@@ -65,7 +65,7 @@ const stub = () => {
   });
   window.chrome = {
     storage: { sync: area('sync'), local: area('local'), onChanged: { addListener() {}, removeListener() {} } },
-    runtime: { getURL: (f) => '/' + f, sendMessage: async () => ({ ok: false }), onMessage: { addListener() {} } },
+    runtime: { getURL: (f) => '/' + f, sendMessage: async () => ({ ok: false }), onMessage: { addListener: (l) => (window.__listeners ??= []).push(l) } },
   };
 };
 const browser = await puppeteer.launch({ executablePath: 'C:/Program Files/Google/Chrome/Application/chrome.exe', headless: 'new', args: ['--no-sandbox'] });
@@ -127,6 +127,32 @@ await check('leaving settings with no banner stays silent', '/acme/widget/settin
   expect: [], settle: 2500,
   then: async (p) => { await wait(400); await p.evaluate(() => location.assign('/acme-home-plain')); await p.waitForNavigation().catch(() => {}); },
 });
+
+console.log('Rehearse and stale-tab handshake');
+{
+  const p = await open('/acme-home-plain');
+  await wait(500);
+  const ask = (msg) => p.evaluate((m) => new Promise((res) => window.__listeners[0](m, null, res)), msg);
+  const hello = await ask({ type: 'hello' });
+  const okHello = typeof hello?.build === 'string' && hello.build.length > 0;
+  if (!okHello) failed++;
+  console.log(`${okHello ? 'PASS' : 'FAIL'}  content script answers hello with its build id`);
+  for (const ev of ['repo.created', 'pr.merged', 'repo.deleted', 'ci.passed', 'ci.failed']) {
+    const reply = await ask({ type: 'rehearse', event: ev });
+    await wait(900);
+    const shown = await p.evaluate(() => !!document.querySelector('footlit-stage'));
+    const ok = reply?.ok === true && shown;
+    if (!ok) failed++;
+    console.log(`${ok ? 'PASS' : 'FAIL'}  rehearse ${ev} replies ok and plays a show`);
+    await p.keyboard.press('Escape');
+    await wait(500);
+  }
+  const bad = await ask({ type: 'rehearse', event: 'no.such.event' });
+  const okBad = bad?.ok === false;
+  if (!okBad) failed++;
+  console.log(`${okBad ? 'PASS' : 'FAIL'}  an unknown event is refused instead of throwing`);
+  await p.close();
+}
 
 await browser.close();
 server.close();

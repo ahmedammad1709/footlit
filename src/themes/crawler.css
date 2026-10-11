@@ -1,0 +1,36 @@
+/* Web Crawler: black, silver, one red. Vector webs, crawling spiders. 1em = min(1cqw, 1.8cqh). */
+.wc {
+  position: absolute; inset: 0;
+  font-size: min(1cqw, 1.8cqh);
+  font-family: 'Footlit Mono', ui-monospace, 'Cascadia Mono', Consolas, monospace;
+  --ink: #050506; --silver: #C9CED6; --dim: #6E757F; --red: #E5322D; --deep: #8A1F1C;
+  color: var(--silver);
+}
+.wc.farewell { --red: #9BA3AE; --deep: #5D646E; }
+.wc-dim { position: absolute; inset: 0; background: var(--ink); opacity: 0; }
+.wc-flash { position: absolute; inset: 0; background: var(--red); opacity: 0; }
+
+.wc-web { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.wc-web path { fill: none; stroke: var(--silver); stroke-width: 1; vector-effect: non-scaling-stroke; stroke-linecap: round; opacity: .62; }
+.wc-web .spoke { stroke-width: 1.3; opacity: .78; }
+.wc.alarm .wc-web path { stroke: #d9b0ad; }
+
+.wc-spider { position: absolute; left: 0; top: 0; width: 5em; height: 5em; margin: -2.5em 0 0 -2.5em; opacity: 0; will-change: transform; }
+.wc-spider svg { width: 100%; height: 100%; overflow: visible; }
+.wc-spider .leg { fill: none; stroke: #0d0d10; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+.wc-spider .body { fill: #0d0d10; }
+.wc-spider .mark { fill: var(--red); }
+.wc-spider .eye { fill: var(--red); }
+.wc-spider .legs { animation: wc-scuttle .16s steps(1) infinite; transform-origin: 0 0; }
+@keyframes wc-scuttle { 0% { transform: scale(1, 1); } 50% { transform: scale(1, .86) rotate(2deg); } }
+.wc-spider.lit .leg { stroke: var(--silver); }
+.wc-spider.lit .body { fill: #14141a; stroke: var(--silver); stroke-width: .8; }
+
+.wc-thread { position: absolute; top: 0; left: 0; width: 1px; background: var(--silver); opacity: .7; transform-origin: 50% 0; }
+
+.wc-head { position: absolute; left: 50%; top: 44%; translate: -50% -50%; text-align: center; width: 96%; opacity: 0; }
+.wc-head h1 { margin: 0; font-family: 'Footlit Display', 'League Gothic', 'Arial Narrow', Impact, sans-serif; font-weight: 400; font-size: 17em; line-height: .95; letter-spacing: .02em; text-transform: uppercase; color: #F2F4F7; white-space: nowrap; text-shadow: .045em .045em 0 var(--red); }
+.wc.alarm .wc-head h1 { color: var(--red); text-shadow: .045em .045em 0 #3a0c0a; }
+.wc.farewell .wc-head h1 { color: #AEB5BF; text-shadow: .045em .045em 0 #20242a; }
+.wc-head .sub { margin-top: 1.6em; font-size: 1.9em; letter-spacing: .2em; text-transform: uppercase; color: var(--silver); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.wc-head .sub b { color: var(--red); font-weight: 500; }

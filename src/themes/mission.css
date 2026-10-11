@@ -1,0 +1,61 @@
+/* Mission Control: launch-room telemetry. 1em = min(1cqw, 1.8cqh). */
+.mc {
+  position: absolute; inset: 0;
+  font-size: min(1cqw, 1.8cqh);
+  font-family: 'Footlit Term', 'JetBrains Mono', ui-monospace, 'Cascadia Mono', Consolas, monospace;
+  --bg: #06090D; --line: #27343F; --fg: #E8EEF3; --dim: #7D8C99; --go: #3FD68F; --orange: #FF7A2B; --nogo: #FF4D4D;
+  --accent: var(--orange);
+  color: var(--fg);
+}
+.mc.alarm { --accent: var(--nogo); }
+.mc.farewell { --accent: #8FA3B3; }
+.mc-dim { position: absolute; inset: 0; opacity: 0; background:
+  linear-gradient(var(--line) 1px, transparent 1px) 0 0 / 6em 6em,
+  linear-gradient(90deg, var(--line) 1px, transparent 1px) 0 0 / 6em 6em, #05080C; }
+.mc-flash { position: absolute; inset: 0; background: #fff; opacity: 0; }
+.mc.alarm .mc-flash { background: var(--nogo); }
+
+/* frame */
+.mc-corner { position: absolute; width: 4em; height: 4em; border: 0 solid var(--accent); opacity: 0; }
+.mc-corner.tl { left: 2.4em; top: 2.4em; border-top-width: .3em; border-left-width: .3em; }
+.mc-corner.tr { right: 2.4em; top: 2.4em; border-top-width: .3em; border-right-width: .3em; }
+.mc-corner.bl { left: 2.4em; bottom: 2.4em; border-bottom-width: .3em; border-left-width: .3em; }
+.mc-corner.br { right: 2.4em; bottom: 2.4em; border-bottom-width: .3em; border-right-width: .3em; }
+.mc-top { position: absolute; left: 8em; right: 8em; top: 2.6em; display: flex; justify-content: space-between; font-size: 1.5em; letter-spacing: .12em; text-transform: uppercase; color: var(--dim); white-space: nowrap; opacity: 0; }
+.mc-top b { color: var(--accent); font-weight: 700; }
+.mc-bar { position: absolute; left: 8em; right: 8em; top: 5.4em; height: .2em; background: var(--line); transform-origin: 0 50%; transform: scaleX(0); }
+
+/* stations + telemetry: two rows under the headline, so nothing ever overlaps */
+.mc-stns { position: absolute; left: 9em; right: 9em; top: 63%; display: flex; justify-content: space-between; }
+.mc-stn { text-align: center; opacity: 0; }
+.mc-stn .k, .mc-t .k { display: block; font-size: 1.35em; letter-spacing: .16em; color: var(--dim); white-space: nowrap; }
+.mc-stn .v { display: block; margin-top: .5em; font-size: 2em; font-weight: 700; white-space: nowrap; }
+.mc-stn .go { color: var(--go); } .mc-stn .nogo { color: var(--nogo); } .mc-stn .wait { color: var(--dim); } .mc-stn .lost { color: var(--dim); }
+.mc-stn .nogo.flash { animation: mc-blink .36s steps(1) infinite; }
+@keyframes mc-blink { 50% { opacity: .15; } }
+.mc-tele { position: absolute; left: 9em; right: 9em; top: 79%; display: flex; justify-content: center; gap: 10em; }
+.mc-t { text-align: center; opacity: 0; }
+.mc-t .v { display: block; margin-top: .35em; font-size: 3em; font-weight: 700; color: var(--fg); white-space: nowrap; }
+
+/* the count */
+.mc-core { position: absolute; left: 50%; top: 36%; translate: -50% -50%; width: 25em; height: 25em; display: grid; place-items: center; }
+.mc-ring { position: absolute; inset: 0; width: 100%; height: 100%; transform: rotate(-90deg); }
+.mc-ring circle { fill: none; stroke-width: 1.6; }
+.mc-ring .track { stroke: var(--line); }
+.mc-ring .sweep { stroke: var(--accent); stroke-linecap: butt; stroke-dasharray: 276.5; stroke-dashoffset: 276.5; }
+.mc-core[hidden] { display: none; }
+.mc-num { font-family: 'Footlit Display', 'League Gothic', 'Arial Narrow', Impact, sans-serif; font-size: 15em; line-height: 1; color: var(--fg); transform-origin: 50% 55%; }
+.mc-cap { position: absolute; bottom: 3.2em; font-size: 1.5em; letter-spacing: .3em; color: var(--dim); text-transform: uppercase; }
+
+/* headline */
+.mc-head { position: absolute; left: 50%; top: 38%; translate: -50% -50%; text-align: center; width: 94%; opacity: 0; }
+.mc-head h1 { margin: 0; font-family: 'Footlit Display', 'League Gothic', 'Arial Narrow', Impact, sans-serif; font-weight: 400; font-size: 15em; line-height: .95; text-transform: uppercase; color: var(--fg); white-space: nowrap; }
+.mc-head h1 em { font-style: normal; color: var(--accent); }
+.mc-head .sub { margin-top: 1.4em; font-size: 1.9em; letter-spacing: .14em; color: var(--dim); text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.mc-head .sub b { color: var(--accent); font-weight: 700; }
+
+/* trajectory */
+.mc-arc { position: absolute; inset: 0; width: 100%; height: 100%; }
+.mc-arc path { fill: none; stroke: var(--accent); stroke-width: 2.4; vector-effect: non-scaling-stroke; stroke-linecap: round; }
+.mc-arc .ghost { stroke: var(--line); stroke-dasharray: 3 5; stroke-width: 1.4; }
+.mc-dot { position: absolute; width: 1.5em; height: 1.5em; margin: -.75em 0 0 -.75em; border-radius: 50%; background: var(--accent); opacity: 0; box-shadow: 0 0 0 .4em color-mix(in srgb, var(--accent) 30%, transparent); }

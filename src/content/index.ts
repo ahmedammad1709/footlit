@@ -1,10 +1,10 @@
 import { EVENT_BY_ID, type EventId } from '../shared/events';
 import { loadFontViaBackground } from '../shared/fonts';
-import type { Message } from '../shared/messages';
-import { INTENSITY_SCALE, defaultSettings, getSettings, recordEvent, watchSettings, type Settings } from '../shared/settings';
+import type { HelloReply, Message, RehearseReply } from '../shared/messages';
+import { INTENSITY_SCALE, defaultSettings, getSettings, recordEvent, themeFor, watchSettings, type Settings } from '../shared/settings';
 import { isPlaying, playShow } from '../engine/play';
 import { watchNavigation, type NavInfo } from './nav';
-import type { DetectorApi, EmitInfo } from './detectors/types';
+import { RESERVED_OWNERS, type DetectorApi, type EmitInfo } from './detectors/types';
 import { repoCreated } from './detectors/repoCreated';
 import { prMerged } from './detectors/prMerged';
 import { repoDeleted } from './detectors/repoDeleted';
@@ -57,7 +57,7 @@ async function main() {
     await playShow({
       eventId: id,
       mood: opts.mood ?? def.mood,
-      themeId: opts.themeId ?? settings.theme,
+      themeId: opts.themeId ?? themeFor(settings, id),
       subject: info.subject,
       detail: info.detail,
       tally: stats.shows,
@@ -103,15 +103,37 @@ async function main() {
   }
 
   // ---- rehearsals from the popup / options page ----
-  chrome.runtime.onMessage.addListener((msg: Message) => {
-    if (msg.type === 'rehearse') {
+  chrome.runtime.onMessage.addListener((msg: Message, _sender, sendResponse: (r: HelloReply | RehearseReply) => void) => {
+    if (msg.type === 'hello') {
+      sendResponse({ build: __BUILD__ });
+    } else if (msg.type === 'rehearse') {
       const def = EVENT_BY_ID[msg.event];
-      void show(msg.event, { subject: msg.subject ?? sample(msg.event), detail: msg.event === 'pr.merged' || msg.event.startsWith('ci.') ? 'Fix flaky login redirect on Safari' : undefined }, { force: true, themeId: msg.theme, mood: msg.mood ?? def.mood });
+      if (!def) {
+        sendResponse({ ok: false, error: 'unknown event' });
+        return false;
+      }
+      const ctx = rehearsalContext(msg.event);
+      void show(msg.event, { subject: msg.subject ?? ctx.subject, detail: ctx.detail }, { force: true, themeId: msg.theme, mood: msg.mood ?? def.mood });
+      sendResponse({ ok: true });
     }
     return false;
   });
 }
 
-function sample(id: EventId): string {
-  return id === 'pr.merged' || id.startsWith('ci.') ? 'acme/widget-shop #42' : 'acme/widget-shop';
+/**
+ * What a rehearsal should show. Uses the repo you are looking at (and the PR title on a pull request page),
+ * your own username on other pages, and only falls back to a made-up name when GitHub gives us nothing.
+ */
+function rehearsalContext(id: EventId): { subject: string; detail?: string } {
+  const needsNumber = id === 'pr.merged' || id.startsWith('ci.');
+  const sampleDetail = needsNumber ? 'Fix flaky login redirect on Safari' : undefined;
+  const m = location.pathname.match(/^\/([^/]+)\/([^/]+)(?:\/(?:pull|issues)\/(\d+))?/);
+  if (m && !RESERVED_OWNERS.has(m[1]!.toLowerCase())) {
+    const nwo = `${m[1]}/${m[2]}`;
+    const title = document.querySelector('.js-issue-title, bdi.markdown-title')?.textContent?.trim().replace(/\s+/g, ' ').slice(0, 90);
+    return { subject: needsNumber ? `${nwo} #${m[3] ?? '42'}` : nwo, detail: title || sampleDetail };
+  }
+  const login = document.querySelector<HTMLMetaElement>('meta[name="user-login"]')?.content;
+  const nwo = login ? `${login}/my-project` : 'acme/widget-shop';
+  return { subject: needsNumber ? `${nwo} #42` : nwo, detail: sampleDetail };
 }

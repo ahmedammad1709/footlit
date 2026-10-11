@@ -47,3 +47,9 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .btn:disabled { opacity: .45; cursor: not-allowed; }
 .btn.primary { background: var(--text); color: var(--ground); }
 .stamp { display: inline-block; transform: rotate(-3deg); border: 1.5px solid var(--alarm); color: var(--alarm); padding: 3px 7px; font: 500 10px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; }
+
+/* segmented control: shared border, square cells, selected cell inked */
+.seg { display: inline-flex; border: 1.5px solid var(--rule); border-radius: 2px; }
+.seg button { border: 0; background: transparent; padding: 7px 12px; font: 500 11px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; }
+.seg button + button { border-left: 1.5px solid var(--rule); }
+.seg button[aria-pressed='true'] { background: var(--text); color: var(--ground); }

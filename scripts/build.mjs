@@ -49,6 +49,7 @@ const common = {
   legalComments: 'none',
   logLevel: 'info',
   loader: { '.css': 'text', '.svg': 'text' },
+  define: { __BUILD__: JSON.stringify(Date.now().toString(36)) },
 };
 
 const entries = {

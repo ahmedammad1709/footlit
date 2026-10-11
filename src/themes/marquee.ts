@@ -254,6 +254,7 @@ export const marquee: Theme = {
   id: 'marquee',
   name: 'Marquee',
   tagline: 'Footlights, a hanging bill, a ticket stub and a lot of paper.',
+  swatch: ['#1B1612', '#F2A81D', '#F1E8D4', '#B8301F'],
   fonts: ['display', 'mono', 'mono-medium'],
   css,
   runtime: 5000,

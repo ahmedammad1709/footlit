@@ -1,6 +1,7 @@
 import css from './terminal.css';
 import type { PlayContext, Theme } from '../engine/types';
 import { EASE, anim, h, rand, sleep } from '../engine/util';
+import { parseSubject, type Subject } from '../engine/subject';
 
 const SCRAMBLE = '#%&*+=?/\\|<>~01';
 const SPIN = ['|', '/', '-', '\\'];
@@ -19,19 +20,6 @@ function icon(kind: 'ok' | 'bad', cls: string): HTMLElement {
   svg.append(p);
   wrap.append(svg);
   return wrap;
-}
-
-interface Subject {
-  nwo: string;
-  repo: string;
-  num: string;
-  path: string;
-}
-
-function parseSubject(raw: string): Subject {
-  const m = raw.match(/^([^\s/]+)\/([^\s#]+)(?:\s+#(\d+))?/);
-  if (!m) return { nwo: '', repo: '', num: '', path: '~' };
-  return { nwo: `${m[1]}/${m[2]}`, repo: m[2]!, num: m[3] ?? '', path: `~/${m[1]}/${m[2]}` };
 }
 
 class Runner {
@@ -272,6 +260,7 @@ export const terminal: Theme = {
   id: 'terminal',
   name: 'Terminal',
   tagline: 'A shell, a merge graph, an exit code. Developers will get it.',
+  swatch: ['#0A0D0C', '#5CF29A', '#6FD3E0', '#FF6B5E'],
   fonts: ['term', 'term-bold'],
   css,
   runtime: 4500,

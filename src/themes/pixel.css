@@ -1,0 +1,28 @@
+/* Pixel Arcade: 16-colour palette, hard edges, no smoothing. 1em = min(1cqw, 1.8cqh). */
+.px {
+  position: absolute; inset: 0;
+  font-size: min(1cqw, 1.8cqh);
+  font-family: 'Footlit Pixel', 'Press Start 2P', ui-monospace, Consolas, monospace;
+  color: #FFF1E8;
+  text-transform: uppercase;
+  --navy: #1D2B53; --plum: #7E2553; --yellow: #FFEC27; --orange: #FFA300; --red: #FF004D; --blue: #29ADFF; --lime: #00E436; --white: #FFF1E8; --pink: #FF77A8;
+}
+.px-dim { position: absolute; inset: 0; background: var(--navy); opacity: 0; }
+.px-scan { position: absolute; inset: 0; opacity: 0; background: repeating-linear-gradient(0deg, rgb(0 0 0 / .28) 0 2px, transparent 2px 4px); }
+.px-cv { position: absolute; inset: 0; width: 100%; height: 100%; image-rendering: pixelated; }
+.px-flash { position: absolute; inset: 0; background: var(--white); opacity: 0; }
+.px.alarm .px-flash { background: var(--red); }
+
+.px-hud { position: absolute; left: 4em; right: 4em; top: 3em; display: flex; justify-content: space-between; font-size: 1.7em; letter-spacing: .06em; white-space: nowrap; opacity: 0; text-shadow: .12em .12em 0 #000; }
+.px-hud b { color: var(--yellow); font-weight: 400; }
+
+.px-stack { position: absolute; left: 50%; top: 34%; translate: -50% -50%; width: 96%; text-align: center; }
+.px-title { margin: 0; font-weight: 400; font-size: 6.4em; line-height: 1.15; color: var(--yellow); white-space: nowrap; opacity: 0;
+  text-shadow: .09em .09em 0 var(--plum), .18em .18em 0 #000, -.05em -.05em 0 #000, .05em -.05em 0 #000, -.05em .05em 0 #000; }
+.px.alarm .px-title { color: var(--red); text-shadow: .09em .09em 0 #000, .18em .18em 0 var(--plum), -.05em -.05em 0 #000; }
+.px.farewell .px-title { font-size: 4.6em; color: var(--white); }
+.px-sub { margin: 2.2em 0 0; font-size: 2em; line-height: 1.6; opacity: 0; text-shadow: .1em .1em 0 #000; white-space: nowrap; }
+.px-sub .c { color: var(--blue); } .px-sub .y { color: var(--yellow); } .px-sub .r { color: var(--red); }
+.px-foot { position: absolute; left: 0; right: 0; bottom: 20%; text-align: center; font-size: 2.2em; letter-spacing: .08em; opacity: 0; text-shadow: .1em .1em 0 #000; }
+.px-foot.blink { animation: px-blink 0.8s steps(1) infinite; }
+@keyframes px-blink { 50% { visibility: hidden; } }

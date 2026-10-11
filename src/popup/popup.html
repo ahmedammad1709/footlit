@@ -14,20 +14,33 @@
     <label class="master"><span class="label" id="masterLabel">On</span><input type="checkbox" class="lever" id="master" aria-label="Footlit on or off" /></label>
   </header>
   <hr class="rule-double" />
-  <section>
-    <p class="label">Now showing</p>
-    <p class="show"><span class="display" id="themeName">Marquee</span> <button class="btn" id="change">Change</button></p>
+
+  <div class="notice alert" id="stale" hidden>
+    <p>This GitHub tab is still running an older Footlit. Reload it to rehearse.</p>
+    <button class="btn primary" id="reloadTab">Reload tab</button>
+  </div>
+  <div class="notice" id="quietBar" hidden>
+    <p id="quietText"></p>
+    <button class="btn" id="endQuiet">End quiet</button>
+  </div>
+
+  <section aria-labelledby="h-theme">
+    <p class="label" id="h-theme">Theme</p>
+    <div class="tiles" id="themes" role="group" aria-label="Theme"></div>
+    <p class="tagline" id="tagline"></p>
   </section>
-  <section>
-    <p class="label">The programme</p>
+
+  <section aria-labelledby="h-events">
+    <p class="label" id="h-events">Events</p>
     <ul id="program" class="program"></ul>
     <p class="hint" id="hint"></p>
   </section>
+
   <hr class="rule-double" />
   <footer class="foot">
     <span class="label" id="tally"></span>
-    <button class="btn" id="mute">Quiet 1h</button>
-    <button class="btn" id="more">Settings</button>
+    <button class="btn" id="mute" title="Pause all shows for an hour">Quiet 1h</button>
+    <button class="btn" id="more">All settings</button>
   </footer>
   <script src="popup.js"></script>
 </body>

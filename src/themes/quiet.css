@@ -1,0 +1,21 @@
+/* Quiet: a small, polite toast for the office. Blends into GitHub; follows its colour mode. */
+.qt {
+  position: absolute; inset: 0;
+  font-size: clamp(11px, min(1cqw, 1.8cqh), 15px);
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --bg: #FFFFFF; --text: #1F2328; --mute: #59636E; --line: #D1D9E0; --good: #1A7F37; --bad: #CF222E; --neutral: #59636E;
+  --accent: var(--good);
+}
+.qt.dark { --bg: #151B23; --text: #E6EDF3; --mute: #9198A1; --line: #3D444D; --good: #3FB950; --bad: #F85149; --neutral: #9198A1; }
+.qt.alarm { --accent: var(--bad); }
+.qt.farewell { --accent: var(--neutral); }
+
+.qt-toast { position: absolute; right: 2em; bottom: 2em; width: 27em; max-width: calc(100% - 4em); display: flex; align-items: center; gap: 1.2em; padding: 1.2em 1.5em 1.2em 1.2em; background: var(--bg); color: var(--text); border: 1px solid var(--line); border-radius: .8em; box-shadow: 0 .8em 2em rgb(0 0 0 / .16); overflow: hidden; opacity: 0; }
+.qt-icon { flex: none; width: 3.2em; height: 3.2em; }
+.qt-icon svg { display: block; width: 100%; height: 100%; }
+.qt-icon circle { fill: none; stroke: var(--accent); stroke-width: 1.6; opacity: .28; }
+.qt-icon .draw { fill: none; stroke: var(--accent); stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; opacity: 1; }
+.qt-text { min-width: 0; display: grid; gap: .25em; }
+.qt-title { font-weight: 600; font-size: 1.2em; line-height: 1.25; }
+.qt-sub { color: var(--mute); font-size: 1em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.qt-timer { position: absolute; left: 0; bottom: 0; height: .22em; width: 100%; background: var(--accent); opacity: .55; transform-origin: 0 50%; }

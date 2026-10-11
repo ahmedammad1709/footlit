@@ -35,6 +35,8 @@ export interface Theme {
   id: string;
   name: string;
   tagline: string;
+  /** four colours shown on the theme card, darkest first */
+  swatch: [string, string, string, string];
   fonts: FontId[];
   css: string;
   /** total runtime in ms at scale 1, used to size timelines and previews */

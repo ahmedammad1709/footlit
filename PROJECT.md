@@ -116,11 +116,11 @@ Each theme gets a distinct visual language and its own copy for every event and 
 | Theme | Idea and palette | Success | Failure | Assets |
 |---|---|---|---|---|
 | **Marquee** (done, default) | Theatre: velvet, bulbs, paper. Amber on ink | "BRAVO!" bill drops, bulbs chase, confetti | "SHOW STOPPED", hazard tape | none |
-| **Terminal** | CRT phosphor, scanlines, typed output. Green or amber on near-black | `$ git merge ... ✔ exit 0`, output types itself, cursor blinks | `exit 1`, red stack trace, glitch | none (canvas + mono font) |
-| **Mission Control** | NASA launch room: telemetry, countdown. Off-white, signal orange, dark slate | "T-0 LIFTOFF", all stations GO, trajectory arc | "ANOMALY", abort sequence | none (SVG/CSS) |
-| **Pixel Arcade** | 8-bit: "STAGE CLEAR!" / "GAME OVER". Limited 16-colour palette | blocky fireworks, bonus counter, tiny hero | "GAME OVER", continue? countdown | Press Start 2P + original sprite |
-| **Web Crawler** | Spiders and webs (from the LeetCode inspiration). Black, red, silver | webs spread, "BUILD COMPILED" | red web, "BROKEN BUILD" | original SVG, drawn in-house |
-| **Quiet** | For the office: a restrained toast with a hand-drawn check, no full-screen takeover | check draws itself | thin red line, one-line message | none |
+| **Terminal** (done) | A modern dark shell: JetBrains Mono, scripted gh/git commands, ASCII merge graph | `$ git merge ... ✔ exit 0`, output types itself, cursor blinks | `exit 1`, red stack trace, glitch | none (canvas + mono font) |
+| **Mission Control** (done) | NASA launch room: telemetry, countdown. Off-white, signal orange, dark slate | "T-0 LIFTOFF", all stations GO, trajectory arc | "ANOMALY", abort sequence | none (SVG/CSS) |
+| **Pixel Arcade** (done) | 8-bit: "STAGE CLEAR!" / "GAME OVER". Limited 16-colour palette | blocky fireworks, bonus counter, tiny hero | "GAME OVER", continue? countdown | Press Start 2P + original sprite |
+| **Web Crawler** (done) | Spiders and webs (from the LeetCode inspiration). Black, red, silver | webs spread, "BUILD COMPILED" | red web, "BROKEN BUILD" | original SVG, drawn in-house |
+| **Quiet** (done) | For the office: a restrained toast with a hand-drawn check, no full-screen takeover | check draws itself | thin red line, one-line message | none |
 | Later | Blueprint, Vintage Paper, Anime | | | commissioned or CC0 |
 
 Dev-metaphor signature moments (replace generic "confetti" where it fits):
@@ -236,3 +236,10 @@ Update 2026-10-11 (later): added **CI passed / CI failed** events and the **Term
 - **Community themes:** a documented theme format (JSON + assets), a gallery on the site, "theme of the week".
 - **Season-ticket stats:** local streaks and counts of performances, shown in the popup.
 - **GitHub profile badge / README snippet** linking back to the site.
+
+Update 2026-10-12: **all six themes shipped** (Marquee, Terminal, Mission Control, Pixel Arcade, Web Crawler, Quiet), each with applause / farewell / alarm for all five events, reduced-motion handling and narrow-window behaviour.
+- Usability pass (see DESIGN.md, "Placement and findability"): popup theme tiles, quiet-mode notice, stale-tab notice with Reload; settings reorganised into Themes / Events / Preferences / Activity and help with a sticky highlighting nav, per-event theme override, first-run welcome, "Saved" feedback, collapsible help, reset.
+- Rehearsals now use the repo you are looking at (PR title on a PR page, your username elsewhere); "acme" is only a last-resort fallback.
+- Tests: `npm test` = 24 detector/handshake tests + 42 theme tests (6 themes x 5 events, reduced motion, 420px window) in real headless Chrome.
+- Known limits: text is small in very narrow (phone-width) windows; no sound; the Pixel hero sprite is a placeholder original (replace with commissioned art later if desired); detectors for repo create/delete and the PR merge-box wording remain unverified on live GitHub.
+- Next candidates: Phase 3 events (Pages/deploy live, release published), the shareable performance card, Firefox build, store assets.

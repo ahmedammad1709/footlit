@@ -1,17 +1,29 @@
-body { width: 360px; padding: 16px 18px 14px; }
+body { width: 372px; padding: 16px 18px 14px; }
 .head { display: flex; align-items: center; gap: 10px; padding-bottom: 12px; }
 .head h1 { margin: 0; font-size: 34px; flex: 1; }
 .master { display: flex; align-items: center; gap: 8px; }
-section { margin: 16px 0 12px; }
+section { margin: 14px 0 8px; }
 section > .label { margin: 0 0 8px; }
-.show { margin: 0; display: flex; align-items: baseline; gap: 10px; }
-.show .display { font-size: 40px; }
-.show .btn { margin-left: auto; }
+
+.notice { margin: 12px 0 0; padding: 9px 12px; border: 1.5px solid var(--rule); display: flex; align-items: center; gap: 12px; }
+.notice p { margin: 0; font-size: 13.5px; line-height: 1.35; flex: 1; }
+.notice.alert { border-color: var(--alarm); }
+.notice[hidden] { display: none; }
+
+.tiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+.tile { border: 1.5px solid var(--rule); background: transparent; border-radius: 2px; padding: 8px 8px 9px; display: grid; gap: 7px; text-align: left; }
+.tile:hover { background: var(--ground-sunk); }
+.tile .sw { display: flex; gap: 3px; }
+.tile .sw i { width: 14px; height: 14px; border: 1px solid var(--rule); display: block; }
+.tile .nm { font: 500 10.5px/1.1 var(--mono); letter-spacing: .05em; text-transform: uppercase; }
+.tile[aria-pressed='true'] { background: var(--lit); color: var(--on-lit); }
+.tagline { margin: 9px 0 0; font-style: italic; color: var(--text-quiet); font-size: 13.5px; line-height: 1.35; min-height: 2.7em; }
+
 .program { list-style: none; margin: 0; padding: 0; }
-.program li { display: flex; align-items: center; gap: 8px; padding: 9px 0; }
+.program li { display: flex; align-items: center; gap: 8px; padding: 6px 0; }
 .program .name { font-size: 16px; font-weight: 500; }
 .program .mood { display: block; margin-top: 3px; }
-.program .leader { flex: 1; border-bottom: 1.5px dotted var(--rule-soft); align-self: flex-end; margin-bottom: 7px; min-width: 12px; }
+.program .leader { flex: 1; border-bottom: 1.5px dotted var(--rule-soft); align-self: flex-end; margin-bottom: 7px; min-width: 10px; }
 .program li.dim { opacity: .5; }
 .program li.dim .name { font-style: italic; font-weight: 400; }
 .hint { margin: 6px 0 0; font-style: italic; color: var(--text-quiet); font-size: 13px; min-height: 18px; }

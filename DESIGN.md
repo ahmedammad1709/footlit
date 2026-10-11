@@ -86,3 +86,27 @@ Each theme is a complete little production with its own visual language, headlin
 - **Marquee** (default): velvet, bulbs, spotlight cone in stepped bands, paper confetti, ticket stub with the performance number.
 - **Pixel**: 8-bit "STAGE CLEAR / GAME OVER" with blocky particles (Press Start 2P).
 - Later: Web Crawler, Matrix.
+
+---
+
+## Placement and findability (popup vs settings)
+
+Research (general UX guidance; the extension-specific sources were thin): the popup is for quick, frequent, per-page actions and should have one obvious purpose; the options page is the complete home for every setting, grouped by feature, with the common ones first and rarely needed ones behind progressive disclosure; search only pays off when many options are hidden deep; a theme choice benefits from a live preview and a sensible default; keyboard navigation and visible focus are mandatory.
+
+How Footlit applies it:
+
+- **Popup (372px) = things you do while browsing:** master on/off, switch theme (tile grid), per-event on/off with Rehearse, quiet 1h, link to all settings. Notices (out-of-date tab, quiet mode) appear at the top, above the controls, with a one-click fix.
+- **Settings = everything, ordered by how often you will touch it:** 01 Themes (the reason you came), 02 Events, 03 Preferences, 04 Activity and help. Section names are plain words with the playbill name as a subtitle, so the personality never costs clarity.
+- **No settings search:** there are about fifteen settings. A sticky sidebar that highlights the section you are reading is faster than a search box at this size. Revisit if settings grow past roughly thirty.
+- **Progressive disclosure:** troubleshooting and the privacy answer live in native `<details>` blocks; per-event theme override is one dropdown per row defaulting to "Default (Marquee)", so nobody has to configure it.
+- **Feedback:** every change saves immediately and the sidebar says "Saved". Destructive reset asks for confirmation.
+- **First run:** a three-step welcome on the settings page (pick a theme, rehearse an event, open GitHub), dismissable and never shown again.
+- **Errors say what to do:** a stale GitHub tab produces a red notice with a Reload button instead of a silently dead Rehearse button.
+
+### Live preview dock (added after user testing)
+
+Problem found in use: the preview stage sat above the theme cards, so on a laptop-height screen you had to scroll down to click, then scroll up to watch. Fix: the preview is not part of the page flow any more. It is a persistent dock that stays on screen while you scroll, so every action that changes a show (picking a theme, Rehearse on an event, show length, reduced motion, mood) plays where you are already looking.
+
+- 1340px and wider: three columns (sidebar, settings, sticky preview). The sidebar tightens below 1600px so 1366x768 laptops still fit all three.
+- Narrower: the dock floats bottom-right with a Hide button, and the page reserves space beneath it.
+- A caption under the stage always says what is playing (theme / event / mood).

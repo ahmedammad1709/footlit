@@ -12,42 +12,98 @@
     <img src="../icons/icon-128.png" width="72" height="72" alt="" />
     <h1 class="display">Footlit</h1>
     <p class="strap">GitHub, with stage lighting.</p>
-    <nav class="label">
-      <a href="#theatre">01 The theatre</a>
-      <a href="#programme">02 The programme</a>
-      <a href="#rules">03 House rules</a>
-      <a href="#backstage">04 Backstage</a>
+    <nav aria-label="Sections">
+      <a href="#sec-themes" data-sec="sec-themes"><b>Themes</b><span>The theatre</span></a>
+      <a href="#sec-events" data-sec="sec-events"><b>Events</b><span>The programme</span></a>
+      <a href="#sec-prefs" data-sec="sec-prefs"><b>Preferences</b><span>House rules</span></a>
+      <a href="#sec-help" data-sec="sec-help"><b>Activity &amp; help</b><span>Backstage</span></a>
     </nav>
+    <p class="saved" id="saved" role="status" aria-live="polite">Changes save automatically.</p>
   </aside>
+
   <main>
-    <section id="theatre">
-      <h2 class="display">The theatre</h2>
-      <div class="stagebox" id="stagebox" aria-label="Preview"><div class="fake"><i></i><i></i><i></i><i></i></div></div>
-      <div class="controls"><div id="themes" class="seg" role="group" aria-label="Theme"></div></div>
+    <section id="welcome" class="welcome" hidden aria-labelledby="h-welcome">
+      <p class="label">Welcome</p>
+      <h2 class="display" id="h-welcome">Three steps and you're done</h2>
+      <ol>
+        <li><b>Pick a theme</b> below. Click a card to preview it.</li>
+        <li><b>Rehearse an event</b> in the Events section to see it play.</li>
+        <li><b>Open GitHub</b> and make something happen. Footlit takes it from there.</li>
+      </ol>
+      <button class="btn primary" id="dismissWelcome">Got it</button>
+    </section>
+
+    <section id="sec-themes" aria-labelledby="h-themes">
+      <p class="label">01 / The theatre</p>
+      <h2 class="display" id="h-themes">Themes</h2>
+      <p class="lede">The look of every show. Click a card to make it your default; the live preview plays it straight away.</p>
+      <div id="themes" class="cards" role="group" aria-label="Theme"></div>
+    </section>
+
+    <section id="sec-events" aria-labelledby="h-events">
+      <p class="label">02 / The programme</p>
+      <h2 class="display" id="h-events">Events</h2>
+      <p class="lede">Switch off what you don't want. Give any event its own theme if you like; otherwise it uses your default.</p>
+      <ul id="events" class="events"></ul>
+    </section>
+
+    <section id="sec-prefs" aria-labelledby="h-prefs">
+      <p class="label">03 / House rules</p>
+      <h2 class="display" id="h-prefs">Preferences</h2>
+      <div class="rule"><div><b>Length of show</b><span class="note">Brief, standard or long.</span></div><div id="intensity" class="seg"></div></div>
+      <div class="rule"><div><b>Appearance</b><span class="note">This page and the popup. Matinee is light, evening is dark.</span></div><div id="appearance" class="seg"></div></div>
+      <div class="rule"><div><b>Respect reduced motion</b><span class="note">If your system asks for less movement, Footlit shows a calm still card instead.</span></div><input type="checkbox" class="lever" id="reduced" aria-label="Respect reduced motion" /></div>
+      <div class="rule"><div><b>Quiet mode</b><span class="note" id="quietNote">Off.</span></div><div class="pair"><button class="btn" id="quiet">Quiet 1h</button><button class="btn" id="unquiet">End quiet</button></div></div>
+    </section>
+
+    <section id="sec-help" aria-labelledby="h-help">
+      <p class="label">04 / Backstage</p>
+      <h2 class="display" id="h-help">Activity &amp; help</h2>
+
+      <h3 class="sub">Recent activity</h3>
+      <p class="note">Everything Footlit noticed, newest first. This stays in your browser; nothing is sent anywhere.</p>
+      <ol id="log" class="log"></ol>
+      <button class="btn" id="clear">Clear activity</button>
+
+      <h3 class="sub">Not working?</h3>
+      <details>
+        <summary>Rehearse does nothing on GitHub</summary>
+        <p>Reload the GitHub tab once after installing or updating Footlit. The popup tells you when a tab is out of date and gives you a Reload button.</p>
+      </details>
+      <details>
+        <summary>A real event didn't play</summary>
+        <p>Check Recent activity above. If the event is listed as "not shown", the reason is next to it (Footlit is off, that event is off, or quiet mode). If it isn't listed at all, the page wasn't recognised. Turn on debug logging by running this in the GitHub tab's console, repeat the action, and look for lines starting with <code>[footlit]</code>:</p>
+        <p><code>localStorage.setItem('footlit:debug','1')</code></p>
+      </details>
+      <details>
+        <summary>I want it quieter</summary>
+        <p>Use the <b>Quiet</b> theme for a small corner toast, switch off events you don't care about, set the length to Brief, or use Quiet mode to pause everything for an hour.</p>
+      </details>
+      <details>
+        <summary>What does Footlit read?</summary>
+        <p>It runs only on github.com, watches the page you have open to notice things like a merge or a check finishing, and plays an animation. Settings and the activity log live in your browser. Nothing is sent to any server.</p>
+      </details>
+
+      <h3 class="sub">Reset</h3>
+      <p class="note">Put every setting back to how it was when you installed Footlit.</p>
+      <button class="btn danger" id="reset">Reset all settings</button>
+    </section>
+  </main>
+
+  <aside class="dock" id="dock" aria-label="Live preview">
+    <div class="dock-head">
+      <p class="label">Live preview</p>
+      <button class="btn dock-toggle" id="dockToggle" aria-expanded="true">Hide</button>
+    </div>
+    <div class="dock-body">
+      <div class="stagebox" id="stagebox" aria-label="Preview of the current theme over a mock profile page"></div>
+      <p class="caption" id="caption" aria-live="polite"></p>
       <div class="controls">
         <div id="moods" class="seg" role="group" aria-label="Preview mood"></div>
         <button class="btn primary" id="replay">Replay</button>
       </div>
-      <p class="note">Pick a mood to see how the current theme handles it. Marquee is the theatre, Terminal is for people who live in a shell. More are on the bill.</p>
-    </section>
-    <section id="programme">
-      <h2 class="display">The programme</h2>
-      <ul id="events" class="events"></ul>
-    </section>
-    <section id="rules">
-      <h2 class="display">House rules</h2>
-      <div class="rule"><div><b>Length of show</b><span class="note">Brief, standard or long.</span></div><div id="intensity" class="seg"></div></div>
-      <div class="rule"><div><b>Appearance</b><span class="note">Matinee is light, evening is dark.</span></div><div id="appearance" class="seg"></div></div>
-      <div class="rule"><div><b>Respect reduced motion</b><span class="note">If your system asks for less movement, Footlit shows a still card instead.</span></div><input type="checkbox" class="lever" id="reduced" aria-label="Respect reduced motion" /></div>
-      <div class="rule"><div><b>Quiet mode</b><span class="note" id="quietNote">Off.</span></div><div><button class="btn" id="quiet">Quiet 1h</button> <button class="btn" id="unquiet">End quiet</button></div></div>
-    </section>
-    <section id="backstage">
-      <h2 class="display">Backstage</h2>
-      <p class="note">Everything Footlit noticed, newest first. This stays in your browser; nothing is sent anywhere.</p>
-      <ol id="log" class="log"></ol>
-      <button class="btn" id="clear">Clear log</button>
-    </section>
-  </main>
+    </div>
+  </aside>
   <script src="options.js"></script>
 </body>
 </html>

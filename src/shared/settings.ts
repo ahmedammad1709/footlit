@@ -6,12 +6,14 @@ export type Appearance = 'auto' | 'light' | 'dark';
 export interface Settings {
   enabled: boolean;
   theme: string;
-  events: Record<EventId, { enabled: boolean }>;
+  events: Record<EventId, { enabled: boolean; /** overrides the default theme for this event; null = use the default */ theme: string | null }>;
   intensity: Intensity;
   appearance: Appearance;
   honorReducedMotion: boolean;
   /** epoch ms; shows are suppressed until then */
   quietUntil: number;
+  /** the first-run welcome has been dismissed */
+  onboarded: boolean;
 }
 
 export interface LogEntry {
@@ -28,17 +30,23 @@ export interface Stats {
   log: LogEntry[];
 }
 
+/** The theme that will actually play for an event: its own choice, else the default. */
+export function themeFor(s: Settings, id: EventId): string {
+  return s.events[id]?.theme ?? s.theme;
+}
+
 export const INTENSITY_SCALE: Record<Intensity, number> = { brief: 0.65, standard: 1, long: 1.5 };
 
 export function defaultSettings(): Settings {
   return {
     enabled: true,
     theme: 'marquee',
-    events: Object.fromEntries(EVENTS.map((e) => [e.id, { enabled: true }])) as Settings['events'],
+    events: Object.fromEntries(EVENTS.map((e) => [e.id, { enabled: true, theme: null }])) as Settings['events'],
     intensity: 'standard',
     appearance: 'auto',
     honorReducedMotion: true,
     quietUntil: 0,
+    onboarded: false,
   };
 }
 
