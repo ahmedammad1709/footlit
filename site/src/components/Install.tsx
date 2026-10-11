@@ -19,7 +19,7 @@ export function Install() {
 
         <dl className={s.glance}>
           <div><dt>Price</dt><dd>Free</dd></div>
-          <div><dt>Works with</dt><dd>Chrome 111+, Edge, Brave; Firefox 128+ (preview)</dd></div>
+          <div><dt>Works with</dt><dd>Chrome 111+, Edge, Brave; Firefox 140+ (preview)</dd></div>
           <div><dt>Version</dt><dd>{VERSION}</dd></div>
           <div><dt>Download</dt><dd>{chrome ? `${chrome.kb} KB` : 'n/a'}</dd></div>
           <div><dt>Data collected</dt><dd>None</dd></div>
@@ -60,7 +60,7 @@ export function Install() {
 
             <h3 className="display">Firefox (experimental)</h3>
             <p>
-              Open <CopyText text="about:debugging" />, choose <b>This Firefox</b>, then <b>Load Temporary Add-on</b> and pick <code>manifest.json</code> from the unzipped folder. Firefox removes temporary add-ons when it restarts, and I have not yet run this build through full testing, so treat it as a preview.
+              Open <CopyText text="about:debugging" />, choose <b>This Firefox</b>, then <b>Load Temporary Add-on</b> and pick <code>manifest.json</code> from the unzipped folder. Needs Firefox 140 or later. Firefox removes temporary add-ons when it restarts, so treat this as a preview until the Firefox Add-ons listing is approved.
             </p>
             <p className={s.update}>
               <b>Installed from a zip? Updates are not automatic.</b> Chrome only updates extensions that came from the store. When a new version is released, download the latest zip here, replace the files in your folder, then press the reload button on Footlit at <CopyText text="chrome://extensions" /> and reload your GitHub tabs. The store version updates itself.

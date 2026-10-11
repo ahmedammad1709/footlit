@@ -14,7 +14,7 @@
     ],
     "notes": [
       "First complete release.",
-      "Known gaps: detectors for repo create/delete/fork, release, Pages and the PR merge-box wording are written from documented behaviour and fixtures and have not yet been confirmed on live GitHub; the Firefox build has not been run in Firefox; no sound; stars and terminal pushes are not detected."
+      "Known gaps: detectors for repo create/delete/fork, release, Pages and the PR merge-box wording are written from documented behaviour and fixtures and have not yet been confirmed on live GitHub; the Firefox build is verified by an automated test on Firefox 157 but, until the Firefox Add-ons listing is approved, installs only as a temporary add-on; no sound; stars and terminal pushes are not detected."
     ]
   }
 ]

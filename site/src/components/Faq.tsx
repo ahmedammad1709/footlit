@@ -28,8 +28,8 @@ export const FAQ_ITEMS: FaqItem[] = [
   },
   {
     q: 'Which browsers does it work in?',
-    a: <>Chrome 111 or later, Microsoft Edge, Brave and other Chromium browsers. A Firefox build (version 128 or later) is available as a preview.</>,
-    text: 'Chrome 111 or later, Microsoft Edge, Brave and other Chromium browsers. A Firefox build for version 128 or later is available as a preview.',
+    a: <>Chrome 111 or later, Microsoft Edge, Brave and other Chromium browsers. A Firefox build (version 140 or later) is available as a preview.</>,
+    text: 'Chrome 111 or later, Microsoft Edge, Brave and other Chromium browsers. A Firefox build for version 140 or later is available as a preview.',
   },
   {
     q: 'Will it slow GitHub down?',

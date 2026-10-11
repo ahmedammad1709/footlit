@@ -38,7 +38,7 @@ export default function Home() {
       applicationCategory: 'DeveloperApplication',
       applicationSubCategory: 'Browser extension',
       operatingSystem: 'Windows, macOS, Linux',
-      browserRequirements: 'Requires Chrome 111 or later, Microsoft Edge, Brave or Firefox 128 or later',
+      browserRequirements: 'Requires Chrome 111 or later, Microsoft Edge, Brave or Firefox 140 or later',
       softwareVersion: VERSION,
       datePublished: site.published,
       dateModified: site.published,
