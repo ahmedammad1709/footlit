@@ -1,5 +1,5 @@
 export type Mood = 'applause' | 'farewell' | 'alarm';
-export type EventId = 'repo.created' | 'pr.merged' | 'repo.deleted';
+export type EventId = 'repo.created' | 'pr.merged' | 'repo.deleted' | 'ci.passed' | 'ci.failed';
 
 export interface EventDef {
   id: EventId;
@@ -14,12 +14,12 @@ export const EVENTS: EventDef[] = [
   { id: 'repo.created', label: 'Repo created', blurb: 'Opening night for something new.', mood: 'applause', kicker: 'New repository' },
   { id: 'pr.merged', label: 'Pull request merged', blurb: 'Two branches, one story.', mood: 'applause', kicker: 'Merged' },
   { id: 'repo.deleted', label: 'Repo deleted', blurb: 'Strike the set.', mood: 'farewell', kicker: 'Repository deleted' },
+  { id: 'ci.passed', label: 'Checks passed', blurb: 'The green check, with feeling.', mood: 'applause', kicker: 'Checks passed' },
+  { id: 'ci.failed', label: 'Checks failed', blurb: 'The show stops.', mood: 'alarm', kicker: 'Checks failed' },
 ];
 
 /** Events on the roadmap that are not wired up yet. Shown dimmed so the programme stays honest. */
 export const UNDERSTUDIES: { label: string; blurb: string }[] = [
-  { label: 'CI passed', blurb: 'The green check, with feeling.' },
-  { label: 'CI failed', blurb: 'The show stops.' },
   { label: 'Site or deploy live', blurb: 'Pages goes up, curtain goes up.' },
   { label: 'Release published', blurb: 'A tag worth a trumpet.' },
   { label: 'Push from your terminal', blurb: 'Needs a GitHub token. Later.' },

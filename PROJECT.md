@@ -194,6 +194,13 @@ Run: `npm install`, `npm run build`, then load `dist/` at chrome://extensions (D
 
 Update 2026-10-11: owner tested the extension in Chrome and it works. Repo initialised (private) with a remote; `.gitignore` added.
 
+Update 2026-10-11 (later): added **CI passed / CI failed** events and the **Terminal** theme.
+- CI detector (`src/content/detectors/ci.ts`): PR merge-box headings (matched by text; the box is client-side rendered) and the Actions run page "Status" cell (verified against a real public run page). Fires only on a pending -> passed/failed transition it watched happen.
+- Terminal theme: JetBrains Mono, scripted `gh`/`git` commands, ASCII merge graph, decode effect, chromatic glitch on failure, dissolve on delete. ASCII only plus SVG icons (the bundled font subset lacks check/block glyphs).
+- Theme picker added to the settings page; "Change" link in the popup.
+- `npm test` runs 13 detector tests (positive and negative cases) against fixture pages using the real built content script. This caught and fixed a quiet-page arming bug and a document_start observer crash.
+- **Still unverified on live GitHub:** the PR merge-box heading text ("All checks have passed", "Some checks were not successful", "Some checks haven't completed yet") and the repo create/delete flows. Use the debug flag and report what the console shows.
+
 ---
 
 ## 10. Full plan: extension -> site -> launch

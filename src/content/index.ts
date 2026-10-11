@@ -8,6 +8,7 @@ import type { DetectorApi, EmitInfo } from './detectors/types';
 import { repoCreated } from './detectors/repoCreated';
 import { prMerged } from './detectors/prMerged';
 import { repoDeleted } from './detectors/repoDeleted';
+import { ci } from './detectors/ci';
 
 // A page can inject us twice (extension reload, bfcache). Only the first copy runs.
 const FLAG = '__footlit__';
@@ -75,7 +76,7 @@ async function main() {
     onMutate: (cb) => void mutateListeners.push(cb),
     log,
   };
-  for (const install of [repoCreated, prMerged, repoDeleted]) install(api);
+  for (const install of [repoCreated, prMerged, repoDeleted, ci]) install(api);
 
   watchNavigation((n) => navListeners.forEach((cb) => cb(n)));
 
@@ -87,18 +88,30 @@ async function main() {
       mutateListeners.forEach((cb) => cb());
     }, 120);
   });
-  mo.observe(document.documentElement, { childList: true, subtree: true, attributes: true, attributeFilter: ['class', 'title'] });
+  // quiet pages still need periodic evaluation so detectors can arm and see state flips that cause no other DOM noise
+  setInterval(() => mutateListeners.forEach((cb) => cb()), 1500);
+  const startObserving = () => mo.observe(document.documentElement, { childList: true, subtree: true, characterData: true, attributes: true, attributeFilter: ['class', 'title'] });
+  // at document_start the root element may not exist yet
+  if (document.documentElement) startObserving();
+  else {
+    const wait = new MutationObserver(() => {
+      if (!document.documentElement) return;
+      wait.disconnect();
+      startObserving();
+    });
+    wait.observe(document, { childList: true });
+  }
 
   // ---- rehearsals from the popup / options page ----
   chrome.runtime.onMessage.addListener((msg: Message) => {
     if (msg.type === 'rehearse') {
       const def = EVENT_BY_ID[msg.event];
-      void show(msg.event, { subject: msg.subject ?? sample(msg.event), detail: msg.event === 'pr.merged' ? 'Fix flaky login redirect on Safari' : undefined }, { force: true, themeId: msg.theme, mood: msg.mood ?? def.mood });
+      void show(msg.event, { subject: msg.subject ?? sample(msg.event), detail: msg.event === 'pr.merged' || msg.event.startsWith('ci.') ? 'Fix flaky login redirect on Safari' : undefined }, { force: true, themeId: msg.theme, mood: msg.mood ?? def.mood });
     }
     return false;
   });
 }
 
 function sample(id: EventId): string {
-  return id === 'pr.merged' ? 'acme/widget-shop #42' : 'acme/widget-shop';
+  return id === 'pr.merged' || id.startsWith('ci.') ? 'acme/widget-shop #42' : 'acme/widget-shop';
 }

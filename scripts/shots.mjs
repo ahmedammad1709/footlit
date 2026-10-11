@@ -19,6 +19,8 @@ for (const f of await fs.readdir(path.join(root, 'node_modules/@fontsource/leagu
 await fs.cp(path.join(root, 'node_modules/@fontsource/dm-mono/files/dm-mono-latin-400-normal.woff2'), path.join(dev, 'fonts/dm-mono-400.woff2'));
 await fs.cp(path.join(root, 'node_modules/@fontsource/dm-mono/files/dm-mono-latin-500-normal.woff2'), path.join(dev, 'fonts/dm-mono-500.woff2'));
 await fs.cp(path.join(root, 'node_modules/@fontsource/press-start-2p/files/press-start-2p-latin-400-normal.woff2'), path.join(dev, 'fonts/press-start-2p.woff2'));
+await fs.cp(path.join(root, 'node_modules/@fontsource/jetbrains-mono/files/jetbrains-mono-latin-400-normal.woff2'), path.join(dev, 'fonts/jetbrains-mono-400.woff2'));
+await fs.cp(path.join(root, 'node_modules/@fontsource/jetbrains-mono/files/jetbrains-mono-latin-700-normal.woff2'), path.join(dev, 'fonts/jetbrains-mono-700.woff2'));
 
 // a stand-in for a GitHub PR page so overlays are judged against real-looking content
 await fs.writeFile(path.join(dev, 'index.html'), `<!doctype html><meta charset=utf-8><style>

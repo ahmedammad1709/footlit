@@ -1,7 +1,7 @@
 import type { FontReply } from './messages';
 
 /** Fonts the overlay needs. Families are namespaced so they can never collide with the host page's fonts. */
-export type FontId = 'display' | 'mono' | 'mono-medium' | 'pixel';
+export type FontId = 'display' | 'mono' | 'mono-medium' | 'pixel' | 'term' | 'term-bold';
 
 interface FontSpec {
   family: string;
@@ -14,6 +14,8 @@ export const FONTS: Record<FontId, FontSpec> = {
   mono: { family: 'Footlit Mono', file: 'fonts/dm-mono-400.woff2', weight: '400' },
   'mono-medium': { family: 'Footlit Mono', file: 'fonts/dm-mono-500.woff2', weight: '500' },
   pixel: { family: 'Footlit Pixel', file: 'fonts/press-start-2p.woff2', weight: '400' },
+  term: { family: 'Footlit Term', file: 'fonts/jetbrains-mono-400.woff2', weight: '400' },
+  'term-bold': { family: 'Footlit Term', file: 'fonts/jetbrains-mono-700.woff2', weight: '700' },
 };
 
 export type FontLoader = (file: string) => Promise<ArrayBuffer>;

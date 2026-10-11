@@ -26,7 +26,7 @@ function render() {
   applyAppearance();
   const theme = getTheme(s.theme);
   $('themeName').textContent = theme.name;
-  $('themeTag').textContent = theme.tagline;
+
   ($('master') as HTMLInputElement).checked = s.enabled;
   $('masterLabel').textContent = s.enabled ? 'On' : 'Off';
   document.body.classList.toggle('off', !s.enabled);
@@ -75,6 +75,7 @@ async function init() {
     void saveSettings({ ...s, quietUntil: Date.now() + 3_600_000 });
     $('hint').textContent = 'Quiet for an hour. Back on the hour.';
   });
+  $('change').addEventListener('click', () => void chrome.runtime.openOptionsPage());
   $('more').addEventListener('click', () => void chrome.runtime.openOptionsPage());
 }
 void init();

@@ -68,6 +68,7 @@ export const prMerged: Detector = (api) => {
   api.onNav(() => {
     tracked = null;
     setTimeout(evaluate, 600);
+    setTimeout(evaluate, 1200); // second look: arms the detector even if the page is otherwise quiet
   });
   api.onMutate(evaluate);
 };

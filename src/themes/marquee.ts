@@ -11,7 +11,7 @@ const HI = '#FFE29A';
 const COLORS = ['#F2A81D', '#FFE29A', '#F1E8D4', '#E5604C', '#B8301F', '#F1E8D4'];
 
 const HEADLINE: Record<Mood, (id: string) => string> = {
-  applause: (id) => (id === 'repo.created' ? 'Opening night' : 'Bravo!'),
+  applause: (id) => (id === 'repo.created' ? 'Opening night' : id === 'ci.passed' ? 'All green' : 'Bravo!'),
   farewell: () => 'Exit, stage left',
   alarm: () => 'Show stopped',
 };

@@ -2,6 +2,7 @@ import { EVENTS, MOODS, UNDERSTUDIES, type EventId, type Mood } from '../shared/
 import { loadFontFromExtension } from '../shared/fonts';
 import { INTENSITY_SCALE, clearStats, getSettings, getStats, saveSettings, watchSettings, watchStats, type Appearance, type Intensity, type LogEntry, type Settings } from '../shared/settings';
 import { playShow, stopShow } from '../engine/play';
+import { THEMES } from '../themes';
 import { h } from '../engine/util';
 import { EVENT_BY_ID } from '../shared/events';
 
@@ -63,6 +64,12 @@ function render() {
   if (s.appearance === 'auto') document.documentElement.removeAttribute('data-theme');
   else document.documentElement.setAttribute('data-theme', s.appearance);
 
+  segment<string>($('themes'), THEMES.map((t) => ({ value: t.id, label: t.name })), s.theme, (v) => {
+    void saveSettings({ ...s, theme: v });
+    s = { ...s, theme: v };
+    render();
+    replay();
+  });
   segment<Mood>($('moods'), (Object.keys(MOODS) as Mood[]).map((m) => ({ value: m, label: MOODS[m].label })), mood, (m) => {
     mood = m;
     render();

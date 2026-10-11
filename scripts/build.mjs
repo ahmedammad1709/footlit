@@ -13,6 +13,8 @@ const fonts = [
   ['@fontsource/dm-mono/files/dm-mono-latin-400-normal.woff2', 'dm-mono-400.woff2'],
   ['@fontsource/dm-mono/files/dm-mono-latin-500-normal.woff2', 'dm-mono-500.woff2'],
   ['@fontsource/press-start-2p/files/press-start-2p-latin-400-normal.woff2', 'press-start-2p.woff2'],
+  ['@fontsource/jetbrains-mono/files/jetbrains-mono-latin-400-normal.woff2', 'jetbrains-mono-400.woff2'],
+  ['@fontsource/jetbrains-mono/files/jetbrains-mono-latin-700-normal.woff2', 'jetbrains-mono-700.woff2'],
   ['@fontsource-variable/newsreader/files/newsreader-latin-wght-normal.woff2', 'newsreader.woff2'],
   ['@fontsource-variable/newsreader/files/newsreader-latin-wght-italic.woff2', 'newsreader-italic.woff2'],
 ];

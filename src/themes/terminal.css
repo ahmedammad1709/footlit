@@ -1,0 +1,49 @@
+/* Terminal: a modern dark shell, not a neon-green cliché. 1em = min(1cqw, 1.8cqh). */
+.tm {
+  position: absolute; inset: 0;
+  font-size: min(1cqw, 1.8cqh);
+  font-family: 'Footlit Term', 'JetBrains Mono', ui-monospace, 'Cascadia Mono', Consolas, monospace;
+  --bg: #0A0D0C; --bar: #121816; --line: #222B27; --fg: #D4E4DA; --dim: #6F8B7B;
+  --accent: #5CF29A; --err: #FF6B5E; --warn: #FFC857; --info: #6FD3E0;
+  color: var(--fg);
+}
+.tm.alarm { --accent: var(--err); --line: #3A1F1C; --bar: #1A0F0E; --bg: #0D0908; }
+.tm.farewell { --accent: #9CB0A5; }
+
+.tm-dim { position: absolute; inset: 0; background: #040605; opacity: 0; }
+.tm-flash { position: absolute; inset: 0; background: var(--err); opacity: 0; }
+
+.tm-win { position: absolute; left: 50%; top: 48%; translate: -50% -50%; width: min(88em, 94%); background: var(--bg); border: .2em solid var(--line); overflow: hidden; transform-origin: 50% 50%; }
+.tm-win::after { content: ''; position: absolute; inset: 0; pointer-events: none; background: repeating-linear-gradient(0deg, rgb(0 0 0 / .2) 0 1px, transparent 1px 3px); }
+
+.tm-bar { display: flex; align-items: center; gap: 1.2em; padding: .9em 1.3em; background: var(--bar); border-bottom: .2em solid var(--line); font-size: 1.25em; color: var(--dim); letter-spacing: .02em; }
+.tm-bar .sq { display: inline-flex; gap: .5em; }
+.tm-bar .sq i { width: .8em; height: .8em; background: var(--line); display: block; }
+.tm.alarm .tm-bar .sq i:first-child { background: var(--err); }
+.tm-title { flex: 1; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tm-size { opacity: .7; }
+
+.tm-body { padding: 1.8em 2.4em 2.2em; font-size: 1.6em; line-height: 1.5; min-height: 20em; }
+.tm-line { white-space: pre-wrap; overflow-wrap: anywhere; min-height: 1.5em; }
+.p-path { color: var(--info); }
+.p-sig { color: var(--accent); font-weight: 700; }
+.ok { color: var(--accent); } .bad { color: var(--err); } .dim { color: var(--dim); } .warn { color: var(--warn); } .info { color: var(--info); }
+.hi { color: #F4FBF6; font-weight: 700; }
+.link { color: var(--info); text-decoration: underline; text-underline-offset: .2em; }
+.ico { display: inline-block; width: 1em; height: 1em; vertical-align: -.14em; margin-right: .55em; }
+.ico svg { display: block; width: 100%; height: 100%; }
+.sp { display: inline-block; width: 1ch; color: var(--accent); }
+
+.tm-cur { display: inline-block; width: .6em; height: 1.15em; background: var(--fg); vertical-align: -.2em; margin-left: .1em; animation: tm-blink 1.05s steps(1) infinite; }
+@keyframes tm-blink { 50% { opacity: 0; } }
+
+.tm-hero { display: flex; align-items: center; gap: 1.4em; margin-top: 1.1em; flex-wrap: wrap; }
+.tm-banner { position: relative; font-weight: 700; font-size: 4.4em; line-height: 1; letter-spacing: .04em; color: var(--accent); text-shadow: 0 0 .22em color-mix(in srgb, var(--accent) 36%, transparent); white-space: pre; }
+.tm-code { border: .12em solid var(--accent); color: var(--accent); padding: .35em .7em; font-size: 1.05em; letter-spacing: .06em; opacity: 0; }
+
+/* chromatic glitch on failure */
+.tm.alarm .tm-banner::before, .tm.alarm .tm-banner::after { content: attr(data-text); position: absolute; left: 0; top: 0; white-space: pre; text-shadow: none; mix-blend-mode: screen; }
+.tm.alarm .tm-banner::before { color: var(--info); animation: tm-gl-a 1.1s steps(1) 3; }
+.tm.alarm .tm-banner::after { color: var(--warn); animation: tm-gl-b 1.1s steps(1) 3; }
+@keyframes tm-gl-a { 0% { clip-path: inset(10% 0 62% 0); transform: translateX(-.05em); } 20% { clip-path: inset(55% 0 10% 0); transform: translateX(.06em); } 40% { clip-path: inset(30% 0 40% 0); transform: translateX(-.04em); } 60% { clip-path: inset(70% 0 5% 0); transform: translateX(.05em); } 80% { clip-path: inset(0 0 80% 0); transform: translateX(-.06em); } 100% { clip-path: inset(100% 0 0 0); transform: none; } }
+@keyframes tm-gl-b { 0% { clip-path: inset(60% 0 15% 0); transform: translateX(.05em); } 25% { clip-path: inset(5% 0 70% 0); transform: translateX(-.05em); } 50% { clip-path: inset(40% 0 35% 0); transform: translateX(.06em); } 75% { clip-path: inset(75% 0 0 0); transform: translateX(-.04em); } 100% { clip-path: inset(100% 0 0 0); transform: none; } }
