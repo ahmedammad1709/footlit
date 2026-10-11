@@ -1,0 +1,30 @@
+# dependencies
+node_modules/
+
+# build output (regenerate with `npm run build`)
+dist/
+*.zip
+
+# local dev/test artifacts (scripts/shots.mjs, scripts/smoke.mjs)
+.dev/
+.shots/
+scripts/logo-sheet.png
+
+# secrets: never commit tokens or keys (Supabase, GitHub, analytics)
+.env
+.env.*
+!.env.example
+
+# logs
+*.log
+npm-debug.log*
+
+# editor / OS
+.idea/
+.vscode/*
+!.vscode/extensions.json
+.DS_Store
+Thumbs.db
+
+# Claude Code local settings
+.claude/settings.local.json

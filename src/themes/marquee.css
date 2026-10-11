@@ -1,0 +1,76 @@
+/* Marquee: footlights, velvet, bulbs, paper. All sizes are in em; 1em = min(1cqw, 1.8cqh) so it scales with its box. */
+.mq {
+  position: absolute; inset: 0;
+  font-size: min(1cqw, 1.8cqh);
+  font-family: 'Footlit Mono', ui-monospace, 'Cascadia Mono', Consolas, monospace;
+  --ink: #1B1612; --paper: #F1E8D4; --lit: #F2A81D; --lit-hi: #FFE29A; --velvet: #B8301F; --velvet-hi: #E5604C;
+  --bill: var(--ink); --on-bill: var(--paper); --bulb-on: var(--lit-hi); --bulb-ring: var(--lit); --bulb-off: #5C4730;
+  color: var(--paper);
+}
+.mq.alarm { --bill: #8E2217; --on-bill: #FFF1E2; --bulb-on: #FFD9CF; --bulb-ring: var(--velvet-hi); --bulb-off: #4A1610; }
+
+.mq-dim { position: absolute; inset: 0; background: #0E0A07; opacity: 0; }
+.mq.alarm .mq-dim { background: #1A0503; }
+
+/* beams rise from the footlights; three flat bands, brighter toward the middle */
+.mq-beam { position: absolute; left: 0; bottom: 0; width: 100%; height: 100%; background: var(--lit); opacity: 0; transform-origin: 50% 100%; transform: scaleY(0); }
+.mq-beam.b1 { clip-path: polygon(41% 100%, -30% 0, 130% 0, 59% 100%); }
+.mq-beam.b2 { clip-path: polygon(44% 100%, 6% 0, 94% 0, 56% 100%); }
+.mq-beam.b3 { clip-path: polygon(46.5% 100%, 28% 0, 72% 0, 53.5% 100%); }
+.mq.alarm .mq-beam { background: var(--velvet-hi); }
+
+.mq-lamps { position: absolute; left: 0; right: 0; bottom: 1.45em; height: 0; display: flex; justify-content: space-evenly; align-items: flex-end; padding: 0 1.4em; }
+.mq-lamp { position: relative; width: 4.6em; height: 2.3em; border-radius: 100% 100% 0 0; background: #3A2E22; }
+.mq-lamp i { position: absolute; left: 14%; bottom: 0; width: 30%; height: 56%; border-radius: 100% 100% 0 0; background: var(--lit-hi); opacity: 0; }
+.mq-lamp.on i { opacity: .9; }
+.mq-lip { position: absolute; left: 0; right: 0; bottom: 0; height: 1.1em; background: #2E251D; border-top: .35em solid var(--paper); }
+.mq.alarm .mq-lamp { background: #3A1410; }
+
+.mq-flash { position: absolute; inset: 0; background: var(--velvet); opacity: 0; mix-blend-mode: normal; }
+
+/* the bill */
+.mq-stack { position: absolute; left: 50%; top: 46%; translate: -50% -50%; display: flex; flex-direction: column; align-items: stretch; gap: 1.8em; max-width: 92%; }
+.mq-bill { position: relative; background: var(--bill); border: .5em solid var(--paper); padding: 1.8em 3.4em 1.6em; transform-origin: 50% -20em; }
+.mq-bill::after { content: ''; position: absolute; inset: .55em; border: .15em solid color-mix(in srgb, var(--paper) 45%, transparent); pointer-events: none; }
+.mq-chain { position: absolute; bottom: calc(100% + .5em); width: .3em; height: 150cqh; background: color-mix(in srgb, var(--paper) 70%, transparent); }
+.mq-chain.l { left: 14%; } .mq-chain.r { right: 14%; }
+.mq-title { display: flex; justify-content: center; overflow: hidden; padding: .2em .1em .1em; font-family: 'Footlit Display', 'League Gothic', 'Arial Narrow', Impact, sans-serif; font-size: 14em; line-height: .92; letter-spacing: .02em; text-transform: uppercase; color: var(--on-bill); white-space: pre; }
+.mq-title span { display: inline-block; }
+.mq-bulb { position: absolute; width: 1.5em; height: 1.5em; margin: -.75em 0 0 -.75em; border-radius: 50%; background: var(--bulb-off); box-shadow: 0 0 0 .25em var(--bill), 0 0 0 .4em var(--paper); }
+.mq-bulbs.go .mq-bulb { animation: mq-chase 0.9s steps(1, end) infinite; animation-delay: calc(var(--i) * -0.075s); }
+.mq-bulbs.still .mq-bulb { background: var(--bulb-on); box-shadow: 0 0 0 .25em var(--bulb-ring), 0 0 0 .5em var(--bill), 0 0 0 .65em var(--paper); }
+@keyframes mq-chase {
+  0%, 30% { background: var(--bulb-on); box-shadow: 0 0 0 .25em var(--bulb-ring), 0 0 0 .5em var(--bill), 0 0 0 .65em var(--paper); }
+  31%, 100% { background: var(--bulb-off); box-shadow: 0 0 0 .25em var(--bill), 0 0 0 .4em var(--paper); }
+}
+
+/* the ticket */
+.mq-ticketwrap { overflow: hidden; padding-bottom: .2em; max-width: 100%; }
+.mq-ticket {
+  display: flex; align-items: stretch; background: var(--paper); color: var(--ink); width: 100%;
+  -webkit-mask: radial-gradient(circle at 0 50%, #0000 1.5em, #000 calc(1.5em + .5px)) left / 51% 100% no-repeat, radial-gradient(circle at 100% 50%, #0000 1.5em, #000 calc(1.5em + .5px)) right / 51% 100% no-repeat;
+  mask: radial-gradient(circle at 0 50%, #0000 1.5em, #000 calc(1.5em + .5px)) left / 51% 100% no-repeat, radial-gradient(circle at 100% 50%, #0000 1.5em, #000 calc(1.5em + .5px)) right / 51% 100% no-repeat;
+}
+.mq-stub { display: grid; place-content: center; gap: .5em; padding: 1.2em 2.4em 1.2em 3em; border-right: .25em dashed color-mix(in srgb, var(--ink) 40%, transparent); text-align: center; font-weight: 500; font-size: 1.25em; letter-spacing: .14em; text-transform: uppercase; line-height: 1.2; }
+.mq-stub b { font-family: 'Footlit Display', 'League Gothic', 'Arial Narrow', Impact, sans-serif; font-weight: 400; font-size: 3.1em; letter-spacing: .03em; line-height: .9; }
+.mq-main { display: grid; align-content: center; gap: .55em; padding: 1.2em 3.2em 1.2em 2.2em; min-width: 0; }
+.mq-kicker { font-weight: 500; font-size: 1.3em; letter-spacing: .18em; text-transform: uppercase; color: #5C5043; }
+.mq-subject { font-weight: 500; font-size: 2.5em; line-height: 1.1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; position: relative; }
+.mq-detail { font-size: 1.5em; color: #5C5043; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* farewell: velvet closes */
+.mq-curtain { position: absolute; top: 0; bottom: 0; width: 50.4%; background:
+  repeating-linear-gradient(90deg, #8E2217 0 3.4em, #A92B1C 3.4em 5.6em, #741A11 5.6em 6.6em); }
+.mq-curtain.l { left: 0; border-right: .5em solid var(--lit); }
+.mq-curtain.r { right: 0; border-left: .5em solid var(--lit); }
+.mq-valance { position: absolute; left: 0; right: 0; top: 0; height: 6em; background: #741A11; border-bottom: .5em solid var(--lit); }
+.mq-fare { position: absolute; left: 50%; top: 46%; translate: -50% -50%; text-align: center; width: 92%; }
+.mq-fare h1 { margin: 0; font-family: 'Footlit Display', 'League Gothic', 'Arial Narrow', Impact, sans-serif; font-weight: 400; font-size: 15em; line-height: .95; letter-spacing: .02em; text-transform: uppercase; color: var(--paper); text-shadow: .05em .05em 0 var(--ink); white-space: nowrap; }
+.mq-fare .who { position: relative; display: inline-block; margin-top: 1.4em; font-weight: 500; font-size: 2.6em; color: var(--paper); max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; padding: 0 .4em; vertical-align: top; }
+.mq-fare .who s { text-decoration: none; }
+.mq-fare .strike { position: absolute; left: 0; right: 0; top: 54%; height: .16em; background: var(--lit); transform-origin: 0 50%; transform: scaleX(0); }
+.mq-fare .tag { display: block; margin-top: 1.3em; font-weight: 500; font-size: 1.5em; letter-spacing: .26em; text-transform: uppercase; color: var(--lit-hi); }
+
+/* alarm: hazard tape */
+.mq-tape { position: absolute; left: -4%; right: -4%; height: 4.4em; background: repeating-linear-gradient(-45deg, var(--lit) 0 2.4em, var(--ink) 2.4em 4.8em); }
+.mq-tape.t { top: 4%; rotate: -1.2deg; } .mq-tape.b { bottom: 9%; rotate: 1deg; }

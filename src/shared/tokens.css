@@ -1,0 +1,49 @@
+/* Playbill tokens: named by function. See DESIGN.md. */
+@font-face { font-family: 'Footlit Display'; src: url('../fonts/league-gothic.woff2') format('woff2'); font-display: swap; }
+@font-face { font-family: 'Footlit Mono'; font-weight: 400; src: url('../fonts/dm-mono-400.woff2') format('woff2'); font-display: swap; }
+@font-face { font-family: 'Footlit Mono'; font-weight: 500; src: url('../fonts/dm-mono-500.woff2') format('woff2'); font-display: swap; }
+@font-face { font-family: 'Footlit Text'; font-weight: 200 800; src: url('../fonts/newsreader.woff2') format('woff2'); font-display: swap; }
+@font-face { font-family: 'Footlit Text'; font-weight: 200 800; font-style: italic; src: url('../fonts/newsreader-italic.woff2') format('woff2'); font-display: swap; }
+
+:root {
+  --ground: #F1E8D4; --ground-sunk: #E7DCC2; --ground-raised: #F8F2E3;
+  --text: #1B1612; --text-quiet: #5C5043; --rule: #1B1612; --rule-soft: #1B16122E;
+  --lit: #F2A81D; --on-lit: #2B1C00; --alarm: #B8301F; --on-alarm: #FFF4E6;
+  --display: 'Footlit Display', 'League Gothic', 'Arial Narrow', Impact, sans-serif;
+  --body: 'Footlit Text', Newsreader, Georgia, serif;
+  --mono: 'Footlit Mono', 'DM Mono', ui-monospace, Consolas, monospace;
+  --spring: cubic-bezier(.34,1.56,.64,1); --ease: cubic-bezier(.2,.7,.2,1);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --ground: #17120E; --ground-sunk: #1F1913; --ground-raised: #272017;
+    --text: #F1E8D4; --text-quiet: #B5A78F; --rule: #F1E8D4; --rule-soft: #F1E8D42E;
+    --lit: #F6B63B; --alarm: #E5604C; --on-alarm: #1B0A07;
+  }
+}
+:root[data-theme='dark'] {
+  --ground: #17120E; --ground-sunk: #1F1913; --ground-raised: #272017;
+  --text: #F1E8D4; --text-quiet: #B5A78F; --rule: #F1E8D4; --rule-soft: #F1E8D42E;
+  --lit: #F6B63B; --alarm: #E5604C; --on-alarm: #1B0A07;
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--ground); color: var(--text); font: 400 15px/1.45 var(--body); -webkit-font-smoothing: antialiased; }
+button { font: inherit; color: inherit; cursor: pointer; }
+:focus-visible { outline: 2px solid var(--lit); outline-offset: 2px; }
+.label { font: 500 11px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--text-quiet); }
+.display { font-family: var(--display); font-weight: 400; letter-spacing: .02em; text-transform: uppercase; line-height: .95; }
+.rule-double { border: 0; border-top: 1.5px solid var(--rule); box-shadow: 0 3px 0 -1.5px var(--ground), 0 4.5px 0 -1.5px var(--rule); margin: 0; height: 0; }
+
+/* lever switch */
+.lever { appearance: none; position: relative; width: 40px; height: 22px; margin: 0; border: 2px solid var(--rule); border-radius: 3px; background: transparent; transition: background 120ms; flex: none; }
+.lever::before { content: ''; position: absolute; top: 2px; left: 2px; width: 14px; height: 14px; background: var(--rule); border-radius: 1px; transition: transform 160ms var(--spring); }
+.lever:checked { background: var(--lit); }
+.lever:checked::before { transform: translateX(18px); background: var(--on-lit); }
+@media (prefers-reduced-motion: reduce) { .lever, .lever::before { transition: none; } }
+
+.btn { border: 1.5px solid var(--rule); background: transparent; padding: 5px 10px; border-radius: 2px; font: 500 11px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; }
+.btn:hover { background: var(--ground-sunk); }
+.btn:disabled { opacity: .45; cursor: not-allowed; }
+.btn.primary { background: var(--text); color: var(--ground); }
+.stamp { display: inline-block; transform: rotate(-3deg); border: 1.5px solid var(--alarm); color: var(--alarm); padding: 3px 7px; font: 500 10px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; }

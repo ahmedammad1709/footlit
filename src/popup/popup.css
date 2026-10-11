@@ -1,0 +1,20 @@
+body { width: 360px; padding: 16px 18px 14px; }
+.head { display: flex; align-items: center; gap: 10px; padding-bottom: 12px; }
+.head h1 { margin: 0; font-size: 34px; flex: 1; }
+.master { display: flex; align-items: center; gap: 8px; }
+section { margin: 16px 0 12px; }
+section > .label { margin: 0 0 8px; }
+.show { margin: 0; display: flex; align-items: baseline; gap: 10px; }
+.show .display { font-size: 40px; }
+.show em { color: var(--text-quiet); font-size: 14px; }
+.program { list-style: none; margin: 0; padding: 0; }
+.program li { display: flex; align-items: center; gap: 8px; padding: 9px 0; }
+.program .name { font-size: 16px; font-weight: 500; }
+.program .mood { display: block; margin-top: 3px; }
+.program .leader { flex: 1; border-bottom: 1.5px dotted var(--rule-soft); align-self: flex-end; margin-bottom: 7px; min-width: 12px; }
+.program li.dim { opacity: .5; }
+.program li.dim .name { font-style: italic; font-weight: 400; }
+.hint { margin: 6px 0 0; font-style: italic; color: var(--text-quiet); font-size: 13px; min-height: 18px; }
+.foot { display: flex; align-items: center; gap: 8px; padding-top: 12px; }
+.foot .label { flex: 1; }
+body.off section { opacity: .45; }

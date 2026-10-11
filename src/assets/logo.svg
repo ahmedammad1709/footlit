@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <title>Footlit</title>
+  <defs><clipPath id="r"><rect width="128" height="128" rx="28"/></clipPath></defs>
+  <rect width="128" height="128" rx="28" fill="#1B1612"/>
+  <g clip-path="url(#r)">
+    <!-- the beam: three flat bands, brighter toward the lamp, running off the top edge -->
+    <path d="M44 92 L-34 -10 H162 L84 92 Z" fill="#F2A81D" fill-opacity=".17"/>
+    <path d="M50 92 L0 -10 H128 L78 92 Z" fill="#F2A81D" fill-opacity=".36"/>
+    <path d="M56 92 L30 -10 H98 L72 92 Z" fill="#F2A81D" fill-opacity=".72"/>
+    <!-- paper strips caught in the light -->
+    <rect x="23" y="30" width="10" height="5" rx="1.2" fill="#F1E8D4" transform="rotate(-24 28 32)"/>
+    <rect x="94" y="22" width="10" height="5" rx="1.2" fill="#E5604C" transform="rotate(30 99 24)"/>
+    <rect x="78" y="50" width="9" height="4.5" rx="1.2" fill="#F1E8D4" transform="rotate(-50 82 52)"/>
+    <rect x="38" y="58" width="9" height="4.5" rx="1.2" fill="#F2A81D" transform="rotate(38 42 60)"/>
+    <rect x="58" y="22" width="8" height="4" rx="1.2" fill="#F2A81D" transform="rotate(-12 62 24)"/>
+    <!-- stage lip + footlights -->
+    <rect x="0" y="106" width="128" height="22" fill="#2E251D"/>
+    <rect x="0" y="106" width="128" height="5" fill="#F1E8D4"/>
+    <path d="M40 106 A24 24 0 0 1 88 106 Z" fill="#F2A81D"/>
+    <path d="M47 106 A17 17 0 0 1 58 90.4 L58 106 Z" fill="#FFE29A"/>
+    <path d="M6 106 A11 11 0 0 1 28 106 Z" fill="#F2A81D" fill-opacity=".6"/>
+    <path d="M100 106 A11 11 0 0 1 122 106 Z" fill="#F2A81D" fill-opacity=".6"/>
+  </g>
+</svg>

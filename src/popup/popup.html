@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width" />
+  <title>Footlit</title>
+  <link rel="stylesheet" href="../shared/tokens.css" />
+  <link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+  <header class="head">
+    <img src="../icons/icon-48.png" width="34" height="34" alt="" />
+    <h1 class="display">Footlit</h1>
+    <label class="master"><span class="label" id="masterLabel">On</span><input type="checkbox" class="lever" id="master" aria-label="Footlit on or off" /></label>
+  </header>
+  <hr class="rule-double" />
+  <section>
+    <p class="label">Now showing</p>
+    <p class="show"><span class="display" id="themeName">Marquee</span> <em id="themeTag"></em></p>
+  </section>
+  <section>
+    <p class="label">The programme</p>
+    <ul id="program" class="program"></ul>
+    <p class="hint" id="hint"></p>
+  </section>
+  <hr class="rule-double" />
+  <footer class="foot">
+    <span class="label" id="tally"></span>
+    <button class="btn" id="mute">Quiet 1h</button>
+    <button class="btn" id="more">Settings</button>
+  </footer>
+  <script src="popup.js"></script>
+</body>
+</html>

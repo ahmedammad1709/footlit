@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <title>Footlit (small)</title>
+  <defs><clipPath id="r"><rect width="128" height="128" rx="26"/></clipPath></defs>
+  <rect width="128" height="128" rx="26" fill="#1B1612"/>
+  <g clip-path="url(#r)">
+    <path d="M42 94 L-30 -10 H158 L86 94 Z" fill="#F2A81D" fill-opacity=".28"/>
+    <path d="M52 94 L14 -10 H114 L76 94 Z" fill="#F2A81D" fill-opacity=".78"/>
+    <rect x="0" y="104" width="128" height="24" fill="#2E251D"/>
+    <rect x="0" y="104" width="128" height="7" fill="#F1E8D4"/>
+    <path d="M34 104 A30 30 0 0 1 94 104 Z" fill="#F2A81D"/>
+  </g>
+</svg>
