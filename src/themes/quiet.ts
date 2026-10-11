@@ -11,6 +11,12 @@ const TITLE: Record<string, string> = {
   'repo.deleted': 'Repository deleted',
   'ci.passed': 'Checks passed',
   'ci.failed': 'Checks failed',
+  'repo.forked': 'Repository forked',
+  'pr.opened': 'Pull request opened',
+  'pr.closed': 'Pull request closed',
+  'deploy.live': 'Site is live',
+  'release.published': 'Release published',
+  'issue.closed': 'Issue closed',
 };
 
 /** Follow GitHub's colour mode (or the extension page's) so the toast never clashes with its surroundings. */

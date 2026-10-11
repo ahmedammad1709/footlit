@@ -8,8 +8,14 @@ const NS = 'http://www.w3.org/2000/svg';
 const VW = 160;
 const VH = 90;
 
-const HEAD: Record<string, string> = { 'repo.created': 'New web spun', 'pr.merged': 'Strands woven', 'ci.passed': 'Build compiled' };
-const KICK: Record<string, string> = { 'repo.created': 'New nest', 'pr.merged': 'Strands joined', 'ci.passed': '200 OK' };
+const HEAD: Record<string, string> = {
+  'repo.created': 'New web spun', 'repo.forked': 'Web split', 'pr.opened': 'New strand', 'pr.merged': 'Strands woven',
+  'ci.passed': 'Build compiled', 'deploy.live': 'Web is live', 'release.published': 'Web complete', 'issue.closed': 'Bug squashed',
+};
+const KICK: Record<string, string> = {
+  'repo.created': 'New nest', 'repo.forked': 'Fork', 'pr.opened': 'Strand attached', 'pr.merged': 'Strands joined',
+  'ci.passed': '200 OK', 'deploy.live': 'Crawlable', 'release.published': 'Tagged', 'issue.closed': 'Resolved',
+};
 
 function svg<K extends keyof SVGElementTagNameMap>(tag: K, attrs: Record<string, string | number> = {}): SVGElementTagNameMap[K] {
   const el = document.createElementNS(NS, tag);
@@ -107,7 +113,7 @@ async function play(ctx: PlayContext) {
   };
 
   const who = sub.nwo ? `${sub.nwo}${sub.num ? ` #${sub.num}` : ''}` : ctx.subject;
-  const headline = alarm ? 'Broken build' : farewell ? 'Web abandoned' : (HEAD[ctx.eventId] ?? 'Build compiled');
+  const headline = alarm ? 'Broken build' : farewell ? (ctx.eventId === 'pr.closed' ? 'Strand cut' : 'Web abandoned') : (HEAD[ctx.eventId] ?? 'Build compiled');
   const kicker = alarm ? 'Checks failed' : farewell ? 'Nothing left to crawl' : (KICK[ctx.eventId] ?? '200 OK');
   const head = h('div', { class: 'wc-head' }, [h('h1', { text: headline }), h('div', { class: 'sub' }, [h('b', { text: kicker }), farewell ? '' : ' / ', farewell ? ` ${who}` : who])]);
 

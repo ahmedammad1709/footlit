@@ -1,4 +1,4 @@
-import { EVENTS, EVENT_BY_ID, MOODS, UNDERSTUDIES, type EventId, type Mood } from '../shared/events';
+import { EVENTS, EVENT_BY_ID, EVENT_GROUPS, MOODS, UNDERSTUDIES, type EventId, type Mood } from '../shared/events';
 import { loadFontFromExtension } from '../shared/fonts';
 import { INTENSITY_SCALE, clearStats, defaultSettings, getSettings, getStats, saveSettings, themeFor, watchSettings, watchStats, type Appearance, type Intensity, type LogEntry, type Settings } from '../shared/settings';
 import { playShow, stopShow } from '../engine/play';
@@ -100,7 +100,7 @@ function replay() {
   stopShow();
   const e = EVENT_BY_ID[previewEvent];
   $('caption').textContent = `${getTheme(previewTheme).name} / ${e.label} / ${MOODS[mood].label}`;
-  const pr = e.id === 'pr.merged' || e.id.startsWith('ci.');
+  const pr = e.numbered;
   void playShow({
     eventId: e.id,
     mood,
@@ -180,7 +180,17 @@ function render() {
   // events: on/off, optional own theme, rehearse
   const ul = $('events');
   ul.replaceChildren();
-  for (const e of EVENTS) {
+  for (const g of EVENT_GROUPS) {
+    ul.append(h('li', { class: 'group' }, [h('span', { class: 'label', text: g.label })]));
+    for (const id of g.events) addEventRow(ul, EVENT_BY_ID[id]);
+  }
+  for (const u of UNDERSTUDIES) ul.append(h('li', { class: 'dim' }, [h('div', { class: 'grow' }, [h('div', { class: 'name', text: u.label }), h('span', { class: 'note', text: `${u.blurb} Coming soon.` })])]));
+
+  renderPrefs();
+}
+
+function addEventRow(ul: HTMLElement, e: (typeof EVENTS)[number]) {
+  {
     const sw = h('input', { type: 'checkbox', class: 'lever', 'aria-label': `${e.label} on or off` });
     sw.checked = s.events[e.id].enabled;
     sw.addEventListener('change', () => save({ ...s, events: { ...s.events, [e.id]: { ...s.events[e.id], enabled: sw.checked } } }));
@@ -207,8 +217,9 @@ function render() {
     });
     ul.append(h('li', {}, [h('div', { class: 'grow' }, [h('div', { class: 'name', text: e.label }), h('span', { class: 'note', text: e.blurb })]), sel, rh, sw]));
   }
-  for (const u of UNDERSTUDIES) ul.append(h('li', { class: 'dim' }, [h('div', { class: 'grow' }, [h('div', { class: 'name', text: u.label }), h('span', { class: 'note', text: `${u.blurb} Coming soon.` })])]));
+}
 
+function renderPrefs() {
   // preferences
   segment<Intensity>($('intensity'), [{ value: 'brief', label: 'Brief' }, { value: 'standard', label: 'Standard' }, { value: 'long', label: 'Long' }], s.intensity, (v) => {
     save({ ...s, intensity: v });

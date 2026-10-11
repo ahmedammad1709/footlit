@@ -154,6 +154,14 @@ async function script(r: Runner) {
   const title = ctx.detail;
   const watch = sub.num ? `gh pr checks ${sub.num} --watch` : 'gh run watch';
 
+  if (ctx.mood === 'farewell' && ctx.eventId === 'pr.closed') {
+    await r.cmd(`gh pr close ${sub.num || '0'}`);
+    await r.out(okLine('Closed pull request', `${sub.nwo} #${sub.num}`.trim()));
+    if (title) await r.out([dim(title)]);
+    await r.banner('CLOSED', 0);
+    return;
+  }
+
   if (ctx.mood === 'farewell') {
     await r.cmd(`gh repo delete ${sub.nwo || 'owner/repo'} --yes`);
     await r.out(okLine('Deleted repository', sub.nwo || 'owner/repo'));
@@ -196,6 +204,39 @@ async function script(r: Runner) {
       await r.out(okLine('All checks were successful'));
       if (title) await r.out([dim(title)]);
       await r.banner('PASSED', 0);
+      return;
+    case 'repo.forked':
+      await r.cmd(`gh repo fork ${sub.nwo || 'owner/repo'} --clone=false`);
+      await r.out(okLine('Created fork', sub.nwo || 'owner/repo'));
+      await r.out([h('span', { class: 'link', text: `https://github.com/${sub.nwo || 'owner/repo'}` })]);
+      await r.banner('FORKED', 0);
+      return;
+    case 'pr.opened':
+      await r.cmd('gh pr create --fill');
+      await r.out(okLine('Created pull request', `${sub.nwo} #${sub.num}`.trim()));
+      await r.out([h('span', { class: 'link', text: `https://github.com/${sub.nwo}/pull/${sub.num}` })]);
+      if (title) await r.out([dim(title)]);
+      await r.banner('OPENED', 0);
+      return;
+    case 'deploy.live':
+      await r.cmd('gh run watch');
+      await r.spin('Waiting for the Pages deployment', 800);
+      await r.out(okLine('Site is live', sub.nwo));
+      await r.banner('LIVE', 0);
+      return;
+    case 'release.published': {
+      const tag = /^Release\s+(\S+)/i.exec(title)?.[1] ?? 'v1.0.0';
+      await r.cmd(`gh release create ${tag}`);
+      await r.out(okLine('Published release', tag));
+      await r.out([h('span', { class: 'link', text: `https://github.com/${sub.nwo}/releases/tag/${tag}` })]);
+      await r.banner('RELEASED', 0);
+      return;
+    }
+    case 'issue.closed':
+      await r.cmd(`gh issue close ${sub.num || '0'}`);
+      await r.out(okLine('Closed issue', `${sub.nwo} #${sub.num}`.trim()));
+      if (title) await r.out([dim(title)]);
+      await r.banner('CLOSED', 0);
       return;
     default:
       await r.cmd(`gh api repos/${sub.nwo || 'owner/repo'}`);

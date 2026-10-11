@@ -8,15 +8,13 @@ const NS = 'http://www.w3.org/2000/svg';
 const STATIONS = ['FLIGHT', 'CAPCOM', 'GUIDANCE', 'BOOSTER', 'RETRO', 'FIDO'];
 
 const HEAD: Record<string, string> = {
-  'repo.created': 'Liftoff',
-  'pr.merged': 'Docking confirmed',
-  'ci.passed': 'All stations go',
+  'repo.created': 'Liftoff', 'repo.forked': 'Stage separation', 'pr.opened': 'Rollout complete', 'pr.merged': 'Docking confirmed',
+  'ci.passed': 'All stations go', 'deploy.live': 'Signal acquired', 'release.published': 'Orbit achieved', 'issue.closed': 'Anomaly resolved',
 };
 
 const KICKER: Record<string, string> = {
-  'repo.created': 'New vehicle',
-  'pr.merged': 'Pull request',
-  'ci.passed': 'Checks',
+  'repo.created': 'New vehicle', 'repo.forked': 'Fork', 'pr.opened': 'Pull request', 'pr.merged': 'Pull request', 'pr.closed': 'Pull request',
+  'ci.passed': 'Checks', 'deploy.live': 'Deployment', 'release.published': 'Release', 'issue.closed': 'Issue',
 };
 
 function svg<K extends keyof SVGElementTagNameMap>(tag: K, attrs: Record<string, string> = {}): SVGElementTagNameMap[K] {
@@ -64,7 +62,7 @@ async function play(ctx: PlayContext) {
   const core = h('div', { class: 'mc-core' }, [ring as unknown as Node, num, cap]);
 
   const kicker = KICKER[ctx.eventId] ?? 'Mission';
-  const title = alarm ? 'Anomaly' : farewell ? 'Loss of signal' : (HEAD[ctx.eventId] ?? 'Nominal');
+  const title = alarm ? 'Anomaly' : farewell ? (ctx.eventId === 'pr.closed' ? 'Mission scrubbed' : 'Loss of signal') : (HEAD[ctx.eventId] ?? 'Nominal');
   const subParts = [kicker, sub.nwo ? `${sub.nwo}${sub.num ? ` #${sub.num}` : ''}` : ctx.subject];
   const head = h('div', { class: 'mc-head' }, [
     h('h1', { text: title }),

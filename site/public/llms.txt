@@ -1,6 +1,6 @@
 # Footlit
 
-> Footlit is a free browser extension for GitHub that plays a themed full-screen animation when you merge a pull request, pass checks, publish a release, put a GitHub Pages site live and more. It works in Chrome, Edge, Brave and Firefox. It makes no network requests, has no accounts or analytics, and runs only on github.com. Built by Ammad Ahmed at CodeVeil Studio (https://codeveilstudio.tech).
+> Footlit is a free browser extension for GitHub that plays a themed full-screen animation when you merge a pull request, pass checks, publish a release, put a GitHub Pages site live and more. It works in Chrome, Edge, Brave and Firefox. It makes no network requests, has no accounts or analytics, and runs only on github.com. Built by Ammad Ahmed at Codeveil Studio (https://codeveilstudio.tech).
 
 ## Key facts
 

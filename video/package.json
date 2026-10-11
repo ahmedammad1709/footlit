@@ -1,0 +1,23 @@
+{
+  "name": "footlit-video",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Renders the Footlit launch film from the real engine, frame by frame",
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "vo": "node scripts/make-vo.mjs",
+    "audio": "node scripts/make-audio.mjs",
+    "render": "node scripts/render.mjs --full",
+    "preview": "node scripts/render.mjs --preview=",
+    "loudness": "node scripts/loudness.mjs",
+    "all": "node scripts/build.mjs && node scripts/make-audio.mjs && node scripts/render.mjs --full",
+    "teaser": "node scripts/build.mjs && node scripts/make-teaser-audio.mjs && node scripts/render.mjs --film=teaser --full --crf=12"
+  },
+  "dependencies": {
+    "@puppeteer/browsers": "^3.2.4",
+    "esbuild": "^0.28.2",
+    "ffmpeg-static": "^5.3.0",
+    "puppeteer-core": "^25.13.0"
+  }
+}

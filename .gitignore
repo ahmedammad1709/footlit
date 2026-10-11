@@ -28,3 +28,16 @@ Thumbs.db
 
 # Claude Code local settings
 .claude/settings.local.json
+
+# release artifacts
+release/
+dist-firefox/
+store/
+
+# the website serves these zips, so they must be committed
+!site/public/downloads/*.zip
+
+# launch film (video/): browser download, renders, generated audio
+video/.cache/
+video/out/
+video/assets/vo/

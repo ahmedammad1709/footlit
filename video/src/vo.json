@@ -1,0 +1,88 @@
+{
+  "voice": "en-US-ChristopherNeural",
+  "rate": "-6%",
+  "pitch": "-4Hz",
+  "note": "SCRATCH voice (free Microsoft neural voice). To use a purchased voice later: replace assets/vo/<id>.wav with your recordings (mono, any sample rate, silence trimmed) or change the voice here and run `npm run vo`. Every line is placed at its `at` time (seconds) and each fits a visual beat, so keep each recording about the same length as the scratch one (see out/vo-durations.json).",
+  "lines": [
+    {
+      "id": "01",
+      "at": 0.45,
+      "text": "Every merge you've ever done…"
+    },
+    {
+      "id": "02",
+      "at": 2.2,
+      "text": "…deserved better."
+    },
+    {
+      "id": "03",
+      "at": 18.05,
+      "text": "Meet Footlit."
+    },
+    {
+      "id": "04",
+      "at": 19.5,
+      "text": "GitHub, with stage lighting."
+    },
+    {
+      "id": "05",
+      "at": 22.95,
+      "text": "Pick a theme."
+    },
+    {
+      "id": "06a",
+      "at": 27.3,
+      "text": "Create a repo."
+    },
+    {
+      "id": "06b",
+      "at": 29.7,
+      "text": "And the show begins."
+    },
+    {
+      "id": "07a",
+      "at": 33.4,
+      "text": "Break the build."
+    },
+    {
+      "id": "07b",
+      "at": 35.95,
+      "text": "And the show stops."
+    },
+    {
+      "id": "08a",
+      "at": 40.3,
+      "text": "Fix it."
+    },
+    {
+      "id": "08b",
+      "at": 41.3,
+      "text": "Merge it."
+    },
+    {
+      "id": "08c",
+      "at": 43.25,
+      "text": "Take a bow."
+    },
+    {
+      "id": "09a",
+      "at": 46.75,
+      "text": "Eleven events."
+    },
+    {
+      "id": "09b",
+      "at": 48.25,
+      "text": "Six themes."
+    },
+    {
+      "id": "09c",
+      "at": 49.75,
+      "text": "Zero data leaves your browser."
+    },
+    {
+      "id": "10",
+      "at": 52.9,
+      "text": "Footlit. Free for Chrome, Edge and Firefox."
+    }
+  ]
+}

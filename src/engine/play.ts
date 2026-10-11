@@ -45,6 +45,12 @@ export async function playShow(req: ShowRequest): Promise<void> {
   await ensureFonts(theme.fonts, req.fontLoader);
   if (signal.aborted) return;
 
+  // A page can be detected at document_start, before there is anywhere to put the stage.
+  if (!embedded && !document.body) {
+    await new Promise<void>((resolve) => document.addEventListener('DOMContentLoaded', () => resolve(), { once: true }));
+    if (signal.aborted) return;
+  }
+
   // Don't perform to an empty room: wait (briefly) for the tab to be visible.
   if (!embedded && document.visibilityState === 'hidden') {
     await new Promise<void>((resolve) => {

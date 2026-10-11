@@ -10,9 +10,14 @@ const LIT = '#F2A81D';
 const HI = '#FFE29A';
 const COLORS = ['#F2A81D', '#FFE29A', '#F1E8D4', '#E5604C', '#B8301F', '#F1E8D4'];
 
+const APPLAUSE: Record<string, string> = {
+  'repo.created': 'Opening night', 'repo.forked': 'Encore!', 'pr.opened': 'Curtain up', 'pr.merged': 'Bravo!',
+  'ci.passed': 'All green', 'deploy.live': 'Now playing', 'release.published': 'Premiere', 'issue.closed': 'Case closed',
+};
+const FAREWELL: Record<string, string> = { 'repo.deleted': 'Exit, stage left', 'pr.closed': 'Cut from the bill' };
 const HEADLINE: Record<Mood, (id: string) => string> = {
-  applause: (id) => (id === 'repo.created' ? 'Opening night' : id === 'ci.passed' ? 'All green' : 'Bravo!'),
-  farewell: () => 'Exit, stage left',
+  applause: (id) => APPLAUSE[id] ?? 'Bravo!',
+  farewell: (id) => FAREWELL[id] ?? 'Exit, stage left',
   alarm: () => 'Show stopped',
 };
 

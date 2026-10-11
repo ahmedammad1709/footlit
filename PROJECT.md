@@ -243,3 +243,39 @@ Update 2026-10-12: **all six themes shipped** (Marquee, Terminal, Mission Contro
 - Tests: `npm test` = 24 detector/handshake tests + 42 theme tests (6 themes x 5 events, reduced motion, 420px window) in real headless Chrome.
 - Known limits: text is small in very narrow (phone-width) windows; no sound; the Pixel hero sprite is a placeholder original (replace with commissioned art later if desired); detectors for repo create/delete and the PR merge-box wording remain unverified on live GitHub.
 - Next candidates: Phase 3 events (Pages/deploy live, release published), the shareable performance card, Firefox build, store assets.
+
+---
+
+## Status: v1.0.0 feature-complete (2026-10-12)
+
+The extension is complete for a first public release.
+
+- **Events (11):** repo created / deleted / forked; PR opened / merged / closed; checks passed / failed / site-or-deploy live; release published; issue closed. Detectors share one "watch a page's state" helper that arms only after the page settles, so nothing fires on first load. Verified markup: PR and issue state via `data-testid="header-state"` + `data-status` (Primer) and the older `.State` badge; Actions run page "Status" cell; PR merge-box headings matched by text.
+- **Themes (6)** with per-event copy for every event, per-event theme override, live-preview dock in settings.
+- **Release engineering:** version from package.json; `npm run package` builds minified Chrome and Firefox zips into `release/`; `npm run store-assets` renders seven 1280x800 screenshots and two promo tiles into `store/`; `docs/PRIVACY.md`, `docs/STORE_LISTING.md`, `CHANGELOG.md`, `README.md`.
+- **Tests:** 38 detector/handshake cases + theme matrix (6 themes x 11 events, reduced motion, 420px window).
+
+### Before submitting to the stores (owner checklist)
+
+1. **Try it on live GitHub** with a throwaway repo and walk through each event once: create, fork, open PR, merge PR, close a PR, run a workflow (pass and fail), publish a release, close an issue, deploy Pages, delete the repo. Anything that does not fire: enable debug (`localStorage.setItem('footlit:debug','1')`), repeat, and send the `[footlit]` lines. Unverified on live GitHub: repo create/delete/fork flows, release publish, Pages banner wording, PR merge-box wording.
+2. **Firefox:** automated check passes on Firefox 157 (`npm run test:firefox`) and `web-ext lint` is clean; still do a manual pass on a real GitHub account (about:debugging -> Load Temporary Add-on).
+3. Fill the contact line in `docs/PRIVACY.md` and host it at a public URL (GitHub Pages is fine); stores ask for the URL.
+4. Look through `store/*.png` and pick the order you like; they are regenerated with `npm run store-assets`.
+5. Chrome Web Store developer registration (one-time fee) and the AMO developer account.
+6. Decide a licence for the repo before making it public.
+
+### After launch (not in v1)
+
+Marketing site (Next.js) and measurement as described in section 10; shareable "performance card"; GitHub-token tier for terminal pushes; star/watch events once stable markup can be verified; sound packs; community themes.
+
+---
+
+## Marketing site (built 2026-10-12)
+
+`site/` is a Next.js static site (Next 16, React 19). See `site/README.md`.
+
+- **Sections:** hero with a clickable mock pull request that plays the real engine; marquee ticker; theme lab (pick a theme, event and mood; plays in a sticky preview, or over the whole page); programme of all 11 events with "Try it"; how it works; "Inside" with real popup and settings mockups; trust (permissions in full, how to verify); install (direct downloads, Chrome Web Store "coming soon", unpacked-install steps, Firefox preview); FAQ; footer "Built by Ammad Ahmed" with Instagram / Facebook / WhatsApp.
+- **Privacy page** at `/privacy/`: states what is read, stored, permissions, and that the website itself uses no cookies or analytics.
+- **Reuses the extension's code:** `src/dev/site-engine.ts` bundles the engine and themes to `site/public/engine/footlit-engine.js`; `npm run site-assets` renders the mockup images from the real UI; `npm run prep` (in `site/`) refreshes everything.
+- **Owner to fill in** (`site/src/site.config.ts`): the three social links, store URLs when live, `NEXT_PUBLIC_SITE_URL` at deploy time. `npm run build` lists what is still empty.
+- **Not done yet:** analytics and the admin panel / Supabase counters from the earlier plan (deliberately deferred; add a consent-friendly tool when needed and update the privacy page in the same change), a custom domain, deployment.

@@ -19,14 +19,14 @@ export const site = {
   url: (process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000').replace(/\/$/, ''),
   author: 'Ammad Ahmed',
   /** the studio the product is built at; linked from the footer and published as the author's employer */
-  agency: { name: 'CodeVeil Studio', url: 'https://codeveilstudio.tech' },
+  agency: { name: 'Codeveil Studio', url: 'https://codeveilstudio.tech' },
   updated: 'October 12, 2026',
   /** ISO date of the first public release, used in structured data */
   published: '2026-10-12',
   social: {
-    instagram: '', // e.g. https://instagram.com/your_handle
-    facebook: '', // e.g. https://facebook.com/your.page
-    whatsapp: '', // e.g. https://wa.me/923001234567  (country code, no + or spaces)
+    instagram: 'https://www.instagram.com/ammad_innovates/', // e.g. https://instagram.com/your_handle
+    facebook: 'https://www.facebook.com/profile.php?id=100069493475592', // e.g. https://facebook.com/your.page
+    whatsapp: 'https://wa.me/923141038814', // e.g. https://wa.me/923001234567  (country code, no + or spaces)
   },
   chromeStoreUrl: '',
   firefoxStoreUrl: '',

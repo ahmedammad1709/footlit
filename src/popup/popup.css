@@ -1,32 +1,38 @@
-body { width: 372px; padding: 16px 18px 14px; }
-.head { display: flex; align-items: center; gap: 10px; padding-bottom: 12px; }
-.head h1 { margin: 0; font-size: 34px; flex: 1; }
+body { width: 372px; padding: 12px 18px 12px; }
+.head { display: flex; align-items: center; gap: 10px; padding-bottom: 9px; }
+.head h1 { margin: 0; font-size: 30px; flex: 1; }
 .master { display: flex; align-items: center; gap: 8px; }
-section { margin: 14px 0 8px; }
-section > .label { margin: 0 0 8px; }
+section { margin: 11px 0 6px; }
+section > .label { margin: 0 0 7px; }
 
-.notice { margin: 12px 0 0; padding: 9px 12px; border: 1.5px solid var(--rule); display: flex; align-items: center; gap: 12px; }
+.notice { margin: 10px 0 0; padding: 8px 12px; border: 1.5px solid var(--rule); display: flex; align-items: center; gap: 12px; }
 .notice p { margin: 0; font-size: 13.5px; line-height: 1.35; flex: 1; }
 .notice.alert { border-color: var(--alarm); }
 .notice[hidden] { display: none; }
 
+/* themes: names only (the colours live in Settings) */
 .tiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
-.tile { border: 1.5px solid var(--rule); background: transparent; border-radius: 2px; padding: 8px 8px 9px; display: grid; gap: 7px; text-align: left; }
+.tile { border: 1.5px solid var(--rule); background: transparent; border-radius: 2px; padding: 8px 9px; text-align: left; font: 500 10.5px/1.15 var(--mono); letter-spacing: .05em; text-transform: uppercase; }
 .tile:hover { background: var(--ground-sunk); }
-.tile .sw { display: flex; gap: 3px; }
-.tile .sw i { width: 14px; height: 14px; border: 1px solid var(--rule); display: block; }
-.tile .nm { font: 500 10.5px/1.1 var(--mono); letter-spacing: .05em; text-transform: uppercase; }
 .tile[aria-pressed='true'] { background: var(--lit); color: var(--on-lit); }
-.tagline { margin: 9px 0 0; font-style: italic; color: var(--text-quiet); font-size: 13.5px; line-height: 1.35; min-height: 2.7em; }
 
+/* events: name .......... rehearse  [switch] */
 .program { list-style: none; margin: 0; padding: 0; }
 .program li { display: flex; align-items: center; gap: 8px; padding: 6px 0; }
-.program .name { font-size: 16px; font-weight: 500; }
-.program .mood { display: block; margin-top: 3px; }
-.program .leader { flex: 1; border-bottom: 1.5px dotted var(--rule-soft); align-self: flex-end; margin-bottom: 7px; min-width: 10px; }
-.program li.dim { opacity: .5; }
-.program li.dim .name { font-style: italic; font-weight: 400; }
-.hint { margin: 6px 0 0; font-style: italic; color: var(--text-quiet); font-size: 13px; min-height: 18px; }
-.foot { display: flex; align-items: center; gap: 8px; padding-top: 12px; }
+.program li.first { margin-top: 12px; }
+.program li.first:first-child { margin-top: 0; }
+.program .name { font-size: 15px; font-weight: 500; line-height: 1.2; }
+.program .leader { flex: 1; border-bottom: 1.5px dotted var(--rule-soft); align-self: flex-end; margin-bottom: 6px; min-width: 10px; }
+.program .btn { padding: 4px 8px; }
+.hint { margin: 4px 0 0; font-style: italic; color: var(--text-quiet); font-size: 12.5px; min-height: 0; }
+.hint:empty { display: none; }
+
+.foot { display: flex; align-items: center; gap: 8px; padding-top: 10px; }
 .foot .label { flex: 1; }
 body.off section { opacity: .45; }
+
+/* Chrome caps a popup at 600px tall; with roomier rows the page scrolls, so give it a scrollbar that belongs to the programme */
+html { scrollbar-width: thin; scrollbar-color: var(--rule) transparent; }
+::-webkit-scrollbar { width: 10px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--rule); border: 3px solid var(--ground); border-radius: 0; }

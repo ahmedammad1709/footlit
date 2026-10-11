@@ -82,6 +82,11 @@ export const ci: Detector = (api) => {
 
     const subject = pr ? `${m[1]}/${m[2]} #${m[3]}` : `${m[1]}/${m[2]}`;
     const detail = pr ? prTitle() : document.title.split(' · ')[0]!.slice(0, 90);
+    // a successful GitHub Pages deployment is a site going live, which deserves its own moment
+    if (run && state === 'success' && /pages build and deployment/i.test(document.title)) {
+      api.emit('deploy.live', { subject, detail: 'Pages build and deployment', key: `${m[1]}/${m[2]}`.toLowerCase() });
+      return;
+    }
     api.emit(state === 'success' ? 'ci.passed' : 'ci.failed', { subject, detail, key: `${key}:${state}` });
   };
 

@@ -1,0 +1,20 @@
+{
+  "size": [1080, 1920],
+  "duration": 16.4,
+  "output": "footlit-teaser-1080x1920.mp4",
+  "hook": { "start": 0, "end": 2.6, "click": 1.2 },
+  "montage": {
+    "start": 2.6, "end": 11.0375, "unit": 0.1875,
+    "payoff": { "marquee": 1.5, "terminal": 2.8, "mission": 2.3, "pixel": 1.9, "crawler": 1.5 },
+    "shots": [
+      { "theme": "marquee", "event": "repo.created", "dur": 1.6875, "caption": "New repo? Opening night." },
+      { "theme": "mission", "event": "ci.passed", "dur": 1.5, "caption": "Checks pass? All stations go." },
+      { "theme": "pixel", "event": "pr.merged", "dur": 1.5, "caption": "PR merged? Stage clear." },
+      { "theme": "crawler", "event": "repo.forked", "dur": 1.3125, "caption": "Forked? Strands woven." },
+      { "theme": "terminal", "event": "pr.merged", "dur": 1.125, "caption": "Or keep it quiet. Exit 0." },
+      { "theme": "marquee", "event": "ci.failed", "dur": 0.75, "caption": "Build breaks? The show stops." },
+      { "theme": "marquee", "event": "pr.merged", "dur": 0.5625, "caption": "Bravo." }
+    ]
+  },
+  "logo": { "start": 11.8, "end": 16.4, "popupAt": 1.7, "stampAt": 2.75 }
+}

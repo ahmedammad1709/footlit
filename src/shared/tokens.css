@@ -53,3 +53,6 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .seg button { border: 0; background: transparent; padding: 7px 12px; font: 500 11px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; }
 .seg button + button { border-left: 1.5px solid var(--rule); }
 .seg button[aria-pressed='true'] { background: var(--text); color: var(--ground); }
+
+/* select styled to match */
+.sel { appearance: none; border: 1.5px solid var(--rule); border-radius: 2px; background: var(--ground) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%23888' stroke-width='1.6'/%3E%3C/svg%3E") no-repeat right 9px center; color: var(--text); font: 500 11px/1 var(--mono); letter-spacing: .06em; text-transform: uppercase; padding: 8px 28px 8px 10px; max-width: 190px; }

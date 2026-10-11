@@ -25,7 +25,7 @@ await new Promise((r) => server.listen(0, r));
 const base = `http://localhost:${server.address().port}`;
 
 const themes = ['marquee', 'terminal', 'mission', 'pixel', 'crawler', 'quiet'];
-const events = ['repo.created', 'pr.merged', 'repo.deleted', 'ci.passed', 'ci.failed'];
+const events = ['repo.created', 'repo.deleted', 'repo.forked', 'pr.opened', 'pr.merged', 'pr.closed', 'ci.passed', 'ci.failed', 'deploy.live', 'release.published', 'issue.closed'];
 const browser = await puppeteer.launch({ executablePath: 'C:/Program Files/Google/Chrome/Application/chrome.exe', headless: 'new', args: ['--no-sandbox'], defaultViewport: { width: 1280, height: 720 } });
 
 let failed = 0;

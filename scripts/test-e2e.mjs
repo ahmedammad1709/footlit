@@ -42,6 +42,30 @@ const routes = {
   '/acme/widget/settings': page('Settings · acme/widget', '<h1>Settings</h1>'),
   '/acme-home': page('GitHub', '<div class="flash flash-success">Your repository "acme/widget" was successfully deleted.</div>'),
   '/acme-home-plain': page('GitHub', '<h1>Dashboard</h1>'),
+
+  // pull request opened / closed, and the newer Primer markup
+  '/acme/widget/compare/main...feature': page('Comparing changes · acme/widget', '<h1>Open a pull request</h1>'),
+  '/acme/widget/pull/42?c=close-flip': prHtml({ badge: 'open', flip: flipAfter(1900, `const b=document.getElementById('badge');b.className='State State--closed';b.title='Status: Closed';b.textContent='Closed';`) }),
+  '/acme/widget/pull/42?c=primer-merge': page('Fix flaky login · Pull Request #42 · acme/widget · GitHub',
+    '<bdi class="js-issue-title">Fix flaky login</bdi><span id="hs" data-testid="header-state" data-status="pullOpened" class="prc-StateLabel">Open</span>',
+    flipAfter(1900, `const b=document.getElementById('hs');b.setAttribute('data-status','pullMerged');b.textContent='Merged';`)),
+  // issues
+  '/acme/widget/issues/7?c=close-flip': page('Bug report · Issue #7 · acme/widget · GitHub',
+    '<span id="hs" data-testid="header-state" data-status="issueOpened">Open</span>',
+    flipAfter(1900, `const b=document.getElementById('hs');b.setAttribute('data-status','issueClosed');b.textContent='Closed';`)),
+  '/acme/widget/issues/7?c=already-closed': page('Bug report · Issue #7 · acme/widget · GitHub', '<span data-testid="header-state" data-status="issueClosed">Closed</span>'),
+  // releases
+  '/acme/widget/releases/new': page('New Release · acme/widget', '<h1>New release</h1>'),
+  '/acme/widget/releases/tag/v1.2.0': page('Release v1.2.0 · acme/widget · GitHub', '<h1>v1.2.0</h1>'),
+  '/acme/widget/releases/tag/untagged-abc123': page('Release · acme/widget · GitHub', '<h1>Draft</h1>'),
+  // forks
+  '/acme/widget/fork': page('Create a new fork · acme/widget', '<h1>Create a new fork</h1>'),
+  '/me/widget': page('GitHub - me/widget: a thing', '<meta name="octolytics-dimension-repository_nwo" content="me/widget">'),
+  '/me/other': page('GitHub - me/other: another', ''),
+  // pages / deploy
+  '/acme/widget/settings/pages?c=live-flip': page('Pages · acme/widget', '<main><p id="pg">Your site is being deployed.</p></main>', flipAfter(1900, `document.getElementById('pg').textContent='Your site is live at https://acme.github.io/widget/';`)),
+  '/acme/widget/settings/pages?c=already-live': page('Pages · acme/widget', '<main><p>Your site is live at https://acme.github.io/widget/</p></main>'),
+  '/acme/widget/actions/runs/456?c=pages-run': page('pages build and deployment · acme/widget@abc123 · GitHub', '<div><span class="mb-1 d-block text-small color-fg-muted">Status</span><span id="st" class="h4">In progress</span></div>', flipAfter(1900, `document.getElementById('st').textContent='Success';`)),
 };
 
 const server = http.createServer((req, res) => {
@@ -65,7 +89,7 @@ const stub = () => {
   });
   window.chrome = {
     storage: { sync: area('sync'), local: area('local'), onChanged: { addListener() {}, removeListener() {} } },
-    runtime: { getURL: (f) => '/' + f, sendMessage: async () => ({ ok: false }), onMessage: { addListener: (l) => (window.__listeners ??= []).push(l) } },
+    runtime: { id: 'footlit-test', getURL: (f) => '/' + f, sendMessage: async () => ({ ok: false }), onMessage: { addListener: (l) => (window.__listeners ??= []).push(l) } },
   };
 };
 const browser = await puppeteer.launch({ executablePath: 'C:/Program Files/Google/Chrome/Application/chrome.exe', headless: 'new', args: ['--no-sandbox'] });
@@ -128,6 +152,28 @@ await check('leaving settings with no banner stays silent', '/acme/widget/settin
   then: async (p) => { await wait(400); await p.evaluate(() => location.assign('/acme-home-plain')); await p.waitForNavigation().catch(() => {}); },
 });
 
+console.log('Pull request opened / closed');
+const go = (to) => async (p) => { await wait(400); await p.evaluate((u) => location.assign(u), to); await p.waitForNavigation().catch(() => {}); };
+await check('compare page -> new PR fires pr.opened', '/acme/widget/compare/main...feature', { expect: ['pr.opened'], then: go('/acme/widget/pull/42?c=already-merged') });
+await check('compare page -> repo root stays silent', '/acme/widget/compare/main...feature', { expect: [], settle: 2500, then: go('/acme/widget') });
+await check('open -> closed while watching fires pr.closed', '/acme/widget/pull/42?c=close-flip', { expect: ['pr.closed'] });
+await check('Primer markup: open -> merged fires pr.merged', '/acme/widget/pull/42?c=primer-merge', { expect: ['pr.merged'] });
+
+console.log('Issues');
+await check('open -> closed fires issue.closed', '/acme/widget/issues/7?c=close-flip', { expect: ['issue.closed'] });
+await check('visiting a closed issue stays silent', '/acme/widget/issues/7?c=already-closed', { expect: [], settle: 3000 });
+
+console.log('Releases and forks');
+await check('release form -> tag page fires release.published', '/acme/widget/releases/new', { expect: ['release.published'], then: go('/acme/widget/releases/tag/v1.2.0') });
+await check('saving a draft (untagged) stays silent', '/acme/widget/releases/new', { expect: [], settle: 2500, then: go('/acme/widget/releases/tag/untagged-abc123') });
+await check('fork form -> your copy fires repo.forked', '/acme/widget/fork', { expect: ['repo.forked'], then: go('/me/widget') });
+await check('fork form -> a different repo stays silent', '/acme/widget/fork', { expect: [], settle: 2500, then: go('/me/other') });
+
+console.log('Deploys');
+await check('Pages: being deployed -> live fires deploy.live', '/acme/widget/settings/pages?c=live-flip', { expect: ['deploy.live'] });
+await check('Pages: already live stays silent', '/acme/widget/settings/pages?c=already-live', { expect: [], settle: 3000 });
+await check('Pages workflow run succeeding fires deploy.live, not ci.passed', '/acme/widget/actions/runs/456?c=pages-run', { expect: ['deploy.live'] });
+
 console.log('Rehearse and stale-tab handshake');
 {
   const p = await open('/acme-home-plain');
@@ -137,7 +183,7 @@ console.log('Rehearse and stale-tab handshake');
   const okHello = typeof hello?.build === 'string' && hello.build.length > 0;
   if (!okHello) failed++;
   console.log(`${okHello ? 'PASS' : 'FAIL'}  content script answers hello with its build id`);
-  for (const ev of ['repo.created', 'pr.merged', 'repo.deleted', 'ci.passed', 'ci.failed']) {
+  for (const ev of ['repo.created', 'repo.deleted', 'repo.forked', 'pr.opened', 'pr.merged', 'pr.closed', 'ci.passed', 'ci.failed', 'deploy.live', 'release.published', 'issue.closed']) {
     const reply = await ask({ type: 'rehearse', event: ev });
     await wait(900);
     const shown = await p.evaluate(() => !!document.querySelector('footlit-stage'));

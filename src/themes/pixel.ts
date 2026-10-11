@@ -25,8 +25,14 @@ interface P { x: number; y: number; vx: number; vy: number; c: string; life: num
 
 const pad = (n: number, len = 6) => String(Math.max(0, Math.floor(n))).padStart(len, '0');
 
-const TITLE: Record<string, string> = { 'repo.created': 'New game!', 'pr.merged': 'Stage clear!', 'ci.passed': 'All clear!' };
-const KICK: Record<string, string> = { 'repo.created': 'World unlocked', 'pr.merged': 'Bonus stage', 'ci.passed': 'Tests passed' };
+const TITLE: Record<string, string> = {
+  'repo.created': 'New game!', 'repo.forked': 'Clone unlocked!', 'pr.opened': 'New challenger!', 'pr.merged': 'Stage clear!',
+  'ci.passed': 'All clear!', 'deploy.live': 'Now playing!', 'release.published': 'Level up!', 'issue.closed': 'Boss defeated!',
+};
+const KICK: Record<string, string> = {
+  'repo.created': 'World unlocked', 'repo.forked': 'Player 2 ready', 'pr.opened': 'Quest accepted', 'pr.merged': 'Bonus stage',
+  'ci.passed': 'Tests passed', 'deploy.live': 'Server online', 'release.published': 'New version', 'issue.closed': 'Bug squashed',
+};
 
 async function play(ctx: PlayContext) {
   const { box, clk, signal, mood } = ctx;
@@ -40,10 +46,10 @@ async function play(ctx: PlayContext) {
   const flash = h('div', { class: 'px-flash' });
   const score = h('b', { text: '000000' });
   const hud = h('div', { class: 'px-hud' }, [h('span', {}, ['1UP ', score]), h('span', {}, ['HI ', h('b', { text: '099999' })]), h('span', { text: `x${pad(Math.min(ctx.tally, 99), 2)}` })]);
-  const title = h('h1', { class: 'px-title', text: alarm ? 'Game over' : farewell ? 'Save deleted' : (TITLE[ctx.eventId] ?? 'Stage clear!') });
+  const title = h('h1', { class: 'px-title', text: alarm ? 'Game over' : farewell ? (ctx.eventId === 'pr.closed' ? 'Quest dropped' : 'Save deleted') : (TITLE[ctx.eventId] ?? 'Stage clear!') });
   const who = sub.nwo ? `${sub.nwo}${sub.num ? ` #${sub.num}` : ''}` : ctx.subject;
   const bonus = 1000 + (ctx.tally % 9) * 500;
-  const sub1 = h('p', { class: 'px-sub' }, alarm ? [h('span', { class: 'r', text: 'Checks failed' })] : farewell ? [h('span', { class: 'c', text: 'Player 1 has left the game' })] : [h('span', { class: 'c', text: `${KICK[ctx.eventId] ?? 'Bonus'} ` }), h('span', { class: 'y', text: `+${bonus}` })]);
+  const sub1 = h('p', { class: 'px-sub' }, alarm ? [h('span', { class: 'r', text: 'Checks failed' })] : farewell ? [h('span', { class: 'c', text: ctx.eventId === 'pr.closed' ? 'Not every quest gets finished' : 'Player 1 has left the game' })] : [h('span', { class: 'c', text: `${KICK[ctx.eventId] ?? 'Bonus'} ` }), h('span', { class: 'y', text: `+${bonus}` })]);
   const sub2 = h('p', { class: 'px-sub', text: who });
   sub2.style.marginTop = '.8em';
   const foot = h('div', { class: 'px-foot blink', text: alarm ? 'Continue? 9' : farewell ? 'Insert coin to start over' : 'Press start' });

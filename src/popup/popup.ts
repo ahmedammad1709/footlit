@@ -1,7 +1,7 @@
-import { EVENTS, MOODS, UNDERSTUDIES, type EventId } from '../shared/events';
+import { EVENT_BY_ID, EVENT_GROUPS, type EventId } from '../shared/events';
 import type { HelloReply, RehearseReply } from '../shared/messages';
 import { getSettings, getStats, saveSettings, watchSettings, type Settings } from '../shared/settings';
-import { THEMES, getTheme } from '../themes';
+import { THEMES } from '../themes';
 import { h } from '../engine/util';
 
 const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
@@ -48,8 +48,6 @@ async function rehearse(id: EventId) {
 
 function render() {
   applyAppearance();
-  const theme = getTheme(s.theme);
-  $('tagline').textContent = theme.tagline;
   ($('master') as HTMLInputElement).checked = s.enabled;
   $('masterLabel').textContent = s.enabled ? 'On' : 'Off';
   document.body.classList.toggle('off', !s.enabled);
@@ -62,39 +60,34 @@ function render() {
 
   $('themes').replaceChildren(
     ...THEMES.map((t) => {
-      const b = h('button', { class: 'tile', 'aria-pressed': String(t.id === s.theme), title: t.tagline }, [h('span', { class: 'sw' }, t.swatch.map((c) => h('i', { style: `background:${c}` }))), h('span', { class: 'nm', text: t.name })]);
+      const b = h('button', { class: 'tile', 'aria-pressed': String(t.id === s.theme), title: t.tagline, text: t.name });
       b.addEventListener('click', () => save({ ...s, theme: t.id }));
       return b;
     }),
   );
 
+  // one flat list; related events sit together with a little extra space between groups
   const list = $('program');
   list.replaceChildren();
-  for (const e of EVENTS) {
-    const sw = h('input', { type: 'checkbox', class: 'lever', 'aria-label': `${e.label} on or off` });
-    sw.checked = s.events[e.id].enabled;
-    sw.addEventListener('change', () => save({ ...s, events: { ...s.events, [e.id]: { ...s.events[e.id], enabled: sw.checked } } }));
-    const rh = h('button', { class: 'btn', text: 'Rehearse', title: 'Play this event on the open GitHub tab' });
-    rh.disabled = githubTab == null || stale;
-    rh.addEventListener('click', () => void rehearse(e.id));
-    list.append(
-      h('li', {}, [
-        h('div', {}, [h('span', { class: 'name', text: e.label }), h('span', { class: 'label mood', text: MOODS[e.mood].label })]),
-        h('span', { class: 'leader' }),
-        rh,
-        sw,
-      ]),
-    );
+  for (const g of EVENT_GROUPS) {
+    g.events.forEach((id, i) => {
+      const e = EVENT_BY_ID[id];
+      const sw = h('input', { type: 'checkbox', class: 'lever', 'aria-label': `${e.label} on or off` });
+      sw.checked = s.events[id].enabled;
+      sw.addEventListener('change', () => save({ ...s, events: { ...s.events, [id]: { ...s.events[id], enabled: sw.checked } } }));
+      const rh = h('button', { class: 'btn', text: 'Rehearse', title: 'Play this event on the open GitHub tab' });
+      rh.disabled = githubTab == null || stale;
+      rh.addEventListener('click', () => void rehearse(id));
+      list.append(h('li', { class: i === 0 ? 'first' : '' }, [h('span', { class: 'name', text: e.label }), h('span', { class: 'leader' }), rh, sw]));
+    });
   }
-  const next = UNDERSTUDIES[0];
-  if (next) list.append(h('li', { class: 'dim' }, [h('div', {}, [h('span', { class: 'name', text: next.label }), h('span', { class: 'label mood', text: 'Coming soon' })])]));
   $('hint').textContent = githubTab == null ? 'Open a GitHub tab to rehearse a show on it.' : '';
 }
 
 async function init() {
   s = await getSettings();
   const stats = await getStats();
-  $('tally').textContent = stats.shows ? `${stats.shows} performances` : 'No performances yet';
+  $('tally').textContent = stats.shows ? `${stats.shows} shows` : 'No shows yet';
   try {
     const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
     githubTab = tabs[0]?.url?.startsWith('https://github.com/') ? (tabs[0].id ?? null) : null;

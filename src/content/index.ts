@@ -9,6 +9,9 @@ import { repoCreated } from './detectors/repoCreated';
 import { prMerged } from './detectors/prMerged';
 import { repoDeleted } from './detectors/repoDeleted';
 import { ci } from './detectors/ci';
+import { issueClosed } from './detectors/issueClosed';
+import { releasePublished, repoForked } from './detectors/releaseForked';
+import { deployLive } from './detectors/deployLive';
 
 // A page can inject us twice (extension reload, bfcache). Only the first copy runs.
 const FLAG = '__footlit__';
@@ -36,7 +39,11 @@ async function main() {
 
   const recent = new Map<string, number>();
 
+  /** After the extension is updated or reloaded, old copies of this script are orphaned and chrome.* stops working. */
+  const orphaned = () => !chrome.runtime?.id;
+
   async function show(id: EventId, info: EmitInfo, opts: { force?: boolean; themeId?: string; mood?: import('../shared/events').Mood } = {}) {
+    if (orphaned()) return;
     const def = EVENT_BY_ID[id];
     const entry = { at: Date.now(), event: id, subject: info.subject };
 
@@ -76,21 +83,31 @@ async function main() {
     onMutate: (cb) => void mutateListeners.push(cb),
     log,
   };
-  for (const install of [repoCreated, prMerged, repoDeleted, ci]) install(api);
+  for (const install of [repoCreated, repoForked, prMerged, repoDeleted, ci, deployLive, releasePublished, issueClosed]) install(api);
 
-  watchNavigation((n) => navListeners.forEach((cb) => cb(n)));
+  /** One misbehaving detector must never stop the others, or break the page. */
+  const safely = (fn: () => void) => {
+    try {
+      fn();
+    } catch (err) {
+      log('detector error', err);
+    }
+  };
+  watchNavigation((n) => navListeners.forEach((cb) => safely(() => cb(n))));
 
   let pending = 0;
   const mo = new MutationObserver(() => {
     if (pending) return;
     pending = window.setTimeout(() => {
       pending = 0;
-      mutateListeners.forEach((cb) => cb());
+      if (!orphaned()) mutateListeners.forEach((cb) => safely(cb));
     }, 120);
   });
   // quiet pages still need periodic evaluation so detectors can arm and see state flips that cause no other DOM noise
-  setInterval(() => mutateListeners.forEach((cb) => cb()), 1500);
-  const startObserving = () => mo.observe(document.documentElement, { childList: true, subtree: true, characterData: true, attributes: true, attributeFilter: ['class', 'title'] });
+  setInterval(() => {
+    if (!orphaned() && document.visibilityState === 'visible') mutateListeners.forEach((cb) => safely(cb));
+  }, 1500);
+  const startObserving = () => mo.observe(document.documentElement, { childList: true, subtree: true, characterData: true, attributes: true, attributeFilter: ['class', 'title', 'data-status'] });
   // at document_start the root element may not exist yet
   if (document.documentElement) startObserving();
   else {
@@ -125,7 +142,7 @@ async function main() {
  * your own username on other pages, and only falls back to a made-up name when GitHub gives us nothing.
  */
 function rehearsalContext(id: EventId): { subject: string; detail?: string } {
-  const needsNumber = id === 'pr.merged' || id.startsWith('ci.');
+  const needsNumber = EVENT_BY_ID[id].numbered;
   const sampleDetail = needsNumber ? 'Fix flaky login redirect on Safari' : undefined;
   const m = location.pathname.match(/^\/([^/]+)\/([^/]+)(?:\/(?:pull|issues)\/(\d+))?/);
   if (m && !RESERVED_OWNERS.has(m[1]!.toLowerCase())) {

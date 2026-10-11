@@ -1,0 +1,176 @@
+{
+  "duration": 60,
+  "hook": {
+    "start": 0,
+    "end": 3.5,
+    "click": 1.35
+  },
+  "montage": {
+    "start": 3.5,
+    "end": 17,
+    "shots": [
+      {
+        "theme": "marquee",
+        "event": "repo.created",
+        "dur": 1.6875
+      },
+      {
+        "theme": "terminal",
+        "event": "pr.merged",
+        "dur": 1.5
+      },
+      {
+        "theme": "mission",
+        "event": "ci.passed",
+        "dur": 1.3125
+      },
+      {
+        "theme": "pixel",
+        "event": "pr.merged",
+        "dur": 1.125
+      },
+      {
+        "theme": "crawler",
+        "event": "repo.forked",
+        "dur": 1.125
+      },
+      {
+        "theme": "marquee",
+        "event": "release.published",
+        "dur": 0.9375
+      },
+      {
+        "theme": "terminal",
+        "event": "ci.failed",
+        "dur": 0.9375
+      },
+      {
+        "theme": "mission",
+        "event": "repo.deleted",
+        "dur": 0.75
+      },
+      {
+        "theme": "pixel",
+        "event": "deploy.live",
+        "dur": 0.75
+      },
+      {
+        "theme": "crawler",
+        "event": "issue.closed",
+        "dur": 0.5625
+      },
+      {
+        "theme": "marquee",
+        "event": "pr.merged",
+        "dur": 0.5625
+      },
+      {
+        "theme": "terminal",
+        "event": "repo.created",
+        "dur": 0.375
+      },
+      {
+        "theme": "pixel",
+        "event": "ci.passed",
+        "dur": 0.375
+      },
+      {
+        "theme": "mission",
+        "event": "release.published",
+        "dur": 0.375
+      },
+      {
+        "theme": "mission",
+        "event": "deploy.live",
+        "dur": 0.375
+      },
+      {
+        "theme": "marquee",
+        "event": "pr.merged",
+        "dur": 0.75
+      }
+    ],
+    "payoff": {
+      "marquee": 1.5,
+      "terminal": 2.8,
+      "mission": 2.3,
+      "pixel": 1.9,
+      "crawler": 1.5,
+      "quiet": 0.6
+    },
+    "unit": 0.1875
+  },
+  "logo": {
+    "start": 17.75,
+    "end": 22.5
+  },
+  "demo": {
+    "start": 22.5,
+    "end": 46.5,
+    "steps": [
+      {
+        "n": 1,
+        "t": 22.5
+      },
+      {
+        "n": 2,
+        "t": 27.3
+      },
+      {
+        "n": 3,
+        "t": 33.4
+      },
+      {
+        "n": 4,
+        "t": 40.3
+      }
+    ],
+    "themeClicks": [
+      24.2,
+      25,
+      25.9
+    ],
+    "browserIn": 27,
+    "typeStart": 27.7,
+    "typeEnd": 29,
+    "shows": [
+      {
+        "t": 29.5,
+        "event": "repo.created",
+        "scale": 0.9,
+        "subject": "acme/widget-shop",
+        "detail": ""
+      },
+      {
+        "t": 35.7,
+        "event": "ci.failed",
+        "scale": 0.75,
+        "subject": "acme/widget-shop #42",
+        "detail": "build / test"
+      },
+      {
+        "t": 42,
+        "event": "pr.merged",
+        "scale": 1.1,
+        "subject": "acme/widget-shop #42",
+        "detail": "Fix flaky login redirect on Safari"
+      }
+    ],
+    "checksFail": 35.7,
+    "checksPass": 41,
+    "mergeClick": 41.95
+  },
+  "trust": {
+    "start": 46.5,
+    "end": 52.2,
+    "nums": [
+      46.75,
+      48.25,
+      49.75
+    ]
+  },
+  "end": {
+    "start": 52.2,
+    "end": 60
+  }
+}

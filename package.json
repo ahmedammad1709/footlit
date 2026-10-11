@@ -1,6 +1,6 @@
 {
   "name": "footlit",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "description": "GitHub, with stage lighting. A browser extension that gives GitHub events a proper entrance.",
   "type": "module",
@@ -9,9 +9,15 @@
     "watch": "node scripts/build.mjs --watch",
     "icons": "node scripts/make-icons.mjs",
     "typecheck": "tsc --noEmit",
+    "build:firefox": "node scripts/build.mjs --firefox",
+    "package": "node scripts/package.mjs",
+    "store-assets": "node scripts/store-assets.mjs",
+    "site-assets": "node scripts/site-assets.mjs",
     "test": "node scripts/test-e2e.mjs && node scripts/test-themes.mjs",
     "test:detectors": "node scripts/test-e2e.mjs",
-    "test:themes": "node scripts/test-themes.mjs"
+    "test:themes": "node scripts/test-themes.mjs",
+    "test:firefox": "node scripts/test-firefox.mjs",
+    "package:source": "node scripts/package-source.mjs"
   },
   "devDependencies": {
     "@fontsource-variable/newsreader": "^5.3.0",
@@ -21,6 +27,7 @@
     "@fontsource/press-start-2p": "^5.3.0",
     "@types/chrome": "^0.3.5",
     "esbuild": "^0.28.2",
+    "fflate": "^0.8.3",
     "puppeteer-core": "^25.13.0",
     "sharp": "^0.35.5",
     "typescript": "^7.0.2"
