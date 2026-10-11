@@ -1,0 +1,28 @@
+.head { margin-bottom: clamp(36px, 5vw, 72px); }
+.h2 { font-size: clamp(58px, 7vw, 112px); }
+.steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(20px, 3vw, 44px); counter-reset: none; }
+.steps li { position: relative; display: grid; gap: 14px; align-content: start; padding-top: 22px; border-top: 4px solid var(--ink); }
+.steps li:not(:last-child)::after { content: ''; position: absolute; top: -4px; right: calc(clamp(20px, 3vw, 44px) / -2 - 14px); width: 28px; height: 4px; background: repeating-linear-gradient(90deg, var(--ink) 0 6px, transparent 6px 12px); }
+.num { font-size: clamp(110px, 11vw, 170px); line-height: .8; color: var(--lit); -webkit-text-stroke: 3px var(--ink); paint-order: stroke fill; }
+.steps h3 { font-size: clamp(34px, 3vw, 44px); }
+.steps p { margin: 0; color: var(--quiet-on-paper); }
+.art { margin-top: 10px; min-height: 150px; border: 2px solid var(--ink); background: var(--paper-3); position: relative; display: grid; place-content: center; padding: 20px; }
+
+.pill { background: #238636; color: #fff; font: 600 15px/1 -apple-system, 'Segoe UI', Arial, sans-serif; padding: 11px 16px; border-radius: 7px; }
+.cursor { position: absolute; left: calc(50% + 34px); top: calc(50% + 6px); color: var(--ink); animation: click 2.6s ease-in-out infinite; }
+@keyframes click { 0%, 55% { transform: translate(40px, 36px); } 70% { transform: translate(0, 0); } 78% { transform: translate(0, 0) scale(.86); } 100% { transform: translate(0, 0); } }
+
+.code { font: 500 13.5px/1.5 var(--mono); gap: 10px; place-content: stretch; }
+.code div { display: flex; justify-content: space-between; gap: 12px; padding-bottom: 8px; border-bottom: 1.5px dotted color-mix(in srgb, var(--ink) 35%, transparent); }
+.code span { color: var(--quiet-on-paper); }
+.code b { font-weight: 500; }
+.flip { color: var(--velvet); }
+.ok { background: var(--ink); color: var(--lit); padding: 0 8px; }
+
+.mini { background: var(--ink); color: var(--paper); place-content: center; justify-items: center; gap: 12px; }
+.bulbrow { display: flex; gap: 8px; }
+.bulbrow i { width: 11px; height: 11px; border-radius: 50%; background: #5C4730; display: block; animation: bulb 1s steps(1) infinite; }
+@keyframes bulb { 0%, 40% { background: var(--lit-hi); box-shadow: 0 0 0 2px var(--lit); } 41%, 100% { background: #5C4730; box-shadow: none; } }
+.bravo { font-size: 58px; color: var(--paper); }
+
+@media (max-width: 900px) { .steps { grid-template-columns: 1fr; gap: 44px; } .steps li::after { display: none; } }

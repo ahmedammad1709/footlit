@@ -1,0 +1,25 @@
+{
+  "name": "footlit-site",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Marketing site for Footlit",
+  "scripts": {
+    "prep": "node scripts/prep.mjs",
+    "dev": "next dev",
+    "prebuild": "node scripts/check-config.mjs",
+    "build": "next build",
+    "seo": "node scripts/seo-check.mjs",
+    "start": "npx --yes serve out -l 3000"
+  },
+  "dependencies": {
+    "next": "^16.4.0",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.5",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "typescript": "^5.9.3"
+  }
+}

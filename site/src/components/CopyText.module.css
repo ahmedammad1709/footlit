@@ -1,0 +1,4 @@
+.copy { display: inline-flex; align-items: stretch; border: 2px solid var(--ink); background: var(--paper-3); border-radius: 2px; padding: 0; vertical-align: middle; }
+.copy code { font: 500 13.5px/1 var(--mono); padding: 8px 10px; }
+.copy span { background: var(--ink); color: var(--paper); font: 500 10.5px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; padding: 0 10px; display: grid; place-content: center; min-width: 64px; }
+.copy:hover span { background: var(--lit); color: var(--on-lit); }

@@ -1,0 +1,9 @@
+.nav { position: sticky; top: 0; z-index: 50; background: var(--paper); border-bottom: 2px solid var(--ink); }
+.nav::after { content: ''; position: absolute; left: 0; right: 0; bottom: -6px; height: 2px; background: var(--ink); }
+.row { display: flex; align-items: center; justify-content: space-between; gap: 24px; height: 66px; }
+.brand { display: inline-flex; align-items: center; gap: 12px; text-decoration: none; }
+.brand :global(.display) { font-size: 34px; letter-spacing: .02em; }
+.links { display: flex; gap: clamp(14px, 2.4vw, 34px); margin-left: auto; margin-right: 8px; }
+.links a { font: 500 12.5px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; text-decoration: none; padding: 8px 2px; border-bottom: 2px solid transparent; transition: border-color .15s; }
+.links a:hover { border-bottom-color: var(--lit); }
+@media (max-width: 860px) { .links { display: none; } .row { height: 60px; } .brand :global(.display) { font-size: 30px; } }

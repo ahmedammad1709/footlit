@@ -1,0 +1,9 @@
+.page { display: block; }
+.hero { padding-block: clamp(36px, 5vw, 72px) clamp(48px, 6vw, 92px); border-bottom: 6px solid var(--lit); }
+.crumbs ol { list-style: none; display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 clamp(26px, 3vw, 44px); padding: 0; font: 500 12px/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--quiet-on-ink); }
+.crumbs li + li::before { content: '/'; margin-right: 8px; opacity: .6; }
+.crumbs a { text-decoration: none; border-bottom: 1.5px dotted currentColor; }
+.crumbs a:hover { color: var(--lit); }
+.h1 { font-size: clamp(64px, 9vw, 150px); color: var(--paper); margin-bottom: 20px; }
+.lede { max-width: 54ch; }
+.actions { margin-top: clamp(24px, 3vw, 40px); display: flex; gap: 20px; flex-wrap: wrap; align-items: center; }

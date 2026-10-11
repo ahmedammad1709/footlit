@@ -1,0 +1,42 @@
+.head { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 430px); gap: 20px clamp(28px, 5vw, 80px); align-items: end; margin-bottom: clamp(28px, 4vw, 52px); }
+.head :global(.eyebrow) { grid-column: 1 / -1; margin: 0; }
+@media (max-width: 900px) { .head { grid-template-columns: 1fr; } }
+.h2 { font-size: clamp(58px, 7vw, 112px); }
+.lab { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: clamp(28px, 4vw, 64px); align-items: start; }
+.cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.card { position: relative; text-align: left; border: 2px solid var(--ink); background: transparent; padding: 18px 18px 22px; display: grid; gap: 10px; align-content: start; border-radius: 2px; min-height: 178px; transition: background .15s, transform .22s var(--spring); }
+.card:hover { background: var(--paper-2); transform: translateY(-3px); }
+.card[aria-pressed='true'] { background: var(--lit); color: var(--on-lit); }
+.sw { display: flex; gap: 4px; }
+.sw i { width: 24px; height: 24px; border: 1.5px solid var(--ink); display: block; }
+.nm { font-size: clamp(34px, 3vw, 46px); line-height: .95; }
+.tg { font-style: italic; font-size: 16px; line-height: 1.35; color: var(--quiet-on-paper); }
+.card[aria-pressed='true'] .tg { color: var(--on-lit); }
+.stamp { position: absolute; top: 14px; right: 14px; transform: rotate(-3deg); border: 1.5px solid var(--on-lit); padding: 4px 8px; font: 500 10px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; }
+
+.dock { position: sticky; top: 92px; display: grid; gap: 12px; }
+.dock :global(.eyebrow) { margin: 0; }
+.stagebox { position: relative; aspect-ratio: 16 / 9; container-type: inline-size; border: 3px solid var(--ink); background: #0d1117; overflow: hidden; box-shadow: 8px 8px 0 var(--ink); }
+.stage { position: absolute; inset: 0; pointer-events: none; }
+.loading { position: absolute; inset: 0; display: grid; place-content: center; margin: 0; font: 500 12px var(--mono); letter-spacing: .12em; text-transform: uppercase; color: #8b949e; background: #0d1117; }
+.caption { margin: 8px 0 0; font: 500 12px/1.4 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--quiet-on-paper); min-height: 1.4em; }
+.controls { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+.pick select { appearance: none; border: 2px solid var(--ink); border-radius: 2px; background: var(--paper) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%231B1612' stroke-width='1.8'/%3E%3C/svg%3E") no-repeat right 11px center; color: var(--ink); font: 500 12px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; padding: 11px 32px 11px 12px; min-width: 210px; }
+.seg { display: inline-flex; border: 2px solid var(--ink); }
+.seg button { border: 0; background: transparent; padding: 11px 13px; font: 500 12px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; }
+.seg button + button { border-left: 2px solid var(--ink); }
+.seg button[aria-pressed='true'] { background: var(--ink); color: var(--paper); }
+.row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+.replay { border: 2px solid var(--ink); background: var(--ink); color: var(--paper); padding: 11px 18px; font: 500 12.5px/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; border-radius: 2px; }
+.replay:hover:not(:disabled) { background: var(--lit); color: var(--on-lit); border-color: var(--ink); }
+.replay:disabled, .row :disabled { opacity: .5; cursor: progress; }
+.stop { border: 0; background: none; text-decoration: underline; text-underline-offset: 3px; font: 500 12px var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--quiet-on-paper); padding: 8px; }
+
+@media (max-width: 1020px) {
+  .lab { grid-template-columns: 1fr; }
+  .dock { position: static; order: -1; }
+}
+@media (max-width: 520px) { .cards { grid-template-columns: 1fr; } }
+
+.more { margin: 4px 0 0; font: 500 12px/1.4 var(--mono); letter-spacing: .08em; text-transform: uppercase; }
+.more a { text-underline-offset: 3px; }

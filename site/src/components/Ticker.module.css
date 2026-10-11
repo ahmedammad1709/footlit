@@ -1,0 +1,11 @@
+.band { background: var(--lit); color: var(--on-lit); border-block: 4px solid var(--ink); position: relative; z-index: 3; }
+.bulbs { height: 18px; background: radial-gradient(circle at 50% 50%, var(--ink) 3.4px, transparent 4px) 0 0 / 26px 18px repeat-x; animation: chase 1.1s steps(2, end) infinite; }
+@keyframes chase { to { background-position: 26px 0; } }
+.window { overflow: hidden; padding-block: 8px 4px; }
+.track { display: flex; width: max-content; animation: slide 46s linear infinite; }
+.band:hover .track { animation-play-state: paused; }
+.set { display: flex; list-style: none; margin: 0; padding: 0; }
+.set li { display: flex; align-items: center; }
+.set span { font: 400 clamp(40px, 5vw, 66px)/1 var(--display); text-transform: uppercase; letter-spacing: .03em; padding-inline: clamp(18px, 2.4vw, 34px); white-space: nowrap; }
+.set i { width: 14px; height: 14px; background: var(--ink); transform: rotate(45deg); flex: none; }
+@keyframes slide { to { transform: translateX(-50%); } }

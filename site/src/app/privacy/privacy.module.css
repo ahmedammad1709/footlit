@@ -1,0 +1,21 @@
+.hero { padding-block: clamp(56px, 8vw, 120px); border-bottom: 6px solid var(--lit); }
+.h1 { font-size: clamp(64px, 9vw, 150px); color: var(--paper); margin-bottom: 22px; }
+.h1 em { font-style: normal; color: var(--lit); display: block; }
+.body { max-width: 860px; padding-block: clamp(48px, 7vw, 100px); display: grid; gap: clamp(36px, 5vw, 64px); }
+.body h2 { font-size: clamp(38px, 4vw, 58px); margin-bottom: 14px; }
+.body p { margin: 0 0 14px; max-width: 68ch; }
+.body code { font: 500 14px var(--mono); background: var(--paper-2); padding: 1px 6px; border-radius: 2px; }
+.body a { text-underline-offset: 3px; }
+
+.short { background: var(--ink); color: var(--paper); padding: clamp(24px, 3vw, 40px); box-shadow: 10px 10px 0 var(--lit); }
+.short h2 { color: var(--lit); }
+.short ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; }
+.short li { display: grid; grid-template-columns: 28px 1fr; gap: 12px; align-items: start; }
+.short li svg { width: 24px; height: 24px; color: #6ee7a0; margin-top: 2px; }
+.short b { color: var(--lit); font-weight: 600; }
+
+.tablewrap { overflow-x: auto; border: 2px solid var(--ink); margin-bottom: 16px; }
+.tablewrap table { border-collapse: collapse; width: 100%; min-width: 560px; }
+.tablewrap th { text-align: left; background: var(--ink); color: var(--paper); font: 500 11.5px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; padding: 12px 14px; }
+.tablewrap td { vertical-align: top; padding: 14px; border-top: 1.5px dotted color-mix(in srgb, var(--ink) 45%, transparent); font-size: 17px; }
+.disclaimer { font: 400 13.5px/1.5 var(--mono); color: var(--quiet-on-paper); border-top: 1.5px solid var(--ink); padding-top: 22px; }

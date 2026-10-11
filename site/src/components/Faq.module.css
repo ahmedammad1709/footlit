@@ -1,0 +1,11 @@
+.grid { display: grid; grid-template-columns: minmax(240px, .7fr) minmax(0, 1.5fr); gap: clamp(28px, 5vw, 88px); align-items: start; }
+.h2 { font-size: clamp(58px, 6.6vw, 108px); position: sticky; top: 100px; }
+.list { border-top: 3px solid var(--ink); }
+.list details { border-bottom: 2px solid var(--ink); }
+.list summary { cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; gap: 20px; padding: 22px 0; font: 500 clamp(21px, 1.9vw, 26px)/1.25 var(--text); }
+.list summary::-webkit-details-marker { display: none; }
+.list summary::after { content: '+'; font: 400 34px/1 var(--display); flex: none; width: 36px; height: 36px; display: grid; place-content: center; border: 2px solid var(--ink); border-radius: 50%; transition: transform .2s var(--spring), background .15s; }
+.list details[open] summary::after { content: '\2212'; background: var(--lit); transform: rotate(180deg); }
+.list details p { margin: 0 0 24px; max-width: 62ch; color: var(--quiet-on-paper); }
+.list details a { color: var(--ink); text-underline-offset: 3px; }
+@media (max-width: 900px) { .grid { grid-template-columns: 1fr; } .h2 { position: static; } }

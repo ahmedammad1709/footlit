@@ -1,0 +1,24 @@
+.footer { padding-top: clamp(56px, 7vw, 100px); border-top: 6px solid var(--lit); }
+.top { display: grid; grid-template-columns: 1.4fr 1fr 1.1fr; gap: clamp(32px, 5vw, 72px); padding-bottom: 56px; }
+.word { font-size: clamp(90px, 12vw, 170px); color: var(--paper); margin: 0; }
+.tag { font-style: italic; color: var(--quiet-on-ink); margin: 6px 0 26px; font-size: 22px; }
+.cols { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; align-content: start; }
+.cols ul, .social { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
+.cols a { text-decoration: none; border-bottom: 1.5px dotted color-mix(in srgb, var(--paper) 35%, transparent); }
+.cols a:hover { border-bottom-color: var(--lit); }
+.by .name { font-size: clamp(54px, 5.4vw, 84px); color: var(--lit); margin: 0 0 10px; }
+.say { margin: 0 0 20px; color: var(--quiet-on-ink); max-width: 30ch; }
+.social { grid-template-columns: repeat(auto-fit, minmax(150px, max-content)); gap: 10px; }
+.social a, .placeholder { display: inline-flex; align-items: center; gap: 10px; border: 2px solid var(--paper); padding: 10px 14px; border-radius: 2px; text-decoration: none; font: 500 12.5px/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; transition: background .15s, color .15s, transform .15s var(--spring); }
+.social a:hover { background: var(--lit); border-color: var(--lit); color: var(--on-lit); transform: translateY(-3px); }
+.placeholder { border-style: dashed; opacity: .55; cursor: help; }
+.legal { display: grid; grid-template-columns: auto 1fr; gap: 24px 48px; padding-block: 26px 34px; border-top: 1.5px solid color-mix(in srgb, var(--paper) 22%, transparent); font: 400 13.5px/1.5 var(--mono); color: var(--quiet-on-ink); }
+.legal p { margin: 0; }
+@media (max-width: 980px) { .top { grid-template-columns: 1fr 1fr; } .by { grid-column: 1 / -1; } }
+@media (max-width: 640px) { .top { grid-template-columns: 1fr; } .legal { grid-template-columns: 1fr; } }
+
+.studio { margin: 0 0 14px; font: 500 13px/1.2 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--quiet-on-ink); }
+.studio a { color: var(--paper); text-decoration: none; border-bottom: 2px solid var(--lit); padding-bottom: 2px; }
+.studio a:hover { background: var(--lit); color: var(--on-lit); }
+.legal a { color: inherit; text-underline-offset: 3px; }
+.legal a:hover { color: var(--lit); }

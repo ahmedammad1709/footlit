@@ -1,0 +1,233 @@
+{
+  "version": "1.0.0",
+  "downloads": {
+    "chrome": {
+      "file": "/downloads/footlit-chrome-1.0.0.zip",
+      "kb": 308
+    },
+    "firefox": {
+      "file": "/downloads/footlit-firefox-1.0.0.zip",
+      "kb": 308
+    }
+  },
+  "events": [
+    {
+      "id": "repo.created",
+      "label": "Repo created",
+      "chip": "Created",
+      "blurb": "Opening night for something new.",
+      "mood": "applause",
+      "kicker": "New repository",
+      "numbered": false
+    },
+    {
+      "id": "repo.deleted",
+      "label": "Repo deleted",
+      "chip": "Deleted",
+      "blurb": "Strike the set.",
+      "mood": "farewell",
+      "kicker": "Repository deleted",
+      "numbered": false
+    },
+    {
+      "id": "repo.forked",
+      "label": "Repo forked",
+      "chip": "Forked",
+      "blurb": "Your own copy, ready to bend.",
+      "mood": "applause",
+      "kicker": "Repository forked",
+      "numbered": false
+    },
+    {
+      "id": "pr.opened",
+      "label": "Pull request opened",
+      "chip": "Opened",
+      "blurb": "A conversation begins.",
+      "mood": "applause",
+      "kicker": "Pull request opened",
+      "numbered": true
+    },
+    {
+      "id": "pr.merged",
+      "label": "Pull request merged",
+      "chip": "Merged",
+      "blurb": "Two branches, one story.",
+      "mood": "applause",
+      "kicker": "Merged",
+      "numbered": true
+    },
+    {
+      "id": "pr.closed",
+      "label": "Pull request closed",
+      "chip": "Closed",
+      "blurb": "Not every scene makes the cut.",
+      "mood": "farewell",
+      "kicker": "Closed without merging",
+      "numbered": true
+    },
+    {
+      "id": "ci.passed",
+      "label": "Checks passed",
+      "chip": "Passed",
+      "blurb": "The green check, with feeling.",
+      "mood": "applause",
+      "kicker": "Checks passed",
+      "numbered": true
+    },
+    {
+      "id": "ci.failed",
+      "label": "Checks failed",
+      "chip": "Failed",
+      "blurb": "The show stops.",
+      "mood": "alarm",
+      "kicker": "Checks failed",
+      "numbered": true
+    },
+    {
+      "id": "deploy.live",
+      "label": "Site or deploy live",
+      "chip": "Deploy",
+      "blurb": "Pages goes up, curtain goes up.",
+      "mood": "applause",
+      "kicker": "Now live",
+      "numbered": false
+    },
+    {
+      "id": "release.published",
+      "label": "Release published",
+      "chip": "Release",
+      "blurb": "A tag worth a trumpet.",
+      "mood": "applause",
+      "kicker": "Release published",
+      "numbered": false
+    },
+    {
+      "id": "issue.closed",
+      "label": "Issue closed",
+      "chip": "Issue closed",
+      "blurb": "One less thing on the list.",
+      "mood": "applause",
+      "kicker": "Issue closed",
+      "numbered": true
+    }
+  ],
+  "groups": [
+    {
+      "id": "repos",
+      "label": "Repositories",
+      "events": [
+        "repo.created",
+        "repo.deleted",
+        "repo.forked"
+      ]
+    },
+    {
+      "id": "prs",
+      "label": "Pull requests",
+      "events": [
+        "pr.opened",
+        "pr.merged",
+        "pr.closed"
+      ]
+    },
+    {
+      "id": "checks",
+      "label": "Checks and deploys",
+      "events": [
+        "ci.passed",
+        "ci.failed",
+        "deploy.live"
+      ]
+    },
+    {
+      "id": "other",
+      "label": "Releases and issues",
+      "events": [
+        "release.published",
+        "issue.closed"
+      ]
+    }
+  ],
+  "moods": {
+    "applause": {
+      "label": "Applause",
+      "blurb": "Something went right."
+    },
+    "farewell": {
+      "label": "Farewell",
+      "blurb": "Something ended, on purpose."
+    },
+    "alarm": {
+      "label": "Alarm",
+      "blurb": "Something broke."
+    }
+  },
+  "themes": [
+    {
+      "id": "marquee",
+      "name": "Marquee",
+      "tagline": "Footlights, a hanging bill, a ticket stub and a lot of paper.",
+      "swatch": [
+        "#1B1612",
+        "#F2A81D",
+        "#F1E8D4",
+        "#B8301F"
+      ]
+    },
+    {
+      "id": "terminal",
+      "name": "Terminal",
+      "tagline": "A shell, a merge graph, an exit code. Developers will get it.",
+      "swatch": [
+        "#0A0D0C",
+        "#5CF29A",
+        "#6FD3E0",
+        "#FF6B5E"
+      ]
+    },
+    {
+      "id": "mission",
+      "name": "Mission Control",
+      "tagline": "T-minus, a GO/NO-GO poll and a trajectory. For launches and for aborts.",
+      "swatch": [
+        "#06090D",
+        "#FF7A2B",
+        "#E8EEF3",
+        "#3FD68F"
+      ]
+    },
+    {
+      "id": "pixel",
+      "name": "Pixel Arcade",
+      "tagline": "Stage clear, game over, and a very small robot. Sixteen colours, no smoothing.",
+      "swatch": [
+        "#1D2B53",
+        "#FFEC27",
+        "#29ADFF",
+        "#FF004D"
+      ]
+    },
+    {
+      "id": "crawler",
+      "name": "Web Crawler",
+      "tagline": "Webs spin out from the corners and spiders do the commit work. Tears if the build breaks.",
+      "swatch": [
+        "#050506",
+        "#C9CED6",
+        "#E5322D",
+        "#6E757F"
+      ]
+    },
+    {
+      "id": "quiet",
+      "name": "Quiet",
+      "tagline": "One small toast in the corner. For the office, for focus, for people who dislike fireworks.",
+      "swatch": [
+        "#FFFFFF",
+        "#1A7F37",
+        "#CF222E",
+        "#59636E"
+      ]
+    }
+  ]
+}

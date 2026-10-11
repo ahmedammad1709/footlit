@@ -1,0 +1,59 @@
+/* Playbill, scaled up for the web. Same tokens as the extension (see DESIGN.md), named by function. */
+@font-face { font-family: 'FL Display'; src: url('/fonts/league-gothic.woff2') format('woff2'); font-display: swap; }
+@font-face { font-family: 'FL Mono'; font-weight: 400; src: url('/fonts/dm-mono-400.woff2') format('woff2'); font-display: swap; }
+@font-face { font-family: 'FL Mono'; font-weight: 500; src: url('/fonts/dm-mono-500.woff2') format('woff2'); font-display: swap; }
+@font-face { font-family: 'FL Text'; font-weight: 200 800; src: url('/fonts/newsreader.woff2') format('woff2'); font-display: swap; }
+@font-face { font-family: 'FL Text'; font-weight: 200 800; font-style: italic; src: url('/fonts/newsreader-italic.woff2') format('woff2'); font-display: swap; }
+
+:root {
+  --paper: #F1E8D4; --paper-2: #E7DCC2; --paper-3: #F8F2E3;
+  --ink: #1B1612; --ink-2: #241D17; --ink-3: #2E251D;
+  --quiet-on-paper: #5C5043; --quiet-on-ink: #B5A78F;
+  --lit: #F2A81D; --lit-hi: #FFE29A; --on-lit: #2B1C00;
+  --velvet: #B8301F; --velvet-hi: #E5604C;
+  --display: 'FL Display', 'League Gothic', 'Arial Narrow', Impact, sans-serif;
+  --text: 'FL Text', Newsreader, Georgia, serif;
+  --mono: 'FL Mono', 'DM Mono', ui-monospace, Consolas, monospace;
+  --spring: cubic-bezier(.34, 1.56, .64, 1);
+  --ease: cubic-bezier(.2, .7, .2, 1);
+  --wrap: 1240px;
+  --gutter: clamp(20px, 4vw, 48px);
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 76px; }
+body { margin: 0; background: var(--paper); color: var(--ink); font: 400 clamp(17px, 1.25vw, 20px)/1.55 var(--text); -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; overflow-x: hidden; }
+img { max-width: 100%; display: block; }
+a { color: inherit; }
+button { font: inherit; color: inherit; cursor: pointer; }
+:focus-visible { outline: 3px solid var(--lit); outline-offset: 3px; }
+::selection { background: var(--lit); color: var(--on-lit); }
+
+.wrap { width: min(var(--wrap), 100% - 2 * var(--gutter)); margin-inline: auto; }
+.paper { background: var(--paper); color: var(--ink); }
+.paper2 { background: var(--paper-2); color: var(--ink); }
+.ink { background: var(--ink); color: var(--paper); }
+
+.display { font-family: var(--display); font-weight: 400; text-transform: uppercase; letter-spacing: .015em; line-height: .92; margin: 0; }
+.eyebrow { font: 500 12.5px/1.2 var(--mono); letter-spacing: .16em; text-transform: uppercase; color: var(--quiet-on-paper); margin: 0 0 14px; }
+.ink .eyebrow { color: var(--quiet-on-ink); }
+.lede { font-size: clamp(19px, 1.7vw, 25px); line-height: 1.45; color: var(--quiet-on-paper); max-width: 46ch; margin: 0; }
+.ink .lede { color: var(--quiet-on-ink); }
+.mono { font-family: var(--mono); }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.skip { position: absolute; left: 12px; top: -60px; background: var(--ink); color: var(--paper); padding: 10px 14px; font: 500 13px var(--mono); z-index: 100; }
+.skip:focus { top: 12px; }
+
+section { position: relative; }
+.band { padding-block: clamp(56px, 7vw, 104px); }
+
+/* small bordered button used inside sections */
+.btn { display: inline-flex; align-items: center; gap: 8px; border: 2px solid currentColor; background: transparent; padding: 11px 16px; border-radius: 2px; font: 500 12.5px/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; text-decoration: none; transition: background .15s, color .15s, transform .15s var(--spring); }
+.btn:hover { background: var(--ink); color: var(--paper); transform: translateY(-2px); }
+.ink .btn:hover { background: var(--paper); color: var(--ink); }
+.btn[aria-pressed='true'] { background: var(--lit); color: var(--on-lit); border-color: var(--lit); }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; }
+}

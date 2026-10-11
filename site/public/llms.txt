@@ -1,0 +1,21 @@
+# Footlit
+
+> Footlit is a free browser extension for GitHub that plays a themed full-screen animation when you merge a pull request, pass checks, publish a release, put a GitHub Pages site live and more. It works in Chrome, Edge, Brave and Firefox. It makes no network requests, has no accounts or analytics, and runs only on github.com. Built by Ammad Ahmed at CodeVeil Studio (https://codeveilstudio.tech).
+
+## Key facts
+
+- Price: free. No account, no ads.
+- Works with: Chrome 111+, Microsoft Edge, Brave, other Chromium browsers; Firefox 128+ (preview build).
+- Events (11): repository created / deleted / forked; pull request opened / merged / closed; checks passed / failed; site or deploy live; release published; issue closed.
+- Themes (6): Marquee, Terminal, Mission Control, Pixel Arcade, Web Crawler, Quiet.
+- Privacy: no network requests from the extension; settings stay in the browser; permissions are access to github.com and storage only.
+- Footlit reacts only to changes it sees happen while a GitHub tab is open. It does not read code, diffs, comments, credentials or anything typed.
+- Not affiliated with GitHub, Inc.
+
+## Pages
+
+- [Home](/): overview, live demo, install
+- [Themes](/themes/): all six themes, each with a live demo
+- [Events](/events/): the 11 GitHub events and how each is detected
+- [Changelog](/changelog/): release notes
+- [Privacy policy](/privacy/): exactly what is read and stored
