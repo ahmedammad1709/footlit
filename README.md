@@ -80,3 +80,5 @@ Footlit reads github.com pages in your browser to notice events and plays an ani
 ## Website
 
 The marketing site lives in `site/` (Next.js, static export) and reuses the extension's engine and themes for its live demos. See `site/README.md`. Related commands: `npm run site-assets` (renders the mockup images) and, inside `site/`, `npm run prep`, `npm run dev`, `npm run build`.
+
+by Ammad Ahmed
