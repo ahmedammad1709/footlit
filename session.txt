@@ -1,0 +1,2551 @@
+ ▐▛███▛█   Claude Code v2.1.296
+▝▜██████▀  Sonnet 5.5 · Claude Pro
+ ▝▝   ▝▝   D:\NodeJS\product
+
+
+✻ Conversation compacted (ctrl+o for history)
+
+
+● All voice lines fit without overlaps. Next I'll build the film's
+  foundation—the build itself, a local server, and a frame-exact renderer
+  streaming directly into ffmpeg with no disk usage. · summary
+
+● Write(video\scripts\build.mjs)
+  ⎿  Wrote 23 lines to video\scripts\build.mjs
+       1 // Bundles the film page and the real Footlit engine into video/
+         dist.
+       2 import esbuild from 'esbuild';
+       4 import path from 'node:path';
+       5 
+       6 const root = path.resolve(import.meta.dirname, '..');
+       7 const repo = path.resolve(root, '..');
+       9 
+      10 // the real engine and themes, exactly as the extension and the 
+         website run them
+     … +18 lines (ctrl+o to expand)
+
+● Write(video\scripts\render.mjs)
+  ⎿  Wrote 138 lines to video\scripts\render.mjs
+       1 // Renders the film deterministically: virtual time + BeginFrame
+       2 //   node scripts/render.mjs --preview=1.5,3.5,10        save PN
+         G stills at those times to out/preview/
+       3 //   node scripts/render.mjs --full                      render 
+       4 //   options: --from=SEC --to=SEC (render only a range)   --fps=
+         30   --no-audio   --crf=14
+       6 import { spawn, spawnSync } from 'node:child_process';
+       7 import http from 'node:http';
+       8 import fs from 'node:fs/promises';
+      10 import path from 'node:path';
+     … +193 lines (ctrl+o to expand)
+  ⎿  Read scripts\render.mjs (139 lines)
+  ⎿  Read scripts\build.mjs (24 lines)
+  ⎿  Read src\vo.json (25 lines)
+  ⎿  Read scripts\make-vo.mjs (47 lines)
+  ⎿  Read scripts\proto.mjs (60 lines)
+
+● Bash(cd /d/NodeJS/product && ls video video/src video/assets video/out 2>&1 |
+      head -40; cat video/package.json; cat .gitignore | head -20; cat
+      src/dev/site-engine.ts…)
+  ⎿  video:
+     assets
+     node_modules
+     … +113 lines (ctrl+o to expand)
+
+● Bash(cat src/engine/play.ts; sed -n 1,80p src/shared/events.ts; grep -rn
+      "site-engine" site/scripts scripts | head; ls src/engine src/themes)
+  ⎿  import { EVENT_BY_ID, type EventId, type Mood } from '../shared/events
+     ';
+     import { ensureFonts, type FontLoader } from '../shared/fonts';
+     … +184 lines (ctrl+o to expand)
+
+● Bash(sed -n 8,30p site/scripts/prep.mjs; cat src/engine/util.ts | head -60;
+      sed -n 1,60p src/engine/stage.ts; cat src/themes/index.ts; cat DESIGN.md |
+      head -60; ffmp…)
+  ⎿  const site = path.resolve(import.meta.dirname, '..');
+     const root = path.resolve(site, '..');
+     const require = createRequire(path.join(root, 'package.json'));
+     … +204 lines (ctrl+o to expand)
+
+● Bash(cd /d/NodeJS/product/video && mkdir -p src && cat > src/cues.json <<'EOF'
+      { "duration": 60 }…)
+  ⎿  video bundles built
+     file:///D:/NodeJS/product/video/node_modules/puppeteer-core/lib/puppet
+     eer/util/Deferred.js:57
+     … +13 lines (ctrl+o to expand)
+
+● The film page and renderer are built, but the first test render timed out
+  since virtual time was blocking page load. I'll reorder things so the page
+  loads in real time before virtual time kicks in. · summary
+
+● Bash(cat > scripts/_patch1.cjs <<'EOF'
+      const fs=require('fs');let
+      s=fs.readFileSync('scripts/render.mjs','utf8');…)
+  ⎿  30:const popupStub = `<script>(()=>{const mem={sync:{'footlit:settings
+     ':{onboarded:true,theme:'marquee'}},local:{'footlit:stats':{shows:214,
+     log:[]}}};const area=(n)=>({get:async(k)=>(k in mem[n]?{[k]:mem[n][k]}
+     … +13 lines (ctrl+o to expand)
+
+● Bash(sed -i "s/return a ? a.split('=')\[1\]/return a ? a.slice(a.indexOf('=')
+      + 1)/" scripts/render.mjs && node scripts/render.mjs
+      --q="lab=marquee:pr.merged:1" --pr…)
+  ⎿  saved t0_5.png
+     saved t1_5.png
+     saved t2_5.png
+     … +3 lines (ctrl+o to expand)
+
+  Read 1 file (ctrl+o to expand)
+
+● Bash(cat > scripts/_p.cjs <<'EOF'
+      const fs=require('fs');let s=fs.readFileSync('src/film.ts','utf8');…)
+  ⎿  video bundles built
+     [page] [film] marquee repo.created 5.00s
+     [page] [film] marquee pr.merged 5.00s
+     … +11 lines (ctrl+o to expand)
+
+● Bash(cat > scripts/sheet.mjs <<'EOF'
+      // Makes a contact sheet from preview stills:  node scripts/sheet.mjs
+      out/sheet.png cols file1 file2 ...…)
+  ⎿  preview
+     sheet-crawler.png
+     sheet-mission.png
+     … +4 lines (ctrl+o to expand)
+
+  Read 5 files (ctrl+o to expand)
+
+● Renders are deterministic and the real themes look great on film—I'll use the
+  Quiet theme's tiny toast as a deliberate quiet beat. Next, I'll write the full
+  film timeline, starting with the on-screen popup. · summary
+
+● Bash(cd /d/NodeJS/product && cat src/popup/popup.html; grep -n "width\|height"
+      src/popup/popup.css | head -20; grep -n "theme" src/popup/popup.ts | head
+      -30)
+  ⎿  <!doctype html>
+     <html lang="en">
+     <head>
+     … +54 lines (ctrl+o to expand)
+
+  Read 1 file, listed 1 directory (ctrl+o to expand)
+
+● Bash(cd /d/NodeJS/product/video && cat > src/cues.json <<'EOF'
+      {…)
+  ⎿  1
+
+● Write(video\src\film.ts)
+  ⎿  Added 402 lines, removed 2 lines
+        1 -declare const Footlit: { play(o: Record<string, unknown>): Pro
+          -mise<void>; stop(): void; themes: { id: string }[] };         
+        1 +// The Footlit launch film, 1920x1080. Everything is scheduled
+          + against one virtual clock,                                   
+        2 +// so the renderer can capture it frame by frame. The shows th
+          +emselves are the real engine.                                 
+        3 +import cues from './cues.json';                               
+        4 +import { buildGh } from './gh';                               
+        5 +                                                              
+        6 +declare const Footlit: { play(o: Record<string, unknown>): Pro
+          +mise<void>; stop(): void; themes: { id: string; name: string }
+          +[] };                                                         
+        7  const w = window as unknown as { __ready: boolean; __start: ()
+            => void };
+        8  const q = new URLSearchParams(location.search);
+        9  
+       10 +const INK = '#17120E', PAPER = '#F1E8D4', LIT = '#F6B63B', ALA
+          +RM = '#E5604C';                                               
+       11 +const DISPLAY = "'League Gothic', 'Impact', sans-serif", TEXT 
+          += "'Newsreader', Georgia, serif", MONO = "'DM Mono', monospace
+          +";                                                            
+       12 +                                                              
+       13 +// ---------- tiny scheduling kit ----------                  
+       14 +type Job = () => void;                                        
+       15 +const jobs: Job[] = [];                                       
+       16 +const later = (fn: Job) => void jobs.push(fn);                
+       17 +/** run fn at film time t (seconds) */                        
+       18 +const at = (t: number, fn: () => void) => later(() => void set
+          +Timeout(fn, t * 1000));                                       
+       19 +/** animate el starting at film time t */                     
+       20 +const A = (el: Element, kf: Keyframe[], t: number, dur: number
+          +, o: KeyframeAnimationOptions = {}) =>                        
+       21 +  later(() => void el.animate(kf, { delay: t * 1000, duration:
+          + Math.max(1, dur * 1000), fill: 'both', easing: 'cubic-bezier(
+          +.2,.7,.2,1)', ...o }));                                       
+       22 +/** make el visible only between t0 and t1 (el must start at o
+          +pacity 0) */                                                  
+       23 +const vis = (el: HTMLElement, t0: number, t1: number, fade = 0
+          +) => {                                                        
+       24 +  el.style.opacity = '0';                                     
+       25 +  const f = fade > 0 ? Math.min(0.5, fade / (t1 - t0)) : 0;   
+       26 +  const kf: Keyframe[] = fade > 0                             
+       27 +    ? [{ opacity: 0, offset: 0 }, { opacity: 1, offset: f }, {
+          + opacity: 1, offset: 1 - f }, { opacity: 0, offset: 1 }]      
+       28 +    : [{ opacity: 1 }, { opacity: 1 }];                       
+       29 +  later(() => void el.animate(kf, { delay: t0 * 1000, duration
+          +: (t1 - t0) * 1000, fill: 'none', easing: 'linear' }));       
+       30 +};                                                            
+       31 +const mk = <K extends keyof HTMLElementTagNameMap>(tag: K, css
+          + = '', text = '', parent?: Element): HTMLElementTagNameMap[K] 
+          +=> {                                                          
+       32 +  const e = document.createElement(tag);                      
+       33 +  if (css) e.style.cssText = css;                             
+       34 +  if (text) e.textContent = text;                             
+       35 +  parent?.append(e);                                          
+       36 +  return e;                                                   
+       37 +};                                                            
+       38 +const layer = (parent: Element, css = '') => mk('div', `positi
+          +on:absolute;inset:0;${css}`, '', parent);                     
+       39 +const EASE_IO = 'cubic-bezier(.45,0,.2,1)';                   
+       40 +                                                              
+       41 +const film = document.getElementById('film')!;                
+       42 +                                                              
+       43 +// ---------- cursor ----------                               
+       44 +function makeCursor(parent: HTMLElement) {                    
+       45 +  const el = mk('div', 'position:absolute;left:0;top:0;width:3
+          +4px;height:42px;opacity:0;z-index:50;pointer-events:none;filte
+          +r:drop-shadow(0 3px 0 rgba(0,0,0,.35))', '', parent);         
+       46 +  el.innerHTML = `<svg width="34" height="42" viewBox="0 0 34 
+          +42"><path d="M3 2 L3 33 L11 26 L16.5 38.5 L22 36 L16.5 24 L27 
+          +24 Z" fill="${PAPER}" stroke="${INK}" stroke-width="2.5" strok
+          +e-linejoin="round"/></svg>`;                                  
+       47 +  return {                                                    
+       48 +    show: (t0: number, t1: number) => vis(el, t0, t1),        
+       49 +    path(pts: { t: number; x: number; y: number }[]) {        
+       50 +      const t0 = pts[0]!.t, t1 = pts[pts.length - 1]!.t;      
+       51 +      const kf = pts.map((p) => ({ transform: `translate(${p.x
+          +}px,${p.y}px)`, offset: (p.t - t0) / (t1 - t0), easing: EASE_I
+          +O }));                                                        
+       52 +      A(el, kf, t0, t1 - t0, { easing: 'linear' });           
+       53 +    },                                                        
+       54 +    click(t: number, x: number, y: number) {                  
+       55 +      const ring = mk('div', `position:absolute;left:${x - 36}
+          +px;top:${y - 36}px;width:72px;height:72px;border-radius:50%;bo
+          +rder:5px solid ${LIT};opacity:0;z-index:49;pointer-events:none
+          +`, '', parent);                                               
+       56 +      A(ring, [{ opacity: 0.95, transform: 'scale(.25)' }, { o
+          +pacity: 0, transform: 'scale(1.25)' }], t, 0.5, { easing: 'cub
+          +ic-bezier(.1,.6,.3,1)', fill: 'none' });                      
+       57 +      A(el, [{ scale: '1' }, { scale: '.86' }, { scale: '1' }]
+          +, t - 0.04, 0.18, { fill: 'none', easing: 'ease-out' });      
+       58 +    },                                                        
+       59 +  };                                                          
+       60 +}                                                             
+       61 +const centerOf = (el: Element) => { const r = el.getBoundingCl
+          +ientRect(); return { x: r.left + r.width / 2, y: r.top + r.hei
+          +ght / 2 }; };                                                 
+       62 +                                                              
+       63 +// ===========================================================
+          +==========                                                    
+       64 +// SCENE 1: the hook. A merge, with nothing to mark it.       
+       65 +// ===========================================================
+          +==========                                                    
+       66 +function hook() {                                             
+       67 +  const { start, end, click } = cues.hook;                    
+       68 +  const s = layer(film, `background:#0c0906;overflow:hidden`);
+       69 +  vis(s, start, end);                                         
+       70 +  const gh = buildGh();                                       
+       71 +  const stage = mk('div', 'position:absolute;left:50%;top:50%;
+          +width:760px;height:260px;margin:-130px 0 0 -380px;transform-or
+          +igin:50% 50%', '', s);                                        
+       72 +  stage.style.transform = 'scale(1.9)';                       
+       73 +  const box = mk('div', 'position:absolute;inset:0', '', stage
+          +);                                                            
+       74 +  box.innerHTML = gh.hookBoxes();                             
+       75 +  const open = box.querySelector<HTMLElement>('.h-open')!;    
+       76 +  const done = box.querySelector<HTMLElement>('.h-done')!;    
+       77 +  open.style.opacity = '1';                                   
+       78 +  done.style.opacity = '0';                                   
+       79 +  A(open, [{ opacity: 1 }, { opacity: 0 }], click, 0.001);    
+       80 +  A(done, [{ opacity: 0 }, { opacity: 1 }], click, 0.001);    
+       81 +  A(stage, [{ transform: 'scale(1.9)' }, { transform: 'scale(2
+          +.06)' }], start, end - start, { easing: 'linear' });          
+       82 +  // fade to black at the end (the cut into the montage is a h
+          +ard one)                                                      
+       83 +  const fadeOut = layer(s, 'background:#000;opacity:0');      
+       84 +  A(fadeOut, [{ opacity: 0 }, { opacity: 1 }], end - 0.35, 0.3
+          +, { easing: 'ease-in' });                                     
+       85 +  const cur = makeCursor(s);                                  
+       86 +  const btn = box.querySelector<HTMLElement>('.h-btn')!;      
+       87 +  const c = centerOf(btn);                                    
+       88 +  cur.show(start, end);                                       
+       89 +  cur.path([{ t: 0.15, x: 1500, y: 880 }, { t: click - 0.05, x
+          +: c.x + 24, y: c.y + 20 }]);                                  
+       90 +  cur.click(click, c.x + 24, c.y + 20);                       
+       91 +}                                                             
+       92 +                                                              
+       93 +// ===========================================================
+          +==========                                                    
+       94 +// SCENE 2: montage. The real engine, cut hard, faster and fas
+          +ter.                                                          
+       95 +// ===========================================================
+          +==========                                                    
+       96 +function montage() {                                          
+       97 +  const { start, end, shots } = cues.montage;                 
+       98 +  const s = layer(film, 'background:#0c0906;overflow:hidden');
+       99 +  vis(s, start, end);                                         
+      100 +  const hostEl = layer(s);                                    
+      101 +  const hud = layer(s, 'z-index:5;pointer-events:none');      
+      102 +  const themeName: Record<string, string> = { marquee: 'Marque
+          +e', terminal: 'Terminal', mission: 'Mission Control', pixel: '
+          +Pixel Arcade', crawler: 'Web Crawler', quiet: 'Quiet' };      
+      103 +  let t = start;                                              
+      104 +  shots.forEach((sh, i) => {                                  
+      105 +    const t0 = t;                                             
+      106 +    const last = i === shots.length - 1;                      
+      107 +    at(t0, () => {                                            
+      108 +      Footlit.stop();                                         
+      109 +      void Footlit.play({ theme: sh.theme, event: sh.event, sc
+          +ale: sh.scale, container: hostEl, subject: 'acme/widget-shop #
+          +42', detail: 'Fix flaky login redirect on Safari' });         
+      110 +    });                                                       
+      111 +    // label chip                                             
+      112 +    const chip = mk('div', `position:absolute;left:48px;top:44
+          +px;padding:9px 14px 8px;background:${INK};color:${PAPER};font:
+          +500 19px ${MONO};letter-spacing:.1em;text-transform:uppercase;
+          +border-left:5px solid ${LIT};opacity:0`, `${themeName[sh.theme
+          +]}  /  ${sh.event.replace('.', ' ')}`, hud);                  
+      113 +    vis(chip, t0, t0 + sh.dur);                               
+      114 +    const count = mk('div', `position:absolute;right:48px;bott
+          +om:40px;color:${PAPER};font:500 19px ${MONO};letter-spacing:.1
+          +4em;text-shadow:0 0 6px ${INK},0 0 2px ${INK};opacity:0`, `${S
+          +tring(i + 1).padStart(2, '0')} / ${shots.length}`, hud);      
+      115 +    vis(count, t0, t0 + sh.dur);                              
+      116 +    // impact flash on each cut                               
+      117 +    const flash = layer(hud, `background:${PAPER};opacity:0`);
+      118 +    A(flash, [{ opacity: i % 2 ? 0.28 : 0.42 }, { opacity: 0 }
+          +], t0, 0.14, { easing: 'linear', fill: 'none' });             
+      119 +    t += sh.dur;                                              
+      120 +    if (last) at(t, () => Footlit.stop());                    
+      121 +  });                                                         
+      122 +  void end;                                                   
+      123 +}                                                             
+      124 +                                                              
+      125 +// ===========================================================
+          +==========                                                    
+      126 +// SCENE 3: black, then the logo with its footlights.         
+      127 +// ===========================================================
+          +==========                                                    
+      128 +function logo() {                                             
+      129 +  const { start, end } = cues.logo;                           
+      130 +  const s = layer(film, `background:#0c0906;overflow:hidden`);
+      131 +  vis(s, start, end);                                         
+      132 +  // stepped light cone: flat bands, never a gradient         
+      133 +  const cx = 960;                                             
+      134 +  const bands = [                                             
+      135 +    { w: 1500, o: 0.10 }, { w: 1180, o: 0.12 }, { w: 860, o: 0
+          +.16 }, { w: 540, o: 0.22 },                                   
+      136 +  ];                                                          
+      137 +  bands.forEach((b, i) => {                                   
+      138 +    const el = mk('div', `position:absolute;left:${cx - b.w / 
+          +2}px;top:0;width:${b.w}px;height:1080px;background:${LIT};opac
+          +ity:0;clip-path:polygon(40% 0,60% 0,100% 100%,0 100%)`, '', s)
+          +;                                                             
+      139 +    A(el, [{ opacity: 0 }, { opacity: b.o }], start + 0.1 + i 
+          +* 0.16, 0.12, { easing: 'steps(1,end)' });                    
+      140 +  });                                                         
+      141 +  // footlights, left to right                                
+      142 +  const row = mk('div', 'position:absolute;left:0;right:0;bott
+          +om:0;height:70px;display:flex;justify-content:space-between;pa
+          +dding:0 62px;align-items:flex-end', '', s);                   
+      143 +  for (let i = 0; i < 15; i++) {                              
+      144 +    const lamp = mk('div', `width:88px;height:44px;border-radi
+          +us:44px 44px 0 0;background:#3a2c14;position:relative`, '', ro
+          +w);                                                           
+      145 +    const on = mk('div', `position:absolute;inset:0;border-rad
+          +ius:44px 44px 0 0;background:${LIT};opacity:0`, '', lamp);    
+      146 +    mk('div', `position:absolute;left:14px;top:12px;width:20px
+          +;height:22px;border-radius:20px 20px 0 0;background:#FFE9B0;op
+          +acity:.0`, '', on);                                           
+      147 +    A(on, [{ opacity: 0 }, { opacity: 1 }], start + 0.35 + i *
+          + 0.045, 0.06, { easing: 'steps(1,end)' });                    
+      148 +    on.firstElementChild && A(on.firstElementChild, [{ opacity
+          +: 0 }, { opacity: 0.9 }], start + 0.35 + i * 0.045, 0.06, { ea
+          +sing: 'steps(1,end)' });                                      
+      149 +  }                                                           
+      150 +  mk('div', `position:absolute;left:0;right:0;bottom:0;height:
+          +8px;background:${PAPER}`, '', s);                             
+      151 +  // wordmark                                                 
+      152 +  const word = mk('div', `position:absolute;left:0;right:0;top
+          +:250px;text-align:center;font:400 400px/1 ${DISPLAY};letter-sp
+          +acing:.02em;color:${PAPER};text-transform:uppercase;display:fl
+          +ex;justify-content:center`, '', s);                           
+      153 +  'FOOTLIT'.split('').forEach((ch, i) => {                    
+      154 +    const l = mk('span', 'display:inline-block;overflow:hidden
+          +;line-height:.86;padding-top:.04em', '', word);               
+      155 +    const inner = mk('span', 'display:inline-block', ch, l);  
+      156 +    A(inner, [{ transform: 'translateY(105%)' }, { transform: 
+          +'translateY(0)' }], start + 0.55 + i * 0.07, 0.5, { easing: 'c
+          +ubic-bezier(.2,.8,.2,1)' });                                  
+      157 +  });                                                         
+      158 +  const tag = mk('div', `position:absolute;left:0;right:0;top:
+          +668px;text-align:center;font:italic 400 58px ${TEXT};color:${L
+          +IT}`, 'GitHub, with stage lighting.', s);                     
+      159 +  A(tag, [{ opacity: 0, transform: 'translateY(14px)' }, { opa
+          +city: 1, transform: 'translateY(0)' }], start + 1.75, 0.5);   
+      160 +  tag.style.opacity = '0';                                    
+      161 +  const sub = mk('div', `position:absolute;left:0;right:0;top:
+          +770px;text-align:center;font:500 22px ${MONO};letter-spacing:.
+          +2em;color:#B5A78F;text-transform:uppercase`, 'A browser extens
+          +ion for Chrome, Edge and Firefox', s);                        
+      162 +  sub.style.opacity = '0';                                    
+      163 +  A(sub, [{ opacity: 0 }, { opacity: 1 }], start + 2.4, 0.5); 
+      164 +  A(s, [{ transform: 'scale(1)' }, { transform: 'scale(1.035)'
+          + }], start, end - start, { easing: 'linear', fill: 'none' }); 
+      165 +}                                                             
+      166 +                                                              
+      167 +// ===========================================================
+          +==========                                                    
+      168 +// SCENE 4: the demo. Programme column on the left, the real t
+          +hing on the right.                                            
+      169 +// ===========================================================
+          +==========                                                    
+      170 +async function demo() {                                       
+      171 +  const { start, end, steps } = cues.demo;                    
+      172 +  const s = layer(film, `background:${INK};overflow:hidden`); 
+      173 +  vis(s, start, end);                                         
+      174 +  const gh = buildGh();                                       
+      175 +                                                              
+      176 +  // ---- left: the programme ----                            
+      177 +  const col = layer(s, 'right:auto;width:420px');             
+      178 +  const names = ['Pick a theme', 'Create a repo', 'Break the b
+          +uild', 'Fix it. Merge it.'];                                  
+      179 +  const stamp = mk('div', `position:absolute;left:62px;top:84p
+          +x;padding:8px 14px 6px;border:2.5px solid ${LIT};color:${LIT};
+          +font:500 19px ${MONO};letter-spacing:.16em;transform:rotate(-3
+          +deg)`, 'NOW SHOWING', col);                                   
+      180 +  void stamp;                                                 
+      181 +  const numWrap = mk('div', `position:absolute;left:52px;top:1
+          +50px;width:360px;height:300px;overflow:hidden`, '', col);     
+      182 +  const titleWrap = mk('div', `position:absolute;left:62px;top
+          +:468px;width:340px;height:170px;overflow:hidden`, '', col);   
+      183 +  steps.forEach((st, i) => {                                  
+      184 +    const t0 = st.t, t1 = i + 1 < steps.length ? steps[i + 1]!
+          +.t : end;                                                     
+      185 +    const n = mk('div', `position:absolute;left:0;top:0;font:4
+          +00 330px/1 ${DISPLAY};color:${LIT};opacity:0`, String(st.n).pa
+          +dStart(2, '0'), numWrap);                                     
+      186 +    const ti = mk('div', `position:absolute;left:0;top:0;font:
+          +italic 500 62px/1.02 ${TEXT};color:${PAPER};opacity:0;letter-s
+          +pacing:-.01em`, names[i], titleWrap);                         
+      187 +    for (const [el, off] of [[n, 140], [ti, 60]] as const) {  
+      188 +      el.style.opacity = '0';                                 
+      189 +      A(el, [{ opacity: 0, transform: `translateY(${off}px)`, 
+          +offset: 0 }, { opacity: 1, transform: 'translateY(0)', offset:
+          + 0.1 }, { opacity: 1, transform: 'translateY(0)', offset: 0.97
+          + }, { opacity: 0, transform: `translateY(-${off / 2}px)`, offs
+          +et: 1 }], t0, t1 - t0, { fill: 'none', easing: 'cubic-bezier(.
+          +2,.8,.2,1)' });                                               
+      190 +    }                                                         
+      191 +  });                                                         
+      192 +  // programme list                                           
+      193 +  const list = mk('div', `position:absolute;left:62px;bottom:8
+          +4px;width:300px;font:500 17px ${MONO};letter-spacing:.1em;text
+          +-transform:uppercase`, '', col);                              
+      194 +  names.forEach((nm, i) => {                                  
+      195 +    const row = mk('div', `display:flex;align-items:flex-end;g
+          +ap:8px;padding:7px 0;color:#7a6c58`, '', list);               
+      196 +    const a = mk('span', '', String(i + 1).padStart(2, '0'), r
+          +ow);                                                          
+      197 +    mk('span', 'flex:1;border-bottom:1.5px dotted #4a3f31;marg
+          +in-bottom:5px', '', row);                                     
+      198 +    const b = mk('span', '', nm.replace('. Merge it.', ' + mer
+          +ge').toUpperCase(), row);                                     
+      199 +    const t0 = steps[i]!.t;                                   
+      200 +    for (const el of [row, a, b]) A(el, [{ color: '#7a6c58' },
+          + { color: LIT }], t0, 0.01, { easing: 'steps(1,end)' });      
+      201 +    if (i + 1 < steps.length) A(row, [{ color: LIT }, { color:
+          + '#7a6c58' }], steps[i + 1]!.t, 0.01, { easing: 'steps(1,end)'
+          + });                                                          
+      202 +    // children inherit via explicit colour: mirror on the spa
+          +ns                                                            
+      203 +    for (const el of [a, b]) {                                
+      204 +      A(el, [{ color: '#7a6c58' }, { color: LIT }], t0, 0.01, 
+          +{ easing: 'steps(1,end)' });                                  
+      205 +      if (i + 1 < steps.length) A(el, [{ color: LIT }, { color
+          +: '#7a6c58' }], steps[i + 1]!.t, 0.01, { easing: 'steps(1,end)
+          +' });                                                         
+      206 +    }                                                         
+      207 +  });                                                         
+      208 +                                                              
+      209 +  // ---- right: everything else lives in one camera ----     
+      210 +  const right = layer(s, 'left:420px;overflow:visible');      
+      211 +  const cam = layer(right, 'transform-origin:50% 50%');       
+      212 +  A(cam, [{ transform: 'scale(1)' }, { transform: 'scale(1.03)
+          +' }], start, end - start, { easing: 'linear' });              
+      213 +                                                              
+      214 +  // popup (the real popup page, in an iframe)                
+      215 +  const popupWrap = layer(cam);                               
+      216 +  vis(popupWrap, start, cues.demo.browserIn + 0.3);           
+      217 +  const PW = 372, PS = 1.68;                                  
+      218 +  const frame = document.createElement('iframe');             
+      219 +  frame.src = '/ext/popup/popup.html';                        
+      220 +  frame.style.cssText = `position:absolute;left:${420 + 740 - 
+          +(PW * PS) / 2 - 420}px;top:${(1080 - 600 * PS) / 2}px;width:${
+          +PW}px;height:600px;border:0;transform-origin:0 0;transform:sca
+          +le(${PS});background:#F1E8D4`;                                
+      221 +  popupWrap.append(frame);                                    
+      222 +  await new Promise<void>((res) => { frame.onload = () => res(
+          +); });                                                        
+      223 +  const fd = frame.contentDocument!;                          
+      224 +  for (let i = 0; i < 100 && !fd.querySelector('#themes .tile'
+          +); i++) await new Promise((r) => setTimeout(r, 30));          
+      225 +  await fd.fonts.ready;                                       
+      226 +  // a hairline "paper edge" so the popup reads as an object o
+          +n the dark ground                                             
+      227 +  const fr = frame.getBoundingClientRect();                   
+      228 +  mk('div', `position:absolute;left:${fr.left - 420 - 3}px;top
+          +:${fr.top - 3}px;width:${PW * PS + 6}px;height:${600 * PS + 6}
+          +px;border:3px solid ${PAPER};box-sizing:border-box;pointer-eve
+          +nts:none`, '', popupWrap);                                    
+      229 +  const tiles = [...fd.querySelectorAll<HTMLElement>('#themes 
+          +.tile')];                                                     
+      230 +  const tileCenter = (i: number) => {                         
+      231 +    const r = tiles[i]!.getBoundingClientRect();              
+      232 +    return { x: fr.left + (r.left + r.width / 2) * PS - 420 + 
+          +420, y: fr.top + (r.top + r.height / 2) * PS };               
+      233 +  };                                                          
+      234 +  // wrapper offset: cursor lives in `right`, whose origin is 
+          +at x=420                                                      
+      235 +  const toRight = (p: { x: number; y: number }) => ({ x: p.x -
+          + 420, y: p.y });                                              
+      236 +  const order = [2, 3, 0]; // mission, pixel, marquee (index i
+          +n THEMES order: marquee, terminal, mission, pixel, crawler, qu
+          +iet)                                                          
+      237 +  cues.demo.themeClicks.forEach((t, k) => at(t, () => tiles[or
+          +der[k]!]!.click()));                                          
+      238 +                                                              
+      239 +  // browser                                                  
+      240 +  const bw = 1420, bh = 940, bx = 30, by = 70;                
+      241 +  const browser = mk('div', `position:absolute;left:${bx}px;to
+          +p:${by}px;width:${bw}px;height:${bh}px;background:#202124;bord
+          +er-radius:14px;overflow:hidden;opacity:0`, '', cam);          
+      242 +  vis(browser, cues.demo.browserIn, end);                     
+      243 +  A(browser, [{ clipPath: 'inset(0 0 0 100%)' }, { clipPath: '
+          +inset(0 0 0 0)' }], cues.demo.browserIn, 0.45, { easing: 'cubi
+          +c-bezier(.7,0,.2,1)', fill: 'none' });                        
+      244 +  gh.chrome(browser, bw);                                     
+      245 +  const url = browser.querySelector<HTMLElement>('.u-text')!; 
+      246 +  const tabTitle = browser.querySelector<HTMLElement>('.t-titl
+          +e')!;                                                         
+      247 +  const view = mk('div', `position:absolute;left:0;top:96px;wi
+          +dth:${bw}px;height:${bh - 96}px;overflow:hidden;background:#0d
+          +1117`, '', browser);                                          
+      248 +  const sc = bw / 1108;                                       
+      249 +  const pages = gh.pages(view, sc);                           
+      250 +  const swap = (t: number, page: HTMLElement, u: string, title
+          +: string) => {                                                
+      251 +    at(t, () => { url.textContent = u; tabTitle.textContent = 
+          +title; });                                                    
+      252 +    void page;                                                
+      253 +  };                                                          
+      254 +  // pages                                                    
+      255 +  const D = cues.demo;                                        
+      256 +  vis(pages.newRepo, D.browserIn, D.shows[0]!.t + 0.15);      
+      257 +  vis(pages.repo, D.shows[0]!.t + 0.15, steps[2]!.t);         
+      258 +  vis(pages.pr, steps[2]!.t, end);                            
+      259 +  swap(D.browserIn, pages.newRepo, 'github.com/new', 'Create a
+          + New Repository');                                            
+      260 +  swap(D.shows[0]!.t + 0.15, pages.repo, 'github.com/acme/widg
+          +et-shop', 'acme/widget-shop');                                
+      261 +  swap(steps[2]!.t, pages.pr, 'github.com/acme/widget-shop/pul
+          +l/42', 'Fix flaky login redirect on Safari #42');             
+      262 +                                                              
+      263 +  // typing the name                                          
+      264 +  const nameEl = pages.newRepo.querySelector<HTMLElement>('.f-
+          +name')!;                                                      
+      265 +  const nameCaret = pages.newRepo.querySelector<HTMLElement>('
+          +.f-caret')!;                                                  
+      266 +  const word = 'widget-shop';                                 
+      267 +  const ts = D.typeStart, te = D.typeEnd;                     
+      268 +  at(ts - 0.05, () => { nameCaret.style.opacity = '1'; });    
+      269 +  [...word].forEach((_, i) => at(ts + ((te - ts) * i) / word.l
+          +ength, () => { nameEl.textContent = word.slice(0, i + 1); }));
+      270 +  // availability tick appears once typed                     
+      271 +  const okEl = pages.newRepo.querySelector<HTMLElement>('.f-ok
+          +')!;                                                          
+      272 +  okEl.style.opacity = '0';                                   
+      273 +  A(okEl, [{ opacity: 0 }, { opacity: 1 }], te + 0.12, 0.2);  
+      274 +                                                              
+      275 +  // the checks box states                                    
+      276 +  const checkTimes = { fail: D.checksFail, pass: D.checksPass,
+          + merge: D.shows[2]!.t };                                      
+      277 +  vis(pages.boxPending, steps[2]!.t, checkTimes.fail);        
+      278 +  vis(pages.boxFail, checkTimes.fail, checkTimes.pass);       
+      279 +  vis(pages.boxPass, checkTimes.pass, checkTimes.merge);      
+      280 +  vis(pages.boxMerged, checkTimes.merge, end);                
+      281 +  vis(pages.commitFix, steps[3]!.t + 0.3, end, 0);            
+      282 +  A(pages.openPill, [{ opacity: 1 }, { opacity: 0 }], checkTim
+          +es.merge, 0.001);                                             
+      283 +  A(pages.mergedPill, [{ opacity: 0 }, { opacity: 1 }], checkT
+          +imes.merge, 0.001);                                           
+      284 +  pages.openPill.style.opacity = '1';                         
+      285 +  pages.mergedPill.style.opacity = '0';                       
+      286 +                                                              
+      287 +  // ---- cursor path across the whole demo ----              
+      288 +  const cur = makeCursor(right);                              
+      289 +  cur.show(start + 0.4, checkTimes.merge + 0.9);              
+      290 +  const cMarq = toRight(tileCenter(0)), cMiss = toRight(tileCe
+          +nter(2)), cPix = toRight(tileCenter(3));                      
+      291 +  const createBtn = toRight(centerOf(pages.newRepo.querySelect
+          +or('.f-create')!));                                           
+      292 +  const nameField = toRight(centerOf(pages.newRepo.querySelect
+          +or('.f-input')!));                                            
+      293 +  const mergeBtn = toRight(centerOf(pages.boxPass.querySelecto
+          +r('.b-merge')!));                                             
+      294 +  const ct = D.themeClicks;                                   
+      295 +  cur.path([                                                  
+      296 +    { t: start + 0.4, x: 900, y: 900 }, { t: ct[0]! - 0.05, x:
+          + cMiss.x, y: cMiss.y }, { t: ct[1]! - 0.05, x: cPix.x, y: cPix
+          +.y }, { t: ct[2]! - 0.05, x: cMarq.x, y: cMarq.y },           
+      297 +    { t: ct[2]! + 0.6, x: cMarq.x + 10, y: cMarq.y + 10 },    
+      298 +    { t: ts - 0.1, x: nameField.x + 120, y: nameField.y + 6 },
+      299 +    { t: te + 0.3, x: nameField.x + 130, y: nameField.y + 8 },
+      300 +    { t: D.shows[0]!.t - 0.06, x: createBtn.x, y: createBtn.y 
+          +},                                                            
+      301 +    { t: D.shows[0]!.t + 1.2, x: createBtn.x + 220, y: createB
+          +tn.y + 260 },                                                 
+      302 +    { t: checkTimes.pass + 0.2, x: 700, y: 600 },             
+      303 +    { t: checkTimes.merge - 0.05, x: mergeBtn.x, y: mergeBtn.y
+          + },                                                           
+      304 +    { t: checkTimes.merge + 0.9, x: mergeBtn.x + 120, y: merge
+          +Btn.y + 140 },                                                
+      305 +  ]);                                                         
+      306 +  ct.forEach((t, k) => { const c = [cMiss, cPix, cMarq][k]!; c
+          +ur.click(t, c.x, c.y); });                                    
+      307 +  cur.click(D.shows[0]!.t - 0.02, createBtn.x, createBtn.y);  
+      308 +  cur.click(D.mergeClick, mergeBtn.x, mergeBtn.y);            
+      309 +  nameField && void 0;                                        
+      310 +                                                              
+      311 +  // ---- the real engine, over the page, exactly where the ex
+          +tension puts it ----                                          
+      312 +  const hostEl = pages.overlayHost;                           
+      313 +  D.shows.forEach((sh) => at(sh.t, () => {                    
+      314 +    Footlit.stop();                                           
+      315 +    void Footlit.play({ theme: 'marquee', event: sh.event, sca
+          +le: sh.scale, container: hostEl, subject: sh.subject, detail: 
+          +sh.detail });                                                 
+      316 +  }));                                                        
+      317 +  at(end - 0.0, () => Footlit.stop());                        
+      318 +  // the engine host needs to sit inside the viewport (not the
+          + whole stage): see gh.pages()                                 
+      319 +  void bh;                                                    
+      320 +}                                                             
+      321 +                                                              
+      322 +// ===========================================================
+          +==========                                                    
+      323 +// SCENE 5: the trust beat, as a printed programme.           
+      324 +// ===========================================================
+          +==========                                                    
+      325 +function trust() {                                            
+      326 +  const { start, end, nums } = cues.trust;                    
+      327 +  const s = layer(film, `background:${PAPER};overflow:hidden`)
+          +;                                                             
+      328 +  vis(s, start, end);                                         
+      329 +  A(s, [{ clipPath: 'inset(100% 0 0 0)' }, { clipPath: 'inset(
+          +0 0 0 0)' }], start, 0.22, { easing: 'cubic-bezier(.7,0,.2,1)'
+          +, fill: 'none' });                                            
+      330 +  // double rule header                                       
+      331 +  mk('div', `position:absolute;left:96px;right:96px;top:104px;
+          +height:3px;background:${INK}`, '', s);                        
+      332 +  mk('div', `position:absolute;left:96px;right:96px;top:112px;
+          +height:1.5px;background:${INK}`, '', s);                      
+      333 +  mk('div', `position:absolute;left:96px;top:60px;font:500 22p
+          +x ${MONO};letter-spacing:.2em;color:#5C5043`, 'THE PROGRAMME',
+          + s);                                                          
+      334 +  mk('div', `position:absolute;right:96px;top:60px;font:500 22
+          +px ${MONO};letter-spacing:.2em;color:#5C5043`, 'FOOTLIT / V1',
+          + s);                                                          
+      335 +  const cols = [                                              
+      336 +    { n: '11', l: 'events', sub: 'repo, pull request, checks, 
+          +deploy, release, issue' },                                    
+      337 +    { n: '6', l: 'themes', sub: 'marquee, terminal, mission co
+          +ntrol, pixel, crawler, quiet' },                              
+      338 +    { n: '0', l: 'bytes leave your browser', sub: 'no account,
+          + no analytics, no servers' },                                 
+      339 +  ];                                                          
+      340 +  cols.forEach((c, i) => {                                    
+      341 +    const x = 96 + i * 600;                                   
+      342 +    const box = mk('div', `position:absolute;left:${x}px;top:1
+          +70px;width:560px;height:760px`, '', s);                       
+      343 +    const n = mk('div', `position:absolute;left:-6px;top:0;fon
+          +t:400 640px/0.92 ${DISPLAY};color:${i === 2 ? '#B8301F' : INK}
+          +;letter-spacing:-.01em`, c.n, box);                           
+      344 +    const l = mk('div', `position:absolute;left:0;top:590px;fo
+          +nt:italic 500 64px/1.05 ${TEXT};color:${INK};width:540px`, c.l
+          +, box);                                                       
+      345 +    const sub = mk('div', `position:absolute;left:0;top:700px;
+          +font:500 20px/1.45 ${MONO};letter-spacing:.06em;color:#5C5043;
+          +text-transform:uppercase;width:520px`, c.sub, box);           
+      346 +    if (i < 2) mk('div', `position:absolute;right:-20px;top:20
+          +px;width:1.5px;height:700px;background:${INK};opacity:.5`, box
+          +);                                                            
+      347 +    for (const [el, dy] of [[n, 120], [l, 40], [sub, 20]] as c
+          +onst) { el.style.opacity = '0'; A(el, [{ opacity: 0, transform
+          +: `translateY(${dy}px)` }, { opacity: 1, transform: 'translate
+          +Y(0)' }], nums[i]! + (el === n ? 0 : 0.12), el === n ? 0.35 : 
+          +0.4); }                                                       
+      348 +  });                                                         
+      349 +}                                                             
+      350 +                                                              
+      351 +// ===========================================================
+          +==========                                                    
+      352 +// SCENE 6: end card.                                         
+      353 +// ===========================================================
+          +==========                                                    
+      354 +function endCard() {                                          
+      355 +  const { start, end } = cues.end;                            
+      356 +  const s = layer(film, `background:${INK};overflow:hidden`); 
+      357 +  vis(s, start, end);                                         
+      358 +  // cone                                                     
+      359 +  [{ w: 1100, o: 0.08 }, { w: 780, o: 0.1 }, { w: 460, o: 0.14
+          + }].forEach((b, i) => {                                       
+      360 +    const el = mk('div', `position:absolute;left:${960 - b.w /
+          + 2}px;top:0;width:${b.w}px;height:1080px;background:${LIT};opa
+          +city:0;clip-path:polygon(40% 0,60% 0,100% 100%,0 100%)`, '', s
+          +);                                                            
+      361 +    A(el, [{ opacity: 0 }, { opacity: b.o }], start + i * 0.1,
+          + 0.1, { easing: 'steps(1,end)' });                            
+      362 +  });                                                         
+      363 +  const icon = mk('img', `position:absolute;left:${960 - 96}px
+          +;top:170px;width:192px;height:192px;image-rendering:auto`, '',
+          + s) as HTMLImageElement;                                      
+      364 +  icon.src = '/ext/icons/icon-128.png';                       
+      365 +  A(icon, [{ opacity: 0, transform: 'translateY(30px) scale(.9
+          +)' }, { opacity: 1, transform: 'none' }], start + 0.2, 0.5);  
+      366 +  const word = mk('div', `position:absolute;left:0;right:0;top
+          +:380px;text-align:center;font:400 250px/1 ${DISPLAY};letter-sp
+          +acing:.03em;color:${PAPER};text-transform:uppercase`, 'Footlit
+          +', s);                                                        
+      367 +  A(word, [{ opacity: 0, transform: 'translateY(40px)' }, { op
+          +acity: 1, transform: 'none' }], start + 0.3, 0.5);            
+      368 +  const free = mk('div', `position:absolute;left:0;right:0;top
+          +:660px;text-align:center;font:italic 400 66px ${TEXT};color:${
+          +LIT}`, 'Free for Chrome, Edge and Firefox.', s);              
+      369 +  free.style.opacity = '0';                                   
+      370 +  A(free, [{ opacity: 0, transform: 'translateY(16px)' }, { op
+          +acity: 1, transform: 'none' }], start + 0.9, 0.5);            
+      371 +  const urlEl = mk('div', `position:absolute;left:0;right:0;to
+          +p:790px;text-align:center;font:500 34px ${MONO};letter-spacing
+          +:.16em;color:${PAPER}`, 'footlit-app.vercel.app', s);         
+      372 +  urlEl.style.opacity = '0';                                  
+      373 +  A(urlEl, [{ opacity: 0 }, { opacity: 1 }], start + 1.9, 0.5)
+          +;                                                             
+      374 +  mk('div', `position:absolute;left:0;right:0;top:860px;height
+          +:2px;width:520px;margin:0 auto;background:${PAPER};opacity:.35
+          +`, '', s);                                                    
+      375 +  const by = mk('div', `position:absolute;left:0;right:0;top:8
+          +84px;text-align:center;font:500 20px ${MONO};letter-spacing:.2
+          +em;color:#B5A78F;text-transform:uppercase`, 'Built by Ammad Ah
+          +med  /  CodeVeil Studio', s);                                 
+      376 +  by.style.opacity = '0';                                     
+      377 +  A(by, [{ opacity: 0 }, { opacity: 1 }], start + 2.6, 0.5);  
+      378 +  // footlights along the bottom                              
+      379 +  const row = mk('div', 'position:absolute;left:0;right:0;bott
+          +om:0;height:60px;display:flex;justify-content:space-between;pa
+          +dding:0 62px;align-items:flex-end', '', s);                   
+      380 +  for (let i = 0; i < 15; i++) {                              
+      381 +    const l = mk('div', `width:88px;height:38px;border-radius:
+          +38px 38px 0 0;background:${LIT}`, '', row);                   
+      382 +    A(l, [{ opacity: 1 }, { opacity: 0.25 }, { opacity: 1 }], 
+          +start + 3 + i * 0.12, 1.2, { easing: 'linear', fill: 'none' })
+          +;                                                             
+      383 +  }                                                           
+      384 +  mk('div', `position:absolute;left:0;right:0;bottom:0;height:
+          +8px;background:${PAPER}`, '', s);                             
+      385 +  const fade = layer(s, 'background:#000;opacity:0');         
+      386 +  A(fade, [{ opacity: 0 }, { opacity: 1 }], end - 0.6, 0.55, {
+          + easing: 'ease-in' });                                        
+      387 +}                                                             
+      388 +                                                              
+      389 +// ---------- boot ----------                                 
+      390  async function boot() {
+      391    await Promise.all([
+      392      document.fonts.load('40px "League Gothic"'), document.font
+           s.load('40px "Newsreader"'), document.fonts.load('italic 40px 
+           "Newsreader"'),
+      393      document.fonts.load('20px "DM Mono"'), document.fonts.load
+           ('500 20px "DM Mono"'),
+      394    ]);
+      395 +  // warm every theme's fonts in real time, so nothing is fetc
+          +hed while the clock is frozen                                 
+      396 +  const warm = layer(film, 'opacity:0');                      
+      397 +  for (const t of Footlit.themes) await Footlit.play({ theme: 
+          +t.id, event: 'pr.merged', scale: 0.02, container: warm });    
+      398 +  warm.remove();                                              
+      399 +                                                              
+      400 +  if (q.get('lab')) { w.__ready = true; return; }             
+      401 +  const only = q.get('only');                                 
+      402 +  hook(); montage(); logo(); await demo(); trust(); endCard();
+      403 +  if (only) {                                                 
+      404 +    // preview helper: ?only=hook shows only that scene by hid
+          +ing the others at all times is not needed, the renderer picks 
+          +times.                                                        
+      405 +  }                                                           
+      406    w.__ready = true;
+      407  }
+      408 +                                                              
+      409  w.__start = () => {
+      410    const lab = q.get('lab');
+      411    if (lab === 'all') {
+     ...
+      421    if (lab) {
+      422      const [theme, event, scale] = lab.split(':');
+      423      void Footlit.play({ theme, event, scale: Number(scale ?? 1
+           ) });
+      424 +    return;                                                   
+      425    }
+      426 +  jobs.forEach((j) => j());                                   
+      427  };
+       29 -void boot();                                                  
+      428 +void boot().catch((e) => console.log('[film] boot failed', e?.
+          +stack ?? e));                                                 
+      429 +void INK; void ALARM;                                         
+
+● Write(video\src\gh.ts)  ⎿  Wrote 165 lines to video\src\gh.ts
+      1 // Stand-in "code host" pages for the film: generic, dark, no log
+      2 const CSS = `
+      3 .gh{font:14px/1.5 -apple-system,'Segoe UI',Helvetica,Arial,sans-s
+        ground:#0d1117}
+      4 .gh *{box-sizing:border-box}
+        ound:#010409;border-bottom:1px solid #30363d;display:flex;align-i
+        tems:center;padding:0 20px;gap:14px}
+        :relative}
+      7 .gh .hd .burger:before,.gh .hd .burger:after{content:'';position:
+      8 .gh .hd .burger:befo
+     … +326 lines (ctrl+o to expand)
+
+● Status: film scenes and stand-in pages are written. I'm building the bundle
+  and rendering test stills from each scene to check them.
+
+● Bash(node scripts/build.mjs 2>&1 | tail -20 &&
+      T="1.0,1.6,3.0,4.0,6.5,10,15,16.8" && node scripts/render.mjs --preview=$T
+      2>&1 | tail -12 && node scripts/sheet.mjs o…)
+  ⎿  video bundles built
+                 this.#timeoutError = new TimeoutError(`Waiting failed: ${o
+     ptions.timeout}ms exceeded`);
+     … +21 lines (ctrl+o to expand)
+
+● Bash(node scripts/render.mjs --preview=1 2>&1 | grep -v "^\s*at
+      \|libav\|libsw\|libpost" | head -12)
+  ⎿  file:///D:/NodeJS/product/video/node_modules/puppeteer-core/lib/puppet
+     eer/common/WaitTask.js:46
+                 this.#timeoutError = new TimeoutError(`Waiting failed: ${o
+     … +6 lines (ctrl+o to expand)
+
+● Bash(cat > scripts/_dbg.mjs <<'EOF'
+      // temporary: log what the film page does while booting…)
+  ⎿  video bundles built
+     film never became ready; stage: warm
+         at CdpPage.waitForFunction (file:///D:/NodeJS/product/video/node_m
+     odules/puppeteer-core/lib/puppeteer/api/Page.js:1537:37)
+
+● Bash(cat > scripts/_p.cjs <<'EOF'
+      const fs=require('fs');let s=fs.readFileSync('src/film.ts','utf8');…)
+  ⎿  video bundles built
+     film never became ready; stage: rest
+     file:///D:/NodeJS/product/video/node_modules/puppeteer-core/lib/puppet
+     … +20 lines (ctrl+o to expand)
+
+● Bash(node scripts/render.mjs --preview=1 2>&1 | grep -v "^\s*at " | head -8)
+  ⎿  film never became ready; stage: rest
+     file:///D:/NodeJS/product/video/node_modules/puppeteer-core/lib/puppet
+     eer/common/WaitTask.js:46
+     … +7 lines (ctrl+o to expand)
+
+● Bash(sed -i "s/{ timeout: 30000 })/{ timeout: 60000, polling: 200 })/"
+      scripts/render.mjs && T="1.0,1.6,3.0,4.0,6.5,10,15,16.8" && node
+      scripts/render.mjs --preview=…)
+  ⎿  saved t1.png
+     saved t1_6.png
+     saved t3.png
+     … +17 lines (ctrl+o to expand)
+
+● Rendering works now; the sheet script just guessed a wrong file name (t1.png,
+  not t1_0.png). I'm fixing that and viewing the stills.
+
+● Bash(cat > scripts/_sheet.sh <<'EOF'
+      #!/bin/bash…)
+  ⎿       58. 29.100 / 58. 29.100
+       libavcodec     60. 31.102 / 60. 31.102
+       libavformat    60. 16.100 / 60. 16.100
+     … +9 lines (ctrl+o to expand)
+
+  Read 1 file (ctrl+o to expand)
+
+● Bash(scripts/_sheet.sh out/sheet-a.png 4 1 1.6 3 4 6.5 10 15 16.8 && echo ok)
+  ⎿  ok
+
+  Read 1 file (ctrl+o to expand)
+
+● Bash(node -e "
+      const c=require('./src/cues.json');let t=c.montage.start;const
+      a=[];c.montage.shots.forEach(s=>{a.push((t+s.dur*0.3).toFixed(2),(t+s.dur*
+      0.75).toFixed…)
+  ⎿  3.98,4.7,5.52,6.15,6.89,7.47,8.16,8.7,9.33,9.82,10.4,10.85,11.37,11.78
+     ,12.24,12.6,13.01,13.33,13.68,13.95,14.25,14.47,14.73,14.94,15.17,15.3
+     5,15.57,15.75,15.96,16.11,16.44,16.8
+     32
+
+  Read 2 files (ctrl+o to expand)
+
+● Bash(node -e "
+      const fs=require('fs');const
+      c=JSON.parse(fs.readFileSync('src/cues.json','utf8'));…)
+  ⎿  1
+     video bundles built
+     32
+
+  Read 1 file (ctrl+o to expand)
+
+● Bash(node -e "
+      const fs=require('fs');const
+      c=JSON.parse(fs.readFileSync('src/cues.json','utf8'));…)
+  ⎿  video bundles built
+     8
+
+  Read 1 file (ctrl+o to expand)
+
+● Status: logo, popup and browser scenes render correctly. I'm checking a couple
+  of details at full size (footlights, browser text) before reviewing the rest
+  of the demo.
+
+  Read 1 file (ctrl+o to expand)
+
+● Bash(cat > scripts/_p.cjs <<'EOF'
+      const fs=require('fs');let
+      s=fs.readFileSync('scripts/render.mjs','utf8');…)
+  ⎿  eval -> {"n":153,"lamps":15,"op":["0","0","0"],"anims":[["finished:0"]
+     ,["finished:0"]]}
+
+● Bash(sed -i "s/easing: 'steps(1,end)'/easing: 'linear'/g" src/film.ts && grep
+      -c "steps(" src/film.ts; node scripts/build.mjs &&
+      T=29.2,29.8,30.6,32,34.5,36.2,37.5,3…)
+  ⎿  0
+     video bundles built
+     8
+
+  Read 1 file (ctrl+o to expand)
+
+● Bash(T=40.6,41.4,42.2,43.5,45,46.4,47.2,48.6,50.6,52.4,54,56,58,59.5,21.5,2.6
+      && node scripts/render.mjs --preview=$T 2>&1 | grep -c saved &&
+      scripts/_sheet.sh out/s…)
+  ⎿  16
+
+  Read 1 file (ctrl+o to expand)
+● Visuals are in good shape. Next is the sound: I'm quantising the montage cuts
+  to a beat grid (160 BPM eighths) and writing a synth-based score and effects
+  script, since I can't use licensed music.
+
+● Bash(node -e "
+      const fs=require('fs');const
+      c=JSON.parse(fs.readFileSync('src/cues.json','utf8'));…)
+  ⎿  13.5
+     345:    const sub = mk('div', `position:absolute;left:0;top:760px;font
+     :500 20px/1.45 ${MONO};letter-spacing:.06em;color:#5C5043;text-transfo
+     rm:uppercase;width:520px`, c.sub, box);
+
+● Write(video\scripts\make-audio.mjs)
+  ⎿  Wrote 529 lines to video\scripts\make-audio.mjs
+       1 // Builds the film's sound: an original synthesised score and ef
+         fects, plus the voiceover, mixed to out/audio-mix.wav.
+       2 // Everything is generated here (no samples, no licensed music),
+       3 //   npm run audio
+       4 import fs from 'node:fs/promises';
+       5 import path from 'node:path';
+       6 import { spawnSync } from 'node:child_process';
+       8 
+       9 const root = path.resolve(import.meta.dirname, '..');
+      10 const ffmpeg = createRequire(import.meta.url)('ffmpeg-static');
+     … +679 lines (ctrl+o to expand)
+
+● Bash(time node scripts/make-audio.mjs 2>&1 | tail -15)
+  ⎿  peak after limiter 1.393
+     audio mixed: out\audio-mix.wav
+     … +3 lines (ctrl+o to expand)
+
+● Bash(sed -i "s|outL\[i\] = Math.tanh(outL\[i\] \* 0.9) / Math.tanh(0.9);
+      outR\[i\] = Math.tanh(outR\[i\] \* 0.9) / Math.tanh(0.9);|outL[i] =
+      Math.tanh(outL[i] * 0.9)…)
+  ⎿  peak after limiter 0.998
+     audio mixed: out\audio-mix.wav (raw -10.1 LUFS, normalised to -15)
+     frame=    1 fps=0.2 q=-0.0 Lsize=N/A time=00:00:00.00 bitrate=N/A spee
+     … +14 lines (ctrl+o to expand)
+
+  Read 1 file (ctrl+o to expand)
+
+● Bash(FF=$(node -e "console.log(require('ffmpeg-static'))") && "$FF" -i
+      out/audio-mix.wav -af ebur128=framelog=verbose -f null - 2>&1 | grep -o
+      "t: [0-9.]* .*M: *-\?[…)
+  ⎿  0-2s    2-4s    4-6s
+     6-8s    8-10s   10-12s
+     12-14s  14-16s  16-18s
+     … +7 lines (ctrl+o to expand)
+
+● Bash(cat > scripts/loudness.mjs <<'EOF'
+      // Prints momentary loudness (LUFS) in 2-second windows for
+      out/audio-mix.wav (or a given file), to sanity-check balance.…)
+  ⎿  (No output)
+
+● Status: the audio mix builds (−15 LUFS). I'm checking how loud each section
+  is, so the voiceover stays clear over the music.
+
+● Bash(FF=$(node -e "console.log(require('ffmpeg-static'))") && "$FF" -i
+      out/audio-mix.wav -af ebur128=framelog=verbose -f null - 2>&1 | grep
+      "TARGET" | head -3 | cat…)
+  ⎿  (No output)
+
+● Bash(FF=$(node -e "console.log(require('ffmpeg-static'))") && "$FF"
+      -hide_banner -nostats -i out/audio-mix.wav -af ebur128=framelog=verbose -f
+      null - 2>&1 | sed -n 1…)
+  ⎿  [aist#0:0/pcm_s16le @ 000002a5ee481180] Guessed Channel Layout: stereo
+     Input #0, wav, from 'out/audio-mix.wav':
+       Metadata:
+     … +10 lines (ctrl+o to expand)
+
+● Bash(sed -i "s/\['-i', file, '-af'/['-hide_banner', '-nostats', '-loglevel',
+      'verbose', '-i', file, '-af'/" scripts/loudness.mjs && node
+      scripts/loudness.mjs | paste…)
+  ⎿   0- 2s -13.3     2- 4s  -8.6     4- 6s -11.1     6- 8s -12.5
+      8-10s -11.1    10-12s -12.4    12-14s -10.4    14-16s  -9.5
+     16-18s  -7.5    18-20s -18.0    20-22s -18.2    22-24s -17.9
+     … +5 lines (ctrl+o to expand)
+
+● Bash(cat > scripts/_p.cjs <<'EOF'
+      const fs=require('fs');let
+      s=fs.readFileSync('scripts/make-audio.mjs','utf8');…)
+  ⎿  vo 01  at  0.45  voice over rest: 13.9 dB
+     vo 02  at  2.20  voice over rest: 9.5 dB
+     vo 03  at 18.05  voice over rest: -2.0 dB
+     … +15 lines (ctrl+o to expand)
+
+● Bash(sed -i "s/duck\[i\] = 1 - 0.72 \* g;/duck[i] = 1 - 0.82 * g;/; s/1 - 0.5
+      \* (1 - duck\[i\]) \/ 0.72/1 - 0.72 * (1 - duck[i]) \/ 0.82/; s/const VOG
+      = 1.35;/const…)
+  ⎿  vo 01  at  0.45  voice over rest: 18.8 dB
+     vo 02  at  2.20  voice over rest: 14.0 dB
+     vo 03  at 18.05  voice over rest: 1.7 dB
+     … +15 lines (ctrl+o to expand)
+
+  Searched for 1 pattern (ctrl+o to expand)
+
+● Bash(cat > scripts/_p.cjs <<'EOF'
+      const fs=require('fs');let
+      s=fs.readFileSync('scripts/make-audio.mjs','utf8');…)
+  ⎿  vo 01  at  0.45  voice over rest: 18.8 dB
+     vo 02  at  2.20  voice over rest: 14.0 dB
+     vo 03  at 18.05  voice over rest: 5.1 dB
+     … +23 lines (ctrl+o to expand)
+
+● Bash(sed -i "s/const WANT = 9;/const WANT = 11;/" scripts/make-audio.mjs &&
+      node scripts/make-audio.mjs 2>&1 | tail -3 && node scripts/build.mjs &&
+      (node scripts/ren…)
+  ⎿  vo 10  at 52.90  voice over rest: 10.6 dB
+     peak after limiter 0.998
+     audio mixed: out\audio-mix.wav (raw -10.5 LUFS, normalised to -15)
+     … +4 lines (ctrl+o to expand)
+
+● Bash(cd /d/NodeJS/product && printf '\n# launch film (video/): browser
+      download, renders, generated
+      audio\nvideo/.cache/\nvideo/out/\nvideo/assets/vo/\n' >> .gitigno…)
+  ⎿    frame 810/1800  (114s elapsed)
+       frame 900/1800  (125s elapsed)
+
+● Bash(sleep 150; tail -3 out/render.log; ls -la out/*.mp4 2>/dev/null)
+  ⎿  Error: Blocked: sleep 150 followed by: tail -3 out/render.log ls -la 
+     out/*.mp4. To wait for a condition, use Monitor with an until-loop (e.g. 
+     `until <check>; do sleep 2; done`). To wait for a command you started, use 
+     run_in_background: true. Do not chain shorter sleeps to work around this 
+     block.
+
+● Bash(until grep -q "^done in\|exited\|Error" out/render.log; do sleep 5; done;
+      tail -3 out/render.log; ls -la out/*.mp4)
+  ⎿    frame 1620/1800  (243s elapsed)
+       frame 1710/1800  (254s elapsed)
+     done in 266s
+     … +2 lines (ctrl+o to expand)
+
+● Status: the full film rendered (60 s, 18.6 MB). I'm verifying the file itself
+  now: duration, audio track and a few frames taken from the finished MP4.
+
+● Bash(FF=$(node -e "console.log(require('ffmpeg-static'))") && "$FF"
+      -hide_banner -i out/footlit-launch-1920x1080.mp4 2>&1 | grep -E
+      "Duration|Stream"; mkdir -p out/q…)
+  ⎿    Duration: 00:01:00.00, start: 0.000000, bitrate: 2482 kb/s
+       Stream #0:0[0x1](und): Video: h264 (High) (avc1 / 0x31637661), yuv42
+     0p(progressive), 1920x1080, 2157 kb/s, 30 fps, 30 tbr, 15360 tbn (defa
+     … +3 lines (ctrl+o to expand)
+
+  Read 1 file (ctrl+o to expand)
+● Bash(FF=$(node -e "console.log(require('ffmpeg-static'))") && for t in 24.4
+      50.8 45.2 55.5; do "$FF" -y -v error -ss $t -i
+      out/footlit-launch-1920x1080.mp4 -frames:v…)
+  ⎿  (No output)
+
+  Read 1 file (ctrl+o to expand)
+
+● Bash(cat > scripts/_p.cjs <<'EOF'
+      const fs=require('fs');let s=fs.readFileSync('src/film.ts','utf8');…)
+  ⎿  Error: Exit code 1
+     1
+     X [ERROR] Unterminated string literal
+
+         src/film.ts:178:77:
+           178 │ ... = ['Pick a theme', 'Create a repo', 'Break the build', 'Fix
+     it.
+               ╵                                                                
+        ^
+
+     D:\NodeJS\product\video\node_modules\esbuild\lib\main.js:1752
+       let error = new Error(text);
+
+     … +19 lines (ctrl+o to expand)
+
+  Read 1 file (ctrl+o to expand)
+
+● The \n in my patch became a real newline inside the string literal; fixing it.
+
+● Bash(cat > scripts/_p.cjs <<'EOF'
+      const fs=require('fs');let s=fs.readFileSync('src/film.ts','utf8');…)
+  ⎿  Error: Exit code 1
+     X [ERROR] Unterminated string literal
+
+         src/film.ts:178:77:
+           178 │ ... = ['Pick a theme', 'Create a repo', 'Break the build', 'Fix
+     it.
+               ╵                                                                
+        ^
+
+     D:\NodeJS\product\video\node_modules\esbuild\lib\main.js:1752
+       let error = new Error(text);
+                   ^
+
+     … +18 lines (ctrl+o to expand)
+
+  Read 2 files (ctrl+o to expand)
+
+● Update(video\src\film.ts)
+  ⎿  Added 1 line, removed 2 lines
+      175  
+      176    // ---- left: the programme ----
+      177    const col = layer(s, 'right:auto;width:420px');
+      178 -  const names = ['Pick a theme', 'Create a repo', 'Break the b
+          -uild', 'Fix it.                                               
+      179 -Merge it.'];                                                  
+      178 +  const names = ['Pick a theme', 'Create a repo', 'Break the b
+          +uild', 'Fix it.\nMerge it.'];                                 
+      179    const labels = ['Pick a theme', 'Create a repo', 'Break the 
+           build', 'Fix it + merge'];
+      180    const stamp = mk('div', `position:absolute;left:62px;top:84p
+           x;padding:8px 14px 6px;border:2.5px solid ${LIT};color:${LIT};
+           font:500 19px ${MONO};letter-spacing:.16em;transform:rotate(-3
+           deg)`, 'NOW SHOWING', col);
+      181    void stamp;
+
+● Bash(node scripts/build.mjs && node scripts/render.mjs --preview=23.2,28,44.5
+      2>&1 | grep -c saved && node scripts/sheet.mjs out/sheet-e.png 3
+      out/preview/t23_2.png…)
+  ⎿  video bundles built
+     3
+
+  Read 1 file (ctrl+o to expand)
+
+● Bash(node scripts/render.mjs --full --crf=12 > out/render.log 2>&1; tail -2
+      out/render.log; ls -la out/*.mp4)
+  ⎿    frame 1710/1800  (254s elapsed)
+     done in 266s
+     -rw-r--r-- 1 AmmadAhmed 197609 21181999 Oct 11 18:56 out/footlit-launc
+     h-1920x1080.mp4
+
+  Wrote 1 memory (ctrl+o to expand)
+
+● Bash(cd "C:/Users/HAROON TRADERS/.claude/projects/D--NodeJS-product/memory" &&
+      printf -- '- [Launch film](project-launch-film.md) — 60s desktop film
+      built in video/,…)
+  ⎿  - [Footlit project](project-footlit.md) — Chrome extension that animat
+     es GitHub events; plan in PROJECT.md
+     - [No AI-slop UI](feedback-no-ai-slop-ui.md) — user demands distinctiv
+     … +5 lines (ctrl+o to expand)
+
+● The 60-second desktop launch film is rendered and I've opened it in your
+  default player. I checked it by rendering stills, measuring the audio levels
+  and decoding the final file, but I haven't heard it, so your ears are the real
+  test.
+
+  The file is video/out/footlit-launch-1920x1080.mp4 (1920×1080, 30 fps, 21 MB).
+  It plays out like this:
+
+  ┌────────────┬────────────────────────────────────────────────────────────┐
+  │    Time    │                        What happens                        │
+  ├────────────┼────────────────────────────────────────────────────────────┤
+  │ 0–3.5 s    │ A merge button gets clicked and nothing happens ("Every    │
+  │            │ merge you've ever done… deserved better.")                 │
+  ├────────────┼────────────────────────────────────────────────────────────┤
+  │ 3.5–17 s   │ 16 hard cuts of the real themes, speeding up on a 160 BPM  │
+  │            │ beat, then silence                                         │
+  ├────────────┼────────────────────────────────────────────────────────────┤
+  │ 17.75–22.5 │ Logo, with the footlights switching on one by one          │
+  │  s         │                                                            │
+  ├────────────┼────────────────────────────────────────────────────────────┤
+  │ 22.5–46.5  │ Four steps: pick a theme in the real popup, create a repo  │
+  │ s          │ (opening-night show), break the build (the show stops),    │
+  │            │ fix and merge (bravo and applause)                         │
+  ├────────────┼────────────────────────────────────────────────────────────┤
+  │ 46.5–52 s  │ Programme-style card: 11 events, 6 themes, 0 bytes leave   │
+  │            │ your browser                                               │
+  ├────────────┼────────────────────────────────────────────────────────────┤
+  │ 52–60 s    │ End card with footlit-app.vercel.app and "Built by Ammad   │
+  │            │ Ahmed / CodeVeil Studio"                                   │
+  └────────────┴────────────────────────────────────────────────────────────┘
+
+  - Real engine, not a recording: every show is the extension's own code,
+    rendered frame by frame. The GitHub-style pages around it are generic
+    stand-ins with no logos or marks.
+  - Sound: the score and effects are synthesised, with no licensed music or
+    samples. I tuned the music to duck under the voice. It sits 5–10 dB below
+    the voice on every line (one line is closer, at about 5 dB), at about −15
+    LUFS overall.
+  - The voice is a free scratch voice (Christopher), not the final one. When you
+    buy a voice, drop the new recordings into video/assets/vo/ (one file per
+    line, mono, 48 kHz, named as in video/src/vo.json), then run npm run audio
+    and npm run render inside video/. Keep each line close to the length of the
+    scratch one, because the picture is timed to it.
+  - Tools: the render pipeline is documented in video/README.md. I added
+    video/.cache, video/out and video/assets/vo to .gitignore because they're
+    regenerable.
+
+  Please send notes on pacing, copy, the music feel, or anything you'd cut or
+  add. Once you approve this cut, I'll build the vertical mobile version from
+  the same setup.
+
+✻ Cooked for 47m 51s · done Sunday 6:57 PM
+
+> thats actually a good video so just confirming should i post that 1 min video 
+  on linked in and same on insta (youo mentioned a shorter clips what were      
+  they !)                                                                       
+
+  Searched for 1 pattern, listed 1 directory (ctrl+o to expand)
+
+● LinkedIn: yes, with two conditions. Instagram: not this file, it needs the 
+  vertical cut.
+
+  LinkedIn: post the 60 s film as a native upload (upload the file itself, not a
+  link), with a short founder note about why you built it. Before you post:
+  - Wait for Chrome Web Store approval. The film says "Free for Chrome, Edge and
+    Firefox" and the end card points people to the site. If the store link is
+    still dead, people who click will find nothing to install.
+  - Swap the voice first. The scratch voice comes from a free Microsoft service
+    that is not an official or licensed route for commercial use. It's fine for
+    review, but I wouldn't publish with it. Replace it with your purchased voice
+    (steps are in video/README.md), and I'll re-render.
+
+  Instagram: a 16:9 video gets letterboxed on Reels and the feed, so it looks
+  small and amateur. The shorter clips from the plan in docs/MARKETING_VIDEO.md
+  are:
+
+  ┌───────────┬───────────────┬────────┬────────────────────────────────────┐
+  │   Clip    │     Size      │ Length │               Where                │
+  ├───────────┼───────────────┼────────┼────────────────────────────────────┤
+  │           │               │        │ Instagram Reels, YouTube Shorts,   │
+  │ Vertical  │ 1080×1920     │ ~35 s  │ TikTok, Facebook Reels, WhatsApp   │
+  │           │               │        │ status                             │
+  ├───────────┼───────────────┼────────┼────────────────────────────────────┤
+  │           │ 1080×1080 or  │        │ Ads, stories, Product Hunt         │
+  │ Teaser    │ 1080×1920     │ ~15 s  │ gallery. A hook, the three best    │
+  │           │               │        │ themes, then the call to action    │
+  ├───────────┼───────────────┼────────┼────────────────────────────────────┤
+  │ Thumbnail │ 1280×720      │ n/a    │ YouTube and LinkedIn: a big BRAVO! │
+  │           │ still         │        │  frame with the logo               │
+  └───────────┴───────────────┴────────┴────────────────────────────────────┘
+
+  None of these exist yet; only the 60 s desktop film is built. The vertical cut
+  will be a faster montage rendered natively in portrait, not a crop of the
+  landscape frame, which would cut off the headlines. Its last card will say
+  it's desktop-only, so nobody expects a phone install.
+
+  Since you like the film, I can build the vertical, the teaser and the
+  thumbnail next. Tell me if you want that, or if you'd rather change something
+  in the 60 s cut first.
+
+✻ Brewed for 20s · done Sunday 7:04 PM
+
+> so listen should i post on insta abt that app a short 10 15 sec clip that     
+  something is coming ! like this or not                                        
+
+● Yes, post it. A short "something is coming" teaser is a good idea, especially
+  while you wait for store approval. It costs nothing, and it gets people
+  following before there's a link to give them.
+
+  How I'd do it:
+  - Length and format: 12 s, vertical (1080×1920), so it fits Reels and stories.
+  - Content: the silent merge where nothing happens, then a fast cut of the
+    themes, then black. It ends on the FOOTLIT logo and "Coming soon". That's
+    the strongest part of the film, and it needs no voiceover, so the
+    scratch-voice problem doesn't apply. It would be music and effects only.
+  - Call to action: "Follow for launch day", not a store link, since there's
+    nothing to install yet.
+  - No date: I wouldn't write one on the video or in the caption. Chrome review
+    time varies, and a missed date looks worse than no date. "Coming soon" is
+    enough.
+  - Desktop only: one small line in the caption, something like "for Chrome,
+    Edge and Firefox on desktop", so nobody expects an iPhone app.
+  - Caption idea: "Every merge you've ever done deserved better. Something's
+    coming."
+
+  One thing I need from you: I haven't put any Instagram handle on the video,
+  because you haven't given me one. Send it and I'll add it if you want it
+  shown, or you can just put it in your bio.
+
+  When the store listing goes live, post the full 60 s film as the launch
+  announcement. The 35 s vertical cut is for after that.
+
+  Want me to build the 12 s teaser now?
+
+✻ Crunched for 9s · done Sunday 7:06 PM
+
+> yes plz go ahead and build for insta reell                                    
+
+● Bash(node -e "
+      const fs=require('fs');let s=fs.readFileSync('src/film.ts','utf8');…)
+  ⎿  Error: Exit code 1
+     [eval]:8
+     for (const n of 
+     ['later','at','A','vis','mk','layer','makeCursor','centerOf']) 
+     kit=kit.replace(new RegExp('^const '+n+' ','m'),'export const '+n+' 
+     ').replace(new RegExp('^function '+n+'\(','m'),'export function '+n+'(');
+                                                                                
+                                                                               
+            ^
+
+     SyntaxError: Invalid regular expression: /^function later(/m: Unterminated 
+     group
+         at new RegExp (<anonymous>)
+         at [eval]:8:159
+         at runScriptInThisContext (node:internal/vm:209:10)
+         at node:internal/process/execution:449:12
+
+     … +7 lines (ctrl+o to expand)
+
+● Quoting through the shell got messy; I'll do the refactor as a proper script
+  file instead.
+
+● Bash(cat > scripts/_refactor.cjs <<'EOF'
+      const fs = require('fs');…)
+  ⎿  2:export const INK = '#17120E', PAPER = '#F1E8D4', LIT = '#F6B63B', AL
+     ARM = '#E5
+     3:export const DISPLAY = "'League Gothic', 'Impact', sans-serif", TEXT
+     … +22 lines (ctrl+o to expand)
+
+● Bash(cat > scripts/_p.cjs <<'EOF'
+      const fs=require('fs');…)
+  ⎿    outfile: path.join(root, 'dist/engine.js'), logLevel: 'error', legal
+     Comments: 'none',
+     });
+     … +11 lines (ctrl+o to expand)
+
+● Bash(cat > src/teaser-cues.json <<'EOF'
+      {…)
+  ⎿  video bundles built
+
+● Bash(sed -i "s/W = 640, H = 360;/W = Number(process.env.SW ?? 640), H =
+      Number(process.env.SH ?? 360);/" scripts/sheet.mjs && SW=360 SH=640 node
+      scripts/sheet.mjs ou…)  ⎿  ok
+
+  Read 1 file (ctrl+o to expand)
+
+● Bash(cat > scripts/_split.cjs <<'EOF'
+      const fs = require('fs');…)
+  ⎿  exports: 34
+     // Builds the film's sound: an original synthesised score and effects,
+      plus the voiceover, mixed to out/audio-mix.wav.
+     … +31 lines (ctrl+o to expand)
+
+● Bash(sed -i "s/import { SR as _SR, makeBus/import { SR, makeBus/"
+      scripts/make-audio.mjs && cp out/audio-mix.wav out/audio-mix.prev.wav &&
+      node scripts/make-audio.mj…)
+  ⎿  vo 10  at 52.90  voice over rest: 10.6 dB
+     peak after limiter 0.998
+     audio mixed: out\audio-mix.wav (raw -10.5 LUFS, normalised to -15)
+     IDENTICAL
+
+● Status: the film's synth code is now a shared library (the 60 s audio comes
+  out bit-identical), and the portrait themes check out. Now I'm writing the 12
+  s teaser picture and its sound.
+
+● Bash(node -e "
+      const fs=require('fs');const
+      c=JSON.parse(fs.readFileSync('src/teaser-cues.json','utf8'));…)
+  ⎿  /usr/bin/bash: line 195: warning: here-document at line 105 delimited
+     by end-of-file (wanted `EOF')
+
+  Searched for 1 pattern, read 1 file, listed 1 directory (ctrl+o to expand)
+
+● Write(video\src\teaser.ts)
+  ⎿  Added 53 lines, removed 6 lines
+      19    stage.style.transform = 'scale(1.3)';
+      20    const box = mk('div', 'position:absolute;inset:0', '', stage)
+          ;
+      21    box.innerHTML = gh.hookBoxes();
+      22 -  const open = box.querySelector<HTMLElement>('.h-open')!, done
+         - = box.querySelector<HTMLElement>('.h-done')!;                 
+      23 -  open.style.opacity = '1'; done.style.opacity = '0';          
+      22 +  const open = box.querySelector<HTMLElement>('.h-open')!;     
+      23 +  const done = box.querySelector<HTMLElement>('.h-done')!;     
+      24 +  open.style.opacity = '1';                                    
+      25 +  done.style.opacity = '0';                                    
+      26    A(open, [{ opacity: 1 }, { opacity: 0 }], click, 0.001);
+      27    A(done, [{ opacity: 0 }, { opacity: 1 }], click, 0.001);
+      28    A(stage, [{ transform: 'scale(1.3)' }, { transform: 'scale(1.
+          4)' }], start, end - start, { easing: 'linear' });
+      29    // captions for viewers with the sound off
+      30    const l1 = mk('div', `position:absolute;left:60px;right:60px;
+          top:430px;text-align:center;font:italic 400 66px/1.1 ${TEXT};co
+          lor:${PAPER}`, "Every merge you've ever done…", s);
+      31    const l2 = mk('div', `position:absolute;left:60px;right:60px;
+          top:1330px;text-align:center;font:italic 400 76px/1.1 ${TEXT};c
+          olor:${LIT}`, '…deserved better.', s);
+      30 -  for (const [el, t0] of [[l1, 0.15], [l2, 1.15]] as const) { e
+         -l.style.opacity = '0'; A(el, [{ opacity: 0, transform: 'transla
+         -teY(14px)' }, { opacity: 1, transform: 'none' }], t0, 0.4); }  
+      32 +  for (const [el, t0] of [[l1, 0.15], [l2, 1.15]] as const) {  
+      33 +    el.style.opacity = '0';                                    
+      34 +    A(el, [{ opacity: 0, transform: 'translateY(14px)' }, { opa
+         +city: 1, transform: 'none' }], t0, 0.4);                       
+      35 +  }                                                            
+      36    const fadeOut = layer(s, 'background:#000;opacity:0');
+      37    A(fadeOut, [{ opacity: 0 }, { opacity: 1 }], end - 0.22, 0.2,
+           { easing: 'ease-in' });
+      38    const cur = makeCursor(s);
+     ...
+      53    let t = start;
+      54    shots.forEach((sh, i) => {
+      55      const t0 = t;
+      51 -    at(t0, () => { Footlit.stop(); void Footlit.play({ theme: s
+         -h.theme, event: sh.event, scale: (sh.dur * 0.82) / (payoff as R
+         -ecord<string, number>)[sh.theme]!, container: host, subject: 'a
+         -cme/widget-shop #42', detail: 'Fix flaky login redirect on Safa
+         -ri' }); });                                                    
+      56 +    const scale = (sh.dur * 0.82) / (payoff as Record<string, n
+         +umber>)[sh.theme]!;                                            
+      57 +    at(t0, () => {                                             
+      58 +      Footlit.stop();                                          
+      59 +      void Footlit.play({ theme: sh.theme, event: sh.event, sca
+         +le, container: host, subject: 'acme/widget-shop #42', detail: '
+         +Fix flaky login redirect on Safari' });                        
+      60 +    });                                                        
+      61      const chip = mk('div', `position:absolute;left:54px;top:300
+          px;padding:11px 18px 9px;background:${INK};color:${PAPER};font:
+          500 27px ${MONO};letter-spacing:.1em;text-transform:uppercase;b
+          order-left:7px solid ${LIT};opacity:0`, `${names[sh.theme]}  / 
+           ${sh.event.replace('.', ' ')}`, hud);
+      62      vis(chip, t0, t0 + sh.dur);
+      63      const count = mk('div', `position:absolute;right:54px;top:1
+          440px;color:${PAPER};font:500 27px ${MONO};letter-spacing:.14em
+          ;text-shadow:0 0 8px ${INK},0 0 3px ${INK};opacity:0`, `${Strin
+          g(i + 1).padStart(2, '0')} / ${shots.length}`, hud);
+     ...
+       93    });
+       94    const tag = mk('div', `position:absolute;left:0;right:0;top:
+           960px;text-align:center;font:italic 400 60px ${TEXT};color:${L
+           IT};opacity:0`, 'GitHub, with stage lighting.', s);
+       95    A(tag, [{ opacity: 0, transform: 'translateY(14px)' }, { opa
+           city: 1, transform: 'none' }], start + 0.95, 0.4);
+       87 -  // the stamp: slams down, then holds                        
+       96 +  // the stamp slams down, then holds                         
+       97    const stampBox = mk('div', 'position:absolute;left:0;right:0
+           ;top:1120px;display:flex;justify-content:center', '', s);
+       98    const stamp = mk('div', `border:5px solid ${LIT};color:${LIT
+           };padding:16px 34px 12px;font:500 56px ${MONO};letter-spacing:
+           .22em;transform:rotate(-3deg);opacity:0`, 'COMING SOON', stamp
+           Box);
+       90 -  A(stamp, [{ opacity: 0, transform: 'rotate(-3deg) scale(1.7)
+          -', offset: 0 }, { opacity: 1, transform:                      
+       99 +  const rot = 'rotate(-3deg)';                                
+      100 +  A(stamp, [                                                  
+      101 +    { opacity: 0, transform: `${rot} scale(1.7)`, offset: 0 },
+      102 +    { opacity: 1, transform: `${rot} scale(1)`, offset: 0.55 }
+          +,                                                             
+      103 +    { opacity: 1, transform: `${rot} scale(1.04)`, offset: 0.7
+          +5 },                                                          
+      104 +    { opacity: 1, transform: `${rot} scale(1)`, offset: 1 },  
+      105 +  ], start + 1.4, 0.3, { easing: 'cubic-bezier(.3,.9,.3,1)' })
+          +;                                                             
+      106 +  const sub = mk('div', `position:absolute;left:60px;right:60p
+          +x;top:1290px;text-align:center;font:500 25px/1.5 ${MONO};lette
+          +r-spacing:.16em;color:#B5A78F;text-transform:uppercase;opacity
+          +:0`, 'For Chrome, Edge and Firefox, on desktop', s);          
+      107 +  A(sub, [{ opacity: 0 }, { opacity: 1 }], start + 1.85, 0.4);
+      108 +  const fade = layer(s, 'background:#000;opacity:0');         
+      109 +  A(fade, [{ opacity: 0 }, { opacity: 1 }], end - 0.25, 0.22, 
+          +{ easing: 'ease-in' });                                       
+      110 +}                                                             
+      111 +                                                              
+      112 +async function boot() {                                       
+      113 +  await Promise.all([                                         
+      114 +    document.fonts.load('40px "League Gothic"'), document.font
+          +s.load('40px "Newsreader"'), document.fonts.load('italic 40px 
+          +"Newsreader"'),                                               
+      115 +    document.fonts.load('20px "DM Mono"'), document.fonts.load
+          +('500 20px "DM Mono"'),                                       
+      116 +  ]);                                                         
+      117 +  // warm every theme's fonts in real time (no frames are prod
+          +uced until the renderer asks)                                 
+      118 +  const warm = layer(film, 'opacity:0');                      
+      119 +  for (const t of Footlit.themes) {                           
+      120 +    void Footlit.play({ theme: t.id, event: 'pr.merged', conta
+          +iner: warm });                                                
+      121 +    await new Promise((r) => setTimeout(r, 450));             
+      122 +    Footlit.stop();                                           
+      123 +  }                                                           
+      124 +  warm.remove();                                              
+      125 +  if (!q.get('lab')) { hook(); montage(); logo(); }           
+      126 +  w.__ready = true;                                           
+      127 +}                                                             
+      128 +w.__start = () => {                                           
+      129 +  const lab = q.get('lab');                                   
+      130 +  if (lab) {                                                  
+      131 +    const [theme, event, scale] = lab.split(':');             
+      132 +    void Footlit.play({ theme, event, scale: Number(scale ?? 1
+          +), container: film });                                        
+      133 +    return;                                                   
+      134 +  }                                                           
+      135 +  jobs.forEach((j) => j());                                   
+      136 +};                                                            
+      137 +void boot().catch((e) => console.log('[film] boot failed', e?.
+          +stack ?? e));                                                 
+
+● Bash(node scripts/build.mjs &&
+      T=0.5,1.2,1.9,2.4,3.5,5,7,8.5,9.5,10.3,10.9,11.7 && node
+      scripts/render.mjs --film=teaser --preview=$T 2>&1 | grep -v "^\s*at " |
+      grep…)
+  ⎿  video bundles built
+     12
+
+  Read 1 file (ctrl+o to expand)
+
+● Write(video\scripts\make-teaser-audio.mjs)
+  ⎿  Wrote 99 lines to video\scripts\make-teaser-audio.mjs
+       1 // Sound for the 12 s teaser: no voice, so it works with or with
+         .
+       2 //   node scripts/make-teaser-audio.mjs   ->   out/teaser-audio-
+       3 import fs from 'node:fs/promises';
+       4 import path from 'node:path';
+       6 import { createRequire } from 'node:module';
+       7 import { SR, makeBus, put, mtof, len, svf, noise, osc, expo, asr
+         luck, whoosh, click } from './synth.mjs';
+       8 
+      10 const ffmpeg = createRequire(import.meta.url)('ffmpeg-static');
+     … +124 lines (ctrl+o to expand)
+
+● Bash(node scripts/make-teaser-audio.mjs 2>&1 | tail -4 && node
+      scripts/render.mjs --film=teaser --full --crf=12 > out/teaser-render.log
+      2>&1; tail -2 out/teaser-rend…)
+  ⎿  teaser audio mixed: out/teaser-audio-mix.wav (raw -7.9 LUFS, normalise
+     d to -14)
+       frame 270/360  (86s elapsed)
+     … +7 lines (ctrl+o to expand)
+
+● Bash(FF=$(node -e "console.log(require('ffmpeg-static'))") && "$FF"
+      -hide_banner -i out/footlit-teaser-1080x1920.mp4 2>&1 | grep -E
+      "Duration|Stream"; mkdir -p out/q…)
+  ⎿    Duration: 00:00:12.00, start: 0.000000, bitrate: 2814 kb/s
+       Stream #0:0[0x1](und): Video: h264 (High) (avc1 / 0x31637661), yuv42
+     0p(progressive), 1080x1920, 2533 kb/s, 30 fps, 30 tbr, 15360 tbn (defa
+     … +3 lines (ctrl+o to expand)
+
+  Read 1 file (ctrl+o to expand)
+
+● Status: the 12 s Reel teaser has rendered and checks out frame by frame, so
+  I'm tidying the scripts and docs, then opening it for you.
+
+● Bash(node -e "
+      const fs=require('fs');const
+      p=JSON.parse(fs.readFileSync('package.json','utf8'));…)
+  ⎿  1
+
+● The 12 s Reel teaser is built and open in your player:
+  video/out/footlit-teaser-1080x1920.mp4 (1080×1920, 30 fps, 4 MB). I checked it
+  by decoding frames from the final file and measuring its loudness, but I
+  haven't listened to it.
+
+  What happens in it
+  - 0–2 s: a merge button gets clicked and nothing happens. Captions read "Every
+    merge you've ever done…" then "…deserved better."
+  - 2–8.75 s: 11 hard cuts of the real themes (Marquee, Mission Control,
+    Terminal, Pixel Arcade, Web Crawler), speeding up on a 160 BPM beat. It ends
+    on the red SHOW STOPPED and the BRAVO! marquee.
+  - 8.75–9.35 s: total silence.
+  - 9.35–12 s: the FOOTLIT logo with the footlights coming on and the tagline
+    "GitHub, with stage lighting." A COMING SOON stamp slams down, with "For
+    Chrome, Edge and Firefox, on desktop" underneath.
+  - No voiceover: the sound is only the synthesised score and effects, so the
+    scratch-voice problem doesn't apply and it's safe to post as is. The
+    captions cover viewers who have the sound off.
+  - Instagram safe zone: all captions and text sit clear of the top 14% and
+    bottom 22% of the frame, where Instagram's buttons cover the video. The
+    theme labels are larger than in the 60 s film so they read on a phone.
+  - No date, no link, no handle: I haven't written a launch date, store link or
+    Instagram handle on it. For the caption you could use: "Every merge you've
+    ever done deserved better. Something's coming."
+  - Instagram upload: Instagram may compress it, but at this size it should look
+    fine.
+  - Loudness: it's mixed hot, at about −14 LUFS, which is normal for Reels. If
+    it feels too loud, tell me and I'll lower it.
+  - Re-rendering: npm run teaser inside video/ rebuilds it, and the shared sound
+    code is now in video/scripts/synth.mjs. The 60 s film's audio came out
+    bit-identical after I moved the code, so it's unchanged.
+
+  When the Chrome store listing is approved, post the 60 s film as the launch
+  announcement (with the purchased voice swapped in). Send notes on this teaser
+  if you want changes.
+
+✻ Crunched for 7m 47s · done Sunday 7:14 PM
+
+> perfecttt should i post or just story on insta !? and what abt linked in i    
+  think on linked in i should post once when all things settle, on insta if i   
+  am posting then what caption !                                                
+
+● Post it as a Reel, then share the Reel to your story too. A story disappears
+  after 24 hours, and a teaser like this works best as something people can find
+  and revisit. The Reel stays on your profile and can be found by people who
+  don't follow you yet. Sharing it to your story as well costs nothing.
+
+  LinkedIn: I agree, wait. Post the 60 s film once the Chrome store listing is
+  live and the voice is final. Then people can click through and install right
+  away, and a LinkedIn post gets most of its reach in the first day or two, so
+  you don't want to spend that on a link that doesn't work yet.
+
+  Caption options (no date and no "available now", since it isn't yet):
+
+  1. Short and moody:
+  ▎ Every merge you've ever done deserved better.
+  ▎ Something's coming. 🎭
+  ▎ Footlit: stage lighting for your GitHub. For Chrome, Edge and Firefox on 
+  desktop.
+  ▎ Follow for launch day.
+  2. Plain and specific:
+  ▎ I built a browser extension that gives every GitHub event its own show: a 
+  merged PR gets applause, a failed build gets an alarm.
+  ▎ Free, private, nothing leaves your browser. Coming soon for Chrome, Edge and
+  Firefox (desktop).
+  ▎ Follow to catch the launch.
+  3. Minimal:
+  ▎ Coming soon. 🎬 Desktop browsers only.
+
+  I'd use #2: it says what the app is, and it tells people they can trust it,
+  which matters for an extension. Add a few hashtags at the end, for example
+  #github #developers #webdev #buildinpublic #chromeextension #indiehackers.
+  Stick to about 6, since more looks spammy.
+
+  Small things worth doing:
+  - Cover frame: pick the BRAVO! frame or the logo frame, not a frame from the
+    hook.
+  - Bio link: put footlit-app.vercel.app in your Instagram bio now. Don't add a
+    store link until it exists.
+  - Pinned comment: pin a comment such as "Launching soon, follow so you don't
+    miss it."
+  - Reels vs story: "Share to story" is available on the Reel itself, so one
+    upload covers both.
+
+  If it helps, I can write the launch-day caption and the LinkedIn founder note
+  now so they're ready.
+
+✻ Brewed for 13s · done Sunday 7:21 PM
+
+> where is cover photo ! for insta i am posting that                            
+
+● Bash(cat > scripts/_p.cjs <<'EOF'
+      const fs=require('fs');let s=fs.readFileSync('src/teaser.ts','utf8');…)
+  ⎿  video bundles built
+     1
+     1
+
+  Read 1 file (ctrl+o to expand)
+
+● Bash(powershell -NoProfile -Command "Start-Process explorer.exe
+      '/select,D:\NodeJS\product\video\out\instagram-cover-B-bravo.png'"; ls -la
+      out/instagram-cover-*.png)
+  ⎿  -rw-r--r-- 1 AmmadAhmed 197609 121156 Oct 11 19:24 out/instagram-cover
+     -A-logo.png
+     -rw-r--r-- 1 AmmadAhmed 197609 213439 Oct 11 19:24 out/instagram-cover
+     -B-bravo.png
+
+● There was no cover image yet, so I made two (both 1080×1920 PNG) and opened
+  the folder video/out/ with the second one selected:
+
+  - A: instagram-cover-A-logo.png is the clean brand frame: the FOOTLIT
+    wordmark, the tagline "GitHub, with stage lighting.", the COMING SOON stamp,
+    and "For Chrome, Edge and Firefox, on desktop".
+  - B: instagram-cover-B-bravo.png is the BRAVO! marquee with confetti, the
+    FOOTLIT wordmark above it and the COMING SOON stamp below.
+
+  I'd use B for the grid. It's more eye-catching in a feed of small thumbnails,
+  and it has the brand name and the promise on it. Use A if you'd rather keep it
+  calm and minimal.
+
+  Both keep their text inside the middle 4:5 area, so your profile grid crop
+  won't cut anything off.
+
+  To use one:
+  1. Send the PNG to your phone (WhatsApp to yourself, Google Drive or email
+     works).
+  2. In Instagram, create the Reel and tap Edit cover.
+  3. Choose Add from camera roll and pick the PNG.
+
+  If you'd rather pick a frame from inside the video, any frame from the last 2
+  seconds (the logo scene) works as well as A.
+
+✻ Cogitated for 51s · done Sunday 7:24 PM
+
+> [Image #17] hey i think let the scrooll bar appears and increase the distance 
+  between the rows so that it looks good hmm                                    
+  ⎿  [Image #17]
+● Bash(cd /d/NodeJS/product && cat src/popup/popup.css; grep -n "program\|li\b"
+      src/popup/popup.ts | head -20)
+  ⎿  body { width: 372px; padding: 12px 18px 12px; }
+     .head { display: flex; align-items: center; gap: 10px; padding-bottom:
+      9px; }
+     … +31 lines (ctrl+o to expand)
+
+● Bash(cat > /tmp/_css.cjs <<'EOF'
+      const fs=require('fs');let
+      s=fs.readFileSync('src/popup/popup.css','utf8');…)
+  ⎿  8:    "build": "node scripts/build.mjs",
+     > node scripts/build.mjs
+
+     built chrome v1.0.0 → D:\NodeJS\product\dist
+
+● Bash(cd /d/NodeJS/product/video && cat >
+      "C:/Users/HAROON~1/AppData/Local/Temp/claude/D--NodeJS-product/9ca765b9-7c
+      d9-41e3-b11c-acb4f5973139/scratchpad/popshot.mjs"…)
+  ⎿  Error: Exit code 1
+     node:internal/modules/package_json_reader:256
+       throw new ERR_MODULE_NOT_FOUND(packageName, fileURLToPath(base), null);
+             ^
+
+     Error [ERR_MODULE_NOT_FOUND]: Cannot find package 'puppeteer-core' imported
+     from C:\Users\HAROON~1\AppData\Local\Temp\claude\D--NodeJS-product\9ca765b
+     9-7cd9-41e3-b11c-acb4f5973139\scratchpad\popshot.mjs
+         at Object.getPackageJSONURL 
+     (node:internal/modules/package_json_reader:256:9)
+         at packageResolve (node:internal/modules/esm/resolve:768:81)
+         at moduleResolve (node:internal/modules/esm/resolve:854:18)
+         at defaultResolve (node:internal/modules/esm/resolve:984:11)
+
+     … +9 lines (ctrl+o to expand)
+
+● Bash(cd /d/NodeJS/product/video && S="C:/Users/HAROON~1/AppData/Local/Temp/cla
+      ude/D--NodeJS-product/9ca765b9-7cd9-41e3-b11c-acb4f5973139/scratchpad"; ls
+      node_modules…)
+  ⎿  Error: Exit code 2
+     ls: cannot access 
+     'node_modules/puppeteer-core/lib/esm/puppeteer/puppeteer-core.js': No such 
+     file or directory
+
+● Bash(cd /d/NodeJS/product/video && grep -n '"main"\|"exports"' -A6
+      node_modules/puppeteer-core/package.json | head -20; ls
+      node_modules/puppeteer-core/lib | head)
+  ⎿  12:  "main": "./lib/puppeteer/puppeteer-core.js",
+     13-  "browser": "./lib/puppeteer/puppeteer-core-browser.js",
+     14-  "module": "./lib/puppeteer/puppeteer-core.js",
+     … +12 lines (ctrl+o to expand)
+
+● Quick status: the popup spacing change is built, and I'm taking a test
+  screenshot at Chrome's 600 px popup cap to confirm the scrollbar looks right.
+
+● Bash(S="C:/Users/HAROON~1/AppData/Local/Temp/claude/D--NodeJS-product/9ca765b9
+      -7cd9-41e3-b11c-acb4f5973139/scratchpad"; sed -i "s#from
+      'puppeteer-core'#from 'file://…)
+  ⎿  {
+       "scrollH": 672,
+       "clientH": 600
+     … +2 lines (ctrl+o to expand)
+
+  Read 1 file (ctrl+o to expand)
+
+● I increased the spacing between the event rows and let the scrollbar appear.
+  It's built into dist/, so you need to reload the extension to see it.
+
+  - Row spacing: each row now has twice the padding (3px → 6px), and the gap
+    between the four event groups is also larger (6px → 12px). In a test
+    screenshot at Chrome's 600 px popup limit, the rows read comfortably.
+  - Scrolling: the popup is now about 672 px tall against Chrome's 600 px cap,
+    so about 70 px scrolls. I styled the scrollbar to match the programme look:
+    thin, with an ink-coloured thumb and square corners. The headless browser I
+    tested in hides scrollbars, so I haven't seen the scrollbar itself. Please
+    check it in real Chrome.
+  - To see it: go to chrome://extensions and press the reload icon on Footlit,
+    then reopen the popup.
+  - Store update: the version you submitted to the Chrome Web Store has the old
+    spacing. When you want this change in the store, bump the version to 1.0.1
+    and upload it as an update after the first review finishes.
+  - Site and video: the popup mock-up on the website and the popup in the launch
+    film still show the old, tighter popup. I can regenerate the site images
+    when you want. The launch film is already rendered, so nothing changes
+    there, but if I ever re-render it the popup scene would need a small
+    adjustment to fit the taller popup.
+
+✻ Brewed for 1m 9s · done Sunday 7:34 PM
+
+> doesnot it seems like too fast and something like any event is coming what    
+  you say talking abt the trailer video                                         
+
+● You're right on both points, and I'll fix them. The cuts are too quick to
+  register what you're seeing (11 shots in under 7 seconds), and the
+  stage-lighting plus "COMING SOON" look reads as a theatre or event
+  announcement, not a GitHub tool. I'm making a v2 that is slower and puts the
+  real extension on screen so it's clearly a product.
+
+● Bash(cat > src/teaser-cues.json <<'EOF'
+      {…)
+  ⎿  Error: Exit code 2
+     /usr/bin/bash: -c: line 91: unexpected EOF while looking for matching `''
+
+  Read 1 file, listed 1 directory (ctrl+o to expand)
+
+● Write(video\src\teaser-cues.json)
+  ⎿  Added 14 lines, removed 80 lines
+       1  {
+       2 -  "size": [                                                    
+       3 -    1080,                                                      
+       4 -    1920                                                       
+       5 -  ],                                                           
+       6 -  "duration": 12,                                              
+       2 +  "size": [1080, 1920],                                        
+       3 +  "duration": 16.4,                                            
+       4    "output": "footlit-teaser-1080x1920.mp4",
+       8 -  "hook": {                                                    
+       9 -    "start": 0,                                                
+      10 -    "end": 2,                                                  
+      11 -    "click": 1                                                 
+      12 -  },                                                           
+       5 +  "hook": { "start": 0, "end": 2.6, "click": 1.2 },            
+       6    "montage": {
+      14 -    "start": 2,                                                
+      15 -    "end": 8.75,                                               
+      16 -    "unit": 0.1875,                                            
+      17 -    "payoff": {                                                
+      18 -      "marquee": 1.5,                                          
+      19 -      "terminal": 2.8,                                         
+      20 -      "mission": 2.3,                                          
+      21 -      "pixel": 1.9,                                            
+      22 -      "crawler": 1.5                                           
+      23 -    },                                                         
+       7 +    "start": 2.6, "end": 11.0375, "unit": 0.1875,              
+       8 +    "payoff": { "marquee": 1.5, "terminal": 2.8, "mission": 2.3
+         +, "pixel": 1.9, "crawler": 1.5 },                              
+       9      "shots": [
+      25 -      {                                                        
+      26 -        "theme": "marquee",                                    
+      27 -        "event": "repo.created",                               
+      28 -        "dur": 1.125                                           
+      29 -      },                                                       
+      30 -      {                                                        
+      31 -        "theme": "mission",                                    
+      32 -        "event": "ci.passed",                                  
+      33 -        "dur": 0.9375                                          
+      34 -      },                                                       
+      35 -      {                                                        
+      36 -        "theme": "terminal",                                   
+      37 -        "event": "pr.merged",                                  
+      38 -        "dur": 0.75                                            
+      39 -      },                                                       
+      40 -      {                                                        
+      41 -        "theme": "pixel",                                      
+      42 -        "event": "pr.merged",                                  
+      43 -        "dur": 0.75                                            
+      44 -      },                                                       
+      45 -      {                                                        
+      46 -        "theme": "crawler",                                    
+      47 -        "event": "repo.forked",                                
+      48 -        "dur": 0.5625                                          
+      49 -      },                                                       
+      50 -      {                                                        
+      51 -        "theme": "marquee",                                    
+      52 -        "event": "release.published",                          
+      53 -        "dur": 0.5625                                          
+      54 -      },                                                       
+      55 -      {                                                        
+      56 -        "theme": "mission",                                    
+      57 -        "event": "repo.deleted",                               
+      58 -        "dur": 0.5625                                          
+      59 -      },                                                       
+      60 -      {                                                        
+      61 -        "theme": "pixel",                                      
+      62 -        "event": "deploy.live",                                
+      63 -        "dur": 0.375                                           
+      64 -      },                                                       
+      65 -      {                                                        
+      66 -        "theme": "marquee",                                    
+      67 -        "event": "ci.failed",                                  
+      68 -        "dur": 0.375                                           
+      69 -      },                                                       
+      70 -      {                                                        
+      71 -        "theme": "crawler",                                    
+      72 -        "event": "issue.closed",                               
+      73 -        "dur": 0.375                                           
+      74 -      },                                                       
+      75 -      {                                                        
+      76 -        "theme": "marquee",                                    
+      77 -        "event": "pr.merged",                                  
+      78 -        "dur": 0.375                                           
+      79 -      }                                                        
+      10 +      { "theme": "marquee", "event": "repo.created", "dur": 1.6
+         +875, "caption": "New repo? Opening night." },                  
+      11 +      { "theme": "mission", "event": "ci.passed", "dur": 1.5, "
+         +caption": "Checks pass? All stations go." },                   
+      12 +      { "theme": "pixel", "event": "pr.merged", "dur": 1.5, "ca
+         +ption": "PR merged? Stage clear." },                           
+      13 +      { "theme": "crawler", "event": "repo.forked", "dur": 1.31
+         +25, "caption": "Forked? Strands woven." },                     
+      14 +      { "theme": "terminal", "event": "pr.merged", "dur": 1.125
+         +, "caption": "Or keep it quiet. Exit 0." },                    
+      15 +      { "theme": "marquee", "event": "ci.failed", "dur": 0.75, 
+         +"caption": "Build breaks? The show stops." },                  
+      16 +      { "theme": "marquee", "event": "pr.merged", "dur": 0.5625
+         +, "caption": "Bravo." }                                        
+      17      ]
+      18    },
+      82 -  "logo": {                                                    
+      83 -    "start": 9.35,                                             
+      84 -    "end": 12                                                  
+      85 -  }                                                            
+      86 -}                                                              
+      19   No newline at end of file
+      20 +  "logo": { "start": 11.8, "end": 16.4, "popupAt": 1.7, "stampA
+         +t": 2.75 }                                                     
+      21 +}                                                              
+
+  Read 1 file (ctrl+o to expand)
+
+● Now the edits themselves, one at a time: caption bar in the montage first,
+  then the new logo scene.
+
+● Update(video\src\teaser.ts)
+  ⎿  Added 3 lines, removed 2 lines
+      60      });
+      61      const chip = mk('div', `position:absolute;left:54px;top:300
+          px;padding:11px 18px 9px;background:${INK};color:${PAPER};font:
+          500 27px ${MONO};letter-spacing:.1em;text-transform:uppercase;b
+          order-left:7px solid ${LIT};opacity:0`, `${names[sh.theme]}  / 
+           ${sh.event.replace('.', ' ')}`, hud);
+      62      vis(chip, t0, t0 + sh.dur);
+      63 -    const count = mk('div', `position:absolute;right:54px;top:1
+         -440px;color:${PAPER};font:500 27px ${MONO};letter-spacing:.14em
+         -;text-shadow:0 0 8px ${INK},0 0 3px ${INK};opacity:0`, `${Strin
+         -g(i + 1).padStart(2, '0')} / ${shots.length}`, hud);           
+      64 -    vis(count, t0, t0 + sh.dur);                               
+      63 +    // a plain-language line for every shot, so it is obvious w
+         +hat is happening and why                                       
+      64 +    const bar = mk('div', `position:absolute;left:0;right:0;top
+         +:1350px;height:118px;background:${INK};border-top:4px solid ${L
+         +IT};display:flex;align-items:center;justify-content:center;font
+         +:italic 400 54px ${TEXT};color:${PAPER};opacity:0`, sh.caption,
+         + hud);                                                         
+      65 +    vis(bar, t0, t0 + sh.dur);                                 
+      66      const flash = layer(hud, `background:${PAPER};opacity:0`);
+      67      A(flash, [{ opacity: i % 2 ? 0.28 : 0.42 }, { opacity: 0 }]
+          , t0, 0.14, { easing: 'linear', fill: 'none' });
+      68      t += sh.dur;
+
+● Update(video\src\teaser.ts)
+  ⎿  Added 1 line, removed 1 line
+      29    // captions for viewers with the sound off
+      30    const l1 = mk('div', `position:absolute;left:60px;right:60px;
+          top:430px;text-align:center;font:italic 400 66px/1.1 ${TEXT};co
+          lor:${PAPER}`, "Every merge you've ever done…", s);
+      31    const l2 = mk('div', `position:absolute;left:60px;right:60px;
+          top:1330px;text-align:center;font:italic 400 76px/1.1 ${TEXT};c
+          olor:${LIT}`, '…deserved better.', s);
+      32 -  for (const [el, t0] of [[l1, 0.15], [l2, 1.15]] as const) {  
+      32 +  for (const [el, t0] of [[l1, 0.2], [l2, 1.55]] as const) {   
+      33      el.style.opacity = '0';
+      34      A(el, [{ opacity: 0, transform: 'translateY(14px)' }, { opa
+          city: 1, transform: 'none' }], t0, 0.4);
+      35    }
+
+● Update(video\src\teaser.ts)
+  ⎿  Added 3 lines, removed 3 lines
+      71    void end;
+      72  }
+      73  
+      74 -// ---- 3. the logo, and the promise ----                      
+      75 -function logo() {                                              
+      76 -  const { start, end } = cues.logo;                            
+      74 +// ---- 3. the logo, the real extension, and the promise ----  
+      75 +async function logo() {                                        
+      76 +  const { start, end, popupAt, stampAt } = cues.logo;          
+      77    const s = layer(film, 'background:#0c0906;overflow:hidden');
+      78    vis(s, start, end);
+      79    [{ w: 1300, o: 0.1 }, { w: 1020, o: 0.12 }, { w: 740, o: 0.16
+           }, { w: 470, o: 0.22 }].forEach((b, i) => {
+
+● Update(video\src\teaser.ts)
+  ⎿  Added 1 line, removed 1 line
+      87      A(on, [{ opacity: 0 }, { opacity: 1 }], start + 0.2 + i * 0
+          .05, 0.05, { easing: 'linear' });
+      88    }
+      89    mk('div', `position:absolute;left:0;right:0;bottom:0;height:8
+          px;background:${PAPER}`, '', s);
+      90 -  const word = mk('div', `position:absolute;left:0;right:0;top:
+         -590px;text-align:center;font:400 370px/1 ${DISPLAY};letter-spac
+         -ing:.02em;color:${PAPER};text-transform:uppercase;display:flex;
+         -justify-content:center`, '', s);                               
+      90 +  const word = mk('div', `position:absolute;left:0;right:0;top:
+         +262px;text-align:center;font:400 250px/1 ${DISPLAY};letter-spac
+         +ing:.02em;color:${PAPER};text-transform:uppercase;display:flex;
+         +justify-content:center`, '', s);                               
+      91    'FOOTLIT'.split('').forEach((ch, i) => {
+      92      const l = mk('span', 'display:inline-block;overflow:hidden;
+          line-height:.86;padding-top:.04em', '', word);
+      93      A(mk('span', 'display:inline-block', ch, l), [{ transform: 
+          'translateY(105%)' }, { transform: 'translateY(0)' }], start + 
+          0.3 + i * 0.06, 0.4, { easing: 'cubic-bezier(.2,.8,.2,1)' });
+
+● Update(video\src\teaser.ts)
+  ⎿  Added 20 lines, removed 4 lines
+       92      const l = mk('span', 'display:inline-block;overflow:hidden
+           ;line-height:.86;padding-top:.04em', '', word);
+       93      A(mk('span', 'display:inline-block', ch, l), [{ transform:
+            'translateY(105%)' }, { transform: 'translateY(0)' }], start 
+           + 0.3 + i * 0.06, 0.4, { easing: 'cubic-bezier(.2,.8,.2,1)' })
+           ;
+       94    });
+       95 -  const tag = mk('div', `position:absolute;left:0;right:0;top:
+          -960px;text-align:center;font:italic 400 60px ${TEXT};color:${L
+          -IT};opacity:0`, 'GitHub, with stage lighting.', s);           
+       95 +  const tag = mk('div', `position:absolute;left:60px;right:60p
+          +x;top:520px;text-align:center;font:italic 400 52px/1.15 ${TEXT
+          +};color:${LIT};opacity:0`, 'Every GitHub event gets a show.', 
+          +s);                                                           
+       96    A(tag, [{ opacity: 0, transform: 'translateY(14px)' }, { opa
+           city: 1, transform: 'none' }], start + 0.95, 0.4);
+       97 -  // the stamp slams down, then holds                         
+       98 -  const stampBox = mk('div', 'position:absolute;left:0;right:0
+          -;top:1120px;display:flex;justify-content:center', '', s);     
+       99 -  const stamp = mk('div', `border:5px solid ${LIT};color:${LIT
+          -};padding:16px 34px 12px;font:500 56px ${MONO};letter-spacing:
+          -.22em;transform:rotate(-3deg);opacity:0`, 'COMING SOON', stamp
+          -Box);                                                         
+       97 +  const what = mk('div', `position:absolute;left:60px;right:60
+          +px;top:600px;text-align:center;font:500 26px/1.4 ${MONO};lette
+          +r-spacing:.14em;color:#B5A78F;text-transform:uppercase;opacity
+          +:0`, 'A free browser extension for GitHub', s);               
+       98 +  A(what, [{ opacity: 0 }, { opacity: 1 }], start + 1.25, 0.4)
+          +;                                                             
+       99 +                                                              
+      100 +  // the real popup, cropped to its top (theme tiles and first
+          + events), sliding up into frame                               
+      101 +  const PS = 2.0, PW = 372, CH = 335;                         
+      102 +  const holder = mk('div', `position:absolute;left:${(1080 - P
+          +W * PS) / 2}px;top:700px;width:${PW * PS}px;height:${CH * PS}p
+          +x;overflow:hidden;border:5px solid ${PAPER};margin-left:-5px;b
+          +ox-sizing:content-box;opacity:0`, '', s);                     
+      103 +  const frame = document.createElement('iframe');             
+      104 +  frame.src = '/ext/popup/popup.html?theme=marquee';          
+      105 +  frame.style.cssText = `position:absolute;left:0;top:0;width:
+          +${PW}px;height:700px;border:0;transform-origin:0 0;transform:s
+          +cale(${PS});background:#F1E8D4`;                              
+      106 +  holder.append(frame);                                       
+      107 +  await new Promise<void>((res) => { frame.onload = () => res(
+          +); });                                                        
+      108 +  const fd = frame.contentDocument!;                          
+      109 +  for (let i = 0; i < 100 && !fd.querySelector('#themes .tile'
+          +); i++) await new Promise((r) => setTimeout(r, 30));          
+      110 +  await fd.fonts.ready;                                       
+      111 +  A(holder, [{ opacity: 0, transform: 'translateY(90px)' }, { 
+          +opacity: 1, transform: 'none' }], start + popupAt, 0.5, { easi
+          +ng: 'cubic-bezier(.2,.8,.2,1)' });                            
+      112 +                                                              
+      113 +  // the stamp slams down on the corner of the popup          
+      114 +  const stampBox = mk('div', 'position:absolute;left:0;right:0
+          +;top:1330px;display:flex;justify-content:center', '', s);     
+      115 +  const stamp = mk('div', `background:${INK};border:5px solid 
+          +${LIT};color:${LIT};padding:16px 34px 12px;font:500 56px ${MON
+          +O};letter-spacing:.22em;transform:rotate(-3deg);opacity:0`, 'C
+          +OMING SOON', stampBox);                                       
+      116    const rot = 'rotate(-3deg)';
+      117    A(stamp, [
+      118      { opacity: 0, transform: `${rot} scale(1.7)`, offset: 0 },
+
+● Update(video\src\teaser.ts)
+  ⎿  Added 4 lines, removed 4 lines
+      119      { opacity: 1, transform: `${rot} scale(1)`, offset: 0.55 }
+           ,
+      120      { opacity: 1, transform: `${rot} scale(1.04)`, offset: 0.7
+           5 },
+      121      { opacity: 1, transform: `${rot} scale(1)`, offset: 1 },
+      122 -  ], start + 1.4, 0.3, { easing: 'cubic-bezier(.3,.9,.3,1)' })
+          -;                                                             
+      123 -  const sub = mk('div', `position:absolute;left:60px;right:60p
+          -x;top:1290px;text-align:center;font:500 25px/1.5 ${MONO};lette
+          -r-spacing:.16em;color:#B5A78F;text-transform:uppercase;opacity
+          -:0`, 'For Chrome, Edge and Firefox, on desktop', s);          
+      124 -  A(sub, [{ opacity: 0 }, { opacity: 1 }], start + 1.85, 0.4);
+      122 +  ], start + stampAt, 0.3, { easing: 'cubic-bezier(.3,.9,.3,1)
+          +' });                                                         
+      123 +  const sub = mk('div', `position:absolute;left:60px;right:60p
+          +x;top:1452px;text-align:center;font:500 24px/1.5 ${MONO};lette
+          +r-spacing:.16em;color:#B5A78F;text-transform:uppercase;opacity
+          +:0`, 'Chrome, Edge and Firefox, on desktop', s);              
+      124 +  A(sub, [{ opacity: 0 }, { opacity: 1 }], start + stampAt + 0
+          +.4, 0.4);                                                     
+      125    const fade = layer(s, 'background:#000;opacity:0');
+      126 -  A(fade, [{ opacity: 0 }, { opacity: 1 }], end - 0.25, 0.22, 
+          -{ easing: 'ease-in' });                                       
+      126 +  A(fade, [{ opacity: 0 }, { opacity: 1 }], end - 0.3, 0.27, {
+          + easing: 'ease-in' });                                        
+      127  }
+      128  
+      129  async function boot() {
+
+● Update(video\src\teaser.ts)
+  ⎿  Added 1 line, removed 1 line
+      145      mk('div', `position:absolute;left:0;right:0;top:300px;text
+           -align:center;font:400 250px/1 ${DISPLAY};letter-spacing:.03em
+           ;color:${PAPER};text-transform:uppercase;text-shadow:0 6px 0 $
+           {INK}`, 'Footlit', hud);
+      146      const sb = mk('div', 'position:absolute;left:0;right:0;top
+           :1390px;display:flex;justify-content:center', '', hud);
+      147      mk('div', `background:${INK};border:5px solid ${LIT};color
+           :${LIT};padding:16px 34px 12px;font:500 54px ${MONO};letter-sp
+           acing:.22em;transform:rotate(-3deg)`, 'COMING SOON', sb);
+      148 -  } else if (!q.get('lab')) { hook(); montage(); logo(); }    
+      148 +  } else if (!q.get('lab')) { hook(); montage(); await logo();
+          + }                                                            
+      149    w.__ready = true;
+      150  }
+      151  w.__start = () => {
+
+● Bash(sed -i "s/theme:'terminal'}},local/theme:(new
+      URLSearchParams(location.search).get('theme')||'terminal')}},local/"
+      scripts/render.mjs && grep -c "URLSearchParam…)  ⎿  1
+     video bundles built
+          58. 29.100 / 58. 29.100
+     … +11 lines (ctrl+o to expand)
+
+  Read 1 file (ctrl+o to expand)
+
+● The preview file names don't carry a trailing .0; rerunning with whole-number
+  times.
+
+● Bash(T=1,2.2,4,6,8.2,9.8,10.8,14.2,15.4 && node scripts/render.mjs
+      --film=teaser --preview=$T 2>&1 | grep -c saved; SW=300 SH=533 node
+      scripts/sheet.mjs out/sheet-t3…)
+  ⎿  9
+
+  Read 1 file (ctrl+o to expand)
+
+● Bash(cat > scripts/_a.cjs <<'EOF'
+      const fs=require('fs');let
+      s=fs.readFileSync('scripts/make-teaser-audio.mjs','utf8');…)
+  ⎿  teaser audio mixed: out/teaser-audio-mix.wav (raw -8.3 LUFS, normalise
+     d to -14)
+     done in 89s
+     … +5 lines (ctrl+o to expand)
+
+● Bash(cat > scripts/_c.cjs <<'EOF'
+      const fs=require('fs');let s=fs.readFileSync('src/teaser.ts','utf8');…)
+  ⎿  video bundles built
+     1
+     1
+     … +5 lines (ctrl+o to expand)
+
+  Read 1 file (ctrl+o to expand)
+
+● Bash(powershell -NoProfile -Command "Start-Process
+      'D:\NodeJS\product\video\out\footlit-teaser-1080x1920.mp4'"; echo ok)
+  ⎿  ok
+
+● You were right on both points, and I rebuilt the teaser as v2 (it's open in
+  your player). It replaces the earlier file,
+  video/out/footlit-teaser-1080x1920.mp4.
+
+  What was wrong
+  - Too fast: 11 theme cuts in under 7 seconds meant nobody could take in a
+    theme before it changed.
+  - Looked like an event: the stage lighting, BRAVO! and "COMING SOON" with no
+    explanation read as a concert or theatre announcement. Nothing said it's a
+    GitHub tool.
+
+  What changed (16.4 s now, was 12 s)
+  - Hook: it's 2.6 s instead of 2 s, so the two captions have time to be read.
+  - Montage: 7 shots instead of 11, each held 0.6–1.7 s, so each show's payoff
+    is visible. It's still on the beat, and it still ends in silence.
+  - Plain-language captions: every shot now has a caption in a bar across the
+    lower part of the frame:
+    - "New repo? Opening night."
+    - "Checks pass? All stations go."
+    - "PR merged? Stage clear."
+    - "Forked? Strands woven."
+    - "Or keep it quiet. Exit 0."
+    - "Build breaks? The show stops."
+    - "Bravo."
+  - Final scene: it shows the product. After the FOOTLIT wordmark you get "Every
+    GitHub event gets a show.", then "A free browser extension for GitHub",
+    then the real extension popup sliding up (cropped to the theme tiles and
+    first events), then the COMING SOON stamp and "Chrome, Edge and Firefox, on
+    desktop".
+
+  Cover: I regenerated both covers for v2. A (instagram-cover-A-logo.png) is now
+  the frame with the popup, the wordmark and the stamp. I recommend it, because
+  it shows it's a product at a glance. B (instagram-cover-B-bravo.png) is the
+  BRAVO! one, but the confetti makes its small "A browser extension for GitHub"
+  line harder to read.
+
+  Watch it once and tell me if the pace feels right now. If it's still too quick
+  or too slow, I can stretch the montage a little more.
+
+✻ Crunched for 4m 59s · done Sunday 7:50 PM
+
+> so does the firefox will seperate count the downloads and chrome will         
+  seperate hmm ! i alr submitted the chrome and whats up for the firefox tell   
+  me the steps for firefox and cant we do something total downloads some logic  
+  !                                                                             
+
+  Listed 1 directory (ctrl+o to expand)
+
+● Bash(ls -la release; grep -n '"id"\|gecko\|version"'
+      dist-firefox/manifest.json | head; grep -n -i "firefox" -B1 -A12
+      docs/STORE_LISTING.md | sed -n 1,60p)
+  ⎿  total 732
+     drwxr-xr-x 1 AmmadAhmed 197609      0 Oct 11 09:23 .
+     drwxr-xr-x 1 AmmadAhmed 197609      0 Oct 11 19:33 ..
+     … +23 lines (ctrl+o to expand)
+
+● Bash(sed -n 1,60p dist-firefox/manifest.json; ls store | head -20; grep -n -i
+      "license" package.json README.md | head -3)
+  ⎿  {
+       "manifest_version": 3,
+       "name": "Footlit",
+     … +66 lines (ctrl+o to expand)
+
+● Each store counts only its own installs. There is no combined number unless
+  you add one yourself, and I'd do that outside the extension (more below).
+
+  Counting
+
+  - Chrome Web Store: its dashboard shows Chrome users and installs.
+  - Firefox (AMO): its Developer Hub shows daily users and downloads for Firefox
+    only, with a CSV export.
+  - Edge: if you submit there later, that is a third separate dashboard (Partner
+    Center).
+
+  For a total, add up users (not downloads) from each dashboard. Chrome's
+  "users" and AMO's "daily users" count the same kind of thing, active installs,
+  so they can be added. Downloads and installs include people who later
+  uninstall, so don't mix them with users.
+
+  Putting Footlit on Firefox (AMO)
+
+  Your ready-to-upload files are in release/: footlit-firefox-1.0.0.zip and
+  footlit-source-1.0.0.zip. They match the version you submitted to Chrome.
+
+  1. Go to addons.mozilla.org/developers and sign in with a Firefox account.
+     Turn on 2-factor authentication, which Mozilla requires for developers.
+  2. Choose Submit a New Add-on, then On this site (the public listing).
+  3. Upload footlit-firefox-1.0.0.zip. The automatic check should pass.
+  4. Leave Android unticked, because I've only tested the desktop version.
+  5. When it asks whether you use minified or bundled code, say Yes and upload
+     footlit-source-1.0.0.zip. In the notes for the reviewer, put:
+  ▎ Node 22. Run npm install then npm run build:firefox to produce 
+  dist-firefox/. Bundled with esbuild (TypeScript). No network requests, no 
+  remote code. To test: open github.com, click the Footlit toolbar icon, press 
+  Rehearse on any event to play an animation. Permissions: storage and 
+  github.com only.
+  6. Fill in the listing from docs/STORE_LISTING.md. Use the Developer Tools or
+     Web Development category. Add your site's privacy page as the privacy
+     policy, and upload the screenshots from store/ (the screenshot-*.png
+     files). You need to pick a license for the listing yourself.
+  7. Submit. Review usually takes hours to a few days.
+  8. When it's approved, send me the listing URL and I'll add a Firefox install
+     button to the site.
+
+  Don't change the extension ID in the manifest. If it changes, AMO treats the
+  upload as a different add-on.
+
+  A "total downloads" number
+
+  - Don't add counting inside the extension. Your privacy page, the Chrome
+    disclosure and the Firefox manifest all say nothing leaves the browser. A
+    tracking ping would break all three, and it still couldn't combine the
+    stores without running a server.
+  - Safest: a monthly spreadsheet of the dashboard numbers.
+  - On the website: I can build a small config-driven "Used by N people"
+    counter. The Chrome and Edge numbers are typed in by you (neither store has
+    a public number to fetch). The Firefox number can be pulled automatically at
+    build time from AMO's public API. I'd leave it off until the number is
+    large enough to help, since a small number can hurt more than help.
+  - Install-click counting: a cookie-free analytics tool such as Vercel
+    Analytics or Plausible can count clicks on the "Add to Chrome" and "Add to
+    Firefox" buttons and show which posts brought visitors. That counts clicks,
+    not real installs, but it is useful for marketing and doesn't touch the
+    extension.
+
+  Do you want me to build the website counter and the Firefox button now? I'd
+  wait for the AMO URL for the button.
+
+✻ Worked for 48s · done Sunday 10:28 PM
+
+> Help us make things better! Take our quick survey 🦊                          
+  ✕                                                                             
+                                                                                
+  Ammad Ahmed                                                                   
+  Tools                                                                         
+  Back to Add-ons                                                               
+  Add-on                                                                        
+  Developer Hub                                                                 
+                                                                                
+  My Add-ons                                                                    
+  Extension Workshop                                                            
+  Documentation                                                                 
+  Tools                                                                         
+  Community & Support                                                           
+  Submit a New Add-on                                                           
+  Describe Add-on                                                               
+  Name: ?                                                                       
+  Add-on URL: https://addons.mozilla.org/…/footlit Edit                         
+  Summary:*                                                                     
+  Celebrate GitHub moments with themed full-screen animations: merges, passing  
+  checks, releases, deploys and more.                                           
+  This summary should clearly explain what your add-on does. It will be shown   
+  in listings and searches, and it will be used by reviewers to test your       
+  add-on.                                                                       
+  138 characters left.                                                          
+  Description:                                                                  
+  A longer explanation of features, functionality, and other relevant           
+  information. This field is only displayed on the add-on's product page.       
+  Minimum length: None characters; Recommended length: 250 characters. If you   
+  need a longer description, make sure the first 250 characters contain the     
+  most important description points.                                            
+  1592 characters.                                                              
+                                                                                
+  Some Markdown supported.                                                      
+  This add-on is experimental ?                                                 
+  This add-on requires payment, non-free services or software, or additional    
+  hardware. ?                                                                   
+  Select up to 3 categories for this add-on:                                    
+                                                                                
+  Alerts & Updates                                                              
+  Appearance                                                                    
+  Bookmarks                                                                     
+  Download Management                                                           
+  Feeds, News & Blogging                                                        
+  Games & Entertainment                                                         
+  Language Support                                                              
+  Photos, Music & Videos                                                        
+  Privacy & Security                                                            
+  Search Tools                                                                  
+  Shopping                                                                      
+  Social & Communication                                                        
+  Tabs                                                                          
+  Web Development                                                               
+                                                                                
+  My add-on doesn't fit into any of the categories                              
+  Support email:                                                                
+  Support website:                                                              
+  License:*                                                                     
+  Please choose a license appropriate for the rights you grant.                 
+  Mozilla Public License 2.0 Details                                            
+  Apache License 2.0 Details                                                    
+  GNU General Public License v2.0 only Details                                  
+  GNU General Public License v3.0 only Details                                  
+  GNU Lesser General Public License v2.1 only Details                           
+  GNU Lesser General Public License v3.0 only Details                           
+  GNU Affero General Public License v3.0 only Details                           
+  MIT License Details                                                           
+  ISC License Details                                                           
+  BSD 2-Clause "Simplified" License Details                                     
+  The Unlicense Details                                                         
+  All Rights Reserved                                                           
+  Other                                                                         
+  This add-on has a Privacy Policy ?                                            
+  Please specify your add-on's Privacy Policy:                                  
+  Notes to Reviewer:                                                            
+                                                                                
+  Is there anything our reviewers should bear in mind when reviewing this       
+  add-on?                                                                       
+                                                                                
+  Important: Read our policy requirements regarding build processes and source  
+  code submission. If your submission requires source code, you must provide    
+  step-by-step build instructions, either inside the source code package or     
+  here, that will create an exact copy of the code.                             
+                                                                                
+  These notes will only be visible to you and our reviewers.                    
+  Submit Version   Cancel and Disable Version                                   
+  Add-ons                                                                       
+                                                                                
+  About                                                                         
+  Firefox Add-ons Blog                                                          
+  Extension Workshop                                                            
+  Developer Hub                                                                 
+  Developer Policies                                                            
+  Community Blog                                                                
+  Forum                                                                         
+  Report a bug                                                                  
+  Review Guide                                                                  
+  Download                                                                      
+                                                                                
+  Download Firefox                                                              
+  Windows                                                                       
+  macOS                                                                         
+  iOS                                                                           
+  Android                                                                       
+  Linux                                                                         
+  All                                                                           
+  Latest Builds                                                                 
+                                                                                
+  Nightly                                                                       
+  Beta                                                                          
+  Firefox for Business                                                          
+                                                                                
+  Enterprise                                                                    
+  Community                                                                     
+                                                                                
+  Connect                                                                       
+  Contribute                                                                    
+  Developer                                                                     
+  Follow                                                                        
+                                                                                
+  Instagram                                                                     
+  YouTube                                                                       
+  TikTok                                                                        
+  Bluesky                                                                       
+  Podcast                                                                       
+                                                                                
+  Privacy Cookies Legal                                                         
+  Except where otherwise noted, content on this site is licensed under the      
+  Creative Commons Attribution Share-Alike License v3.0 or any later version.   
+  Other languages                                                               
+  tell me what to select and what to leave empty                                
+
+  Searched for 1 pattern (ctrl+o to expand)
+
+● Here is what to do with each field.
+
+  ┌─────────────────┬───────────────────────────────────────────────────────┐
+  │      Field      │                      What to do                       │
+  ├─────────────────┼───────────────────────────────────────────────────────┤
+  │ Name            │ The paste shows it blank, so type Footlit. If it's    │
+  │                 │ already filled, leave it.                             │
+  ├─────────────────┼───────────────────────────────────────────────────────┤
+  │ Add-on URL      │ Leave as …/footlit. That becomes your public Firefox  │
+  │                 │ address.                                              │
+  ├─────────────────┼───────────────────────────────────────────────────────┤
+  │ Summary         │ Leave it as it is (the one from your manifest). It's  │
+  │                 │ well under the limit.                                 │
+  ├─────────────────┼───────────────────────────────────────────────────────┤
+  │ Description     │ Leave it. Your 1,592-character text is already filled │
+  │                 │  in.                                                  │
+  ├─────────────────┼───────────────────────────────────────────────────────┤
+  │ This add-on is  │ Leave unticked.                                       │
+  │ experimental    │                                                       │
+  ├─────────────────┼───────────────────────────────────────────────────────┤
+  │ Requires        │                                                       │
+  │ payment /       │ Leave unticked. It's free and needs nothing extra.    │
+  │ non-free        │                                                       │
+  │ services        │                                                       │
+  ├─────────────────┼───────────────────────────────────────────────────────┤
+  │ Categories      │ Tick Web Development and Appearance (the themes).     │
+  │ (pick up to 3)  │ Optionally add Alerts & Updates. Skip the rest.       │
+  ├─────────────────┼───────────────────────────────────────────────────────┤
+  │                 │ Optional. AMO shows it publicly, so only enter an     │
+  │ Support email   │ address you're happy to have public (ideally a        │
+  │                 │ dedicated one). Otherwise leave it empty.             │
+  ├─────────────────┼───────────────────────────────────────────────────────┤
+  │ Support website │ Enter https://footlit-app.vercel.app                  │
+  ├─────────────────┼───────────────────────────────────────────────────────┤
+  │                 │ Choose All Rights Reserved, since you're keeping the  │
+  │ License         │ code private. Reviewers still see the source you      │
+  │                 │ upload, but nobody gets a licence to reuse it. Choose │
+  │                 │  MIT only if you decide to open-source it.            │
+  ├─────────────────┼───────────────────────────────────────────────────────┤
+  │ This add-on has │ Tick it. The box that appears wants the policy text,  │
+  │  a Privacy      │ not a link. Paste the text from docs/PRIVACY.md.      │
+  │ Policy          │                                                       │
+  ├─────────────────┼───────────────────────────────────────────────────────┤
+  │ Notes to        │ Paste the text below.                                 │
+  │ Reviewer        │                                                       │
+  └─────────────────┴───────────────────────────────────────────────────────┘
+
+  Before you paste the privacy policy: the last lines of docs/PRIVACY.md still
+  say [your name or organisation] - [your contact email]. Replace that line with
+  your name, or Ammad Ahmed / CodeVeil Studio, plus a contact email you're okay
+  making public. If you'd rather not use an email, point to the contact page on
+  your site. The "Last updated" line at the top also says to replace the
+  contact line, so you can delete that note.
+
+  Notes to Reviewer (paste as is):
+  Source code is uploaded in the next step (footlit-source-1.0.0.zip). Build: 
+  Node 22; run `npm install` then `npm run build:firefox`; this creates 
+  dist-firefox/ (TypeScript bundled with esbuild). The extension makes no 
+  network requests and loads no remote code.
+
+  To test: open any page on https://github.com, click the Footlit toolbar icon, 
+  and press "Rehearse" next to an event; a full-screen animation plays over the 
+  page. Real events (a merged pull request, passing checks, a published release)
+  are detected by a content script that reads page labels on github.com only.
+
+  Permissions: "storage" (settings) and host access to https://github.com/* 
+  only. No data is collected (data_collection_permissions: none).
+
+  Then click Submit Version. It will ask for the source code zip next
+  (release/footlit-source-1.0.0.zip). If it asks for screenshots after that, use
+  the ones in store/.
+
+✻ Worked for 28s · done Sunday 10:41 PM
+
+> submitted on firefox too, whats next edge !?                                  
+
+● Bash(ls site/src/app | head -20; node -e "
+      const fs=require('fs');for(const f of fs.readdirSync('store')){const
+      b=fs.readFileSync('store/'+f);console.log(f,b.readUIn…)
+  ⎿  apple-icon.png
+     changelog
+     events
+     … +19 lines (ctrl+o to expand)
+
+● Edge is the quickest of the three, because Edge runs Chrome extensions as they
+  are. You upload the same zip you sent to Chrome, with no rebuild.
+
+  Steps for Edge Add-ons
+
+  1. Go to partner.microsoft.com/dashboard/microsoftedge and sign in with a
+     Microsoft account. Registering is free, with no fee like Chrome's. You may
+     be asked for personal details, and possibly a trader declaration like
+     Chrome's, so answer it the same way.
+  2. Choose Create new extension and upload release/footlit-chrome-1.0.0.zip.
+     It's the same file the Chrome store has.
+  3. Availability: Public, all markets.
+  4. Properties:
+     - Category: Developer Tools.
+     - Privacy policy URL: https://footlit-app.vercel.app/privacy/
+     - Website: https://footlit-app.vercel.app
+     - Support contact: use a contact you're happy to have public.
+  5. Store listing (English):
+     - Name and description: from docs/STORE_LISTING.md.
+     - Screenshots: the 1280×800 files in store/ (screenshot-1-marquee.png to
+       screenshot-7-settings.png). All seven are the right size.
+     - Small promo tile: promo-small-440x280.png.
+     - Large promo tile: promo-marquee-1400x560.png. It's optional, but you
+       already have it.
+  6. Notes for certification (paste as is):
+  Open any page on https://github.com, click the Footlit toolbar icon, and press
+  "Rehearse" next to an event; a full-screen animation plays over the page. 
+  Real events (merged PR, passing checks, release) are detected by a content 
+  script reading page labels on github.com only. Permissions: storage and 
+  https://github.com/*. No network requests, no data collected.
+  7. Submit. Review usually takes a few business days.
+
+  One thing I need to make: Edge asks for a 300×300 logo, and the icon we have
+  is 128×128. I can generate a crisp 300×300 from the logo mark so you have it
+  ready. Say the word.
+
+  You don't strictly need the Edge listing, since Edge users can already install
+  from the Chrome Web Store. But the Edge listing gives you search visibility
+  inside Edge and a separate install count, and your site and video already say
+  "Edge".
+
+  After all three are approved
+
+  1. Send me the three store URLs (Chrome, Firefox, Edge).
+  2. I'll put the real install buttons on the site and redeploy.
+  3. Post the launch: the 60 s film on LinkedIn, and the vertical cut on
+     Instagram.
+
+✻ Sautéed for 28s · done Sunday 10:53 PM

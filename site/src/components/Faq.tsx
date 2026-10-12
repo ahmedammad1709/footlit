@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import type { ReactNode } from 'react';
+import { site } from '@/site.config';
 import s from './Faq.module.css';
 
 export interface FaqItem {
@@ -13,8 +14,8 @@ export interface FaqItem {
 export const FAQ_ITEMS: FaqItem[] = [
   {
     q: 'What is Footlit?',
-    a: <>Footlit is a free browser extension for GitHub. It plays a themed full-screen animation when you merge a pull request, finish checks, publish a release, put a Pages site live and more. There are six hand-built themes, and it works in Chrome, Edge and Firefox.</>,
-    text: 'Footlit is a free browser extension for GitHub. It plays a themed full-screen animation when you merge a pull request, finish checks, publish a release, put a Pages site live and more. There are six hand-built themes, and it works in Chrome, Edge and Firefox.',
+    a: <>Footlit is a free browser extension for GitHub. It plays a themed full-screen animation when you merge a pull request, finish checks, publish a release, put a Pages site live and more. There are six hand-built themes, and it works in Chrome and Firefox.</>,
+    text: 'Footlit is a free browser extension for GitHub. It plays a themed full-screen animation when you merge a pull request, finish checks, publish a release, put a Pages site live and more. There are six hand-built themes, and it works in Chrome and Firefox.',
   },
   {
     q: 'Is it safe? What can it see?',
@@ -28,8 +29,8 @@ export const FAQ_ITEMS: FaqItem[] = [
   },
   {
     q: 'Which browsers does it work in?',
-    a: <>Chrome 111 or later, Microsoft Edge, Brave and other Chromium browsers. A Firefox build (version 140 or later) is available as a preview.</>,
-    text: 'Chrome 111 or later, Microsoft Edge, Brave and other Chromium browsers. A Firefox build for version 140 or later is available as a preview.',
+    a: <>Chrome 111 or later and other Chromium browsers such as Brave. A Firefox build (version 140 or later) is available as a preview.</>,
+    text: 'Chrome 111 or later and other Chromium browsers such as Brave. A Firefox build for version 140 or later is available as a preview.',
   },
   {
     q: 'Will it slow GitHub down?',
@@ -61,11 +62,17 @@ export const FAQ_ITEMS: FaqItem[] = [
     a: <>Installed from the Chrome Web Store, Footlit updates itself in the background. If you installed from the direct zip download, Chrome does not update it: download the latest zip, replace the files in your folder, and press reload on the extension. See the <Link prefetch={false} href="/changelog/">changelog</Link> for what is new.</>,
     text: 'Installed from the Chrome Web Store, Footlit updates itself in the background. If you installed from the direct zip download, Chrome does not update it: download the latest zip, replace the files in your folder, and press reload on the extension.',
   },
-  {
-    q: 'Why is it not on the Chrome Web Store yet?',
-    a: <>The listing is coming. Until it is approved, you can install the exact same package from the direct download above in about a minute.</>,
-    text: 'The store listing is coming. Until it is approved, you can install the exact same package from the direct download on this site in about a minute.',
-  },
+  site.chromeStoreUrl
+    ? {
+        q: 'Why does Chrome say it can “read and change your data on github.com”?',
+        a: <>That is Chrome’s standard wording for any extension that runs a script on a website, and it describes what is possible, not what happens. Footlit asks for github.com only (never “all websites”), reads page labels locally to know when something happened, draws the animation, and sends nothing anywhere. The <Link prefetch={false} href="/privacy/">privacy page</Link> has the details.</>,
+        text: 'That is Chrome’s standard wording for any extension that runs a script on a website, and it describes what is possible, not what happens. Footlit asks for github.com only, never all websites, reads page labels locally to know when something happened, draws the animation, and sends nothing anywhere.',
+      }
+    : {
+        q: 'Why is it not on the Chrome Web Store yet?',
+        a: <>The listing is coming. Until it is approved, you can install the exact same package from the direct download above in about a minute.</>,
+        text: 'The store listing is coming. Until it is approved, you can install the exact same package from the direct download on this site in about a minute.',
+      },
   {
     q: 'Something did not play. Why?',
     a: <>GitHub changes its pages from time to time. The settings page has an activity log showing what Footlit noticed, and a short help section. If it still misbehaves, tell me on any of the links in the footer and I will fix the detector.</>,

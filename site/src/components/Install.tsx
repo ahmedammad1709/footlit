@@ -19,7 +19,7 @@ export function Install() {
 
         <dl className={s.glance}>
           <div><dt>Price</dt><dd>Free</dd></div>
-          <div><dt>Works with</dt><dd>Chrome 111+, Edge, Brave; Firefox 140+ (preview)</dd></div>
+          <div><dt>Works with</dt><dd>Chrome 111+ and Chromium browsers; Firefox 140+ (preview)</dd></div>
           <div><dt>Version</dt><dd>{VERSION}</dd></div>
           <div><dt>Download</dt><dd>{chrome ? `${chrome.kb} KB` : 'n/a'}</dd></div>
           <div><dt>Data collected</dt><dd>None</dd></div>
@@ -28,27 +28,40 @@ export function Install() {
 
         <div className={s.grid}>
           <div className={s.tickets}>
-            {chrome ? (
-              <TicketButton href={chrome.file} download title="Chrome and Edge" sub={`Direct download · .zip · ${chrome.kb} KB`} stub="Free" tone="ink" icon={<Down />} />
-            ) : null}
             {site.chromeStoreUrl ? (
-              <TicketButton href={site.chromeStoreUrl} title="Chrome Web Store" sub="One-click install" stub="Store" tone="tungsten" />
+              <TicketButton href={site.chromeStoreUrl} title="Add to Chrome" sub="Chrome Web Store · one click · updates itself" stub="Store" tone="tungsten" />
             ) : (
               <TicketButton href="#" title="Chrome Web Store" sub="Coming soon" stub="Soon" stubSmall="Not yet" tone="ink" disabled />
             )}
+            {chrome ? (
+              <TicketButton href={chrome.file} download title={site.chromeStoreUrl ? 'Manual install' : 'Chrome'} sub={`Direct download · .zip · ${chrome.kb} KB`} stub="Free" tone="ink" icon={<Down />} />
+            ) : null}
             {firefox ? (
-              <TicketButton href={firefox.file} download title="Firefox" sub={`Experimental · .zip · ${firefox.kb} KB`} stub="Beta" stubSmall="Admit one" tone="ink" icon={<Down />} />
+              <TicketButton href={firefox.file} download title="Firefox" sub={`Preview · .zip · ${firefox.kb} KB`} stub="Beta" stubSmall="Admit one" tone="ink" icon={<Down />} />
             ) : null}
           </div>
 
           <div className={s.steps}>
-            <h3 className="display">Chrome, Edge, Brave</h3>
+            {site.chromeStoreUrl ? (
+              <>
+                <h3 className="display">Chrome and Chromium browsers</h3>
+                <ol>
+                  <li><b>Press “Add to Chrome”</b> and confirm. Chrome will say Footlit can read and change your data on github.com. That is standard wording for any extension that runs on a site: Footlit only runs on github.com, looks at page labels on your machine to know when something happened, and sends nothing anywhere.</li>
+                  <li><b>Reload any GitHub tab</b> you already had open, click the Footlit icon, and press Rehearse on any event.</li>
+                </ol>
+                <p>Brave and other Chromium browsers can install straight from the Chrome Web Store too. The store version updates itself.</p>
+                <h3 className="display">Manual install (zip)</h3>
+                <p>Only needed if you cannot use the store. Steps are below.</p>
+              </>
+            ) : (
+              <h3 className="display">Chrome and Chromium browsers</h3>
+            )}
             <ol>
               <li>
                 <b>Download and unzip</b> the file somewhere it can stay. Chrome loads the extension from that folder, so do not delete it afterwards.
               </li>
               <li>
-                <b>Open the extensions page</b> by pasting <CopyText text="chrome://extensions" /> into the address bar (Edge: <CopyText text="edge://extensions" />), then switch on <b>Developer mode</b>.
+                <b>Open the extensions page</b> by pasting <CopyText text="chrome://extensions" /> into the address bar, then switch on <b>Developer mode</b>.
               </li>
               <li>
                 <b>Click “Load unpacked”</b> and choose the unzipped folder. The folder you pick must be the one that contains <code>manifest.json</code>.
@@ -65,7 +78,11 @@ export function Install() {
             <p className={s.update}>
               <b>Installed from a zip? Updates are not automatic.</b> Chrome only updates extensions that came from the store. When a new version is released, download the latest zip here, replace the files in your folder, then press the reload button on Footlit at <CopyText text="chrome://extensions" /> and reload your GitHub tabs. The store version updates itself.
             </p>
-            <p className={s.note}>The Chrome Web Store and Firefox Add-ons listings are on the way. Until then, the direct download is the real thing: the same package that will be submitted.</p>
+            <p className={s.note}>
+              {site.chromeStoreUrl
+                ? 'The Firefox Add-ons listing is under review. Until it is approved, the Firefox zip above is a preview.'
+                : 'The Chrome Web Store and Firefox Add-ons listings are on the way. Until then, the direct download is the real thing: the same package that will be submitted.'}
+            </p>
           </div>
         </div>
       </div>

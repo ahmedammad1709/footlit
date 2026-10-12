@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 import { DOWNLOADS, EVENTS, THEMES, VERSION, useFootlit } from '@/lib/footlit';
+import { site } from '@/site.config';
 import { TicketButton } from './TicketButton';
 import { PrDemo } from './PrDemo';
 import { Down } from './Icons';
@@ -46,7 +47,7 @@ export function Hero() {
 
       <div className={`wrap ${s.grid}`}>
         <div className={s.copy}>
-          <p className="eyebrow">Free GitHub extension · Chrome, Edge, Firefox</p>
+          <p className="eyebrow">Free GitHub extension · Chrome, Firefox</p>
           <h1 className={`display ${s.h1}`}>
             GitHub, with <em>stage lighting.</em>
           </h1>
@@ -54,12 +55,16 @@ export function Hero() {
             Merge a pull request, watch the checks go green, publish a release. Footlit gives the moment a proper entrance: {THEMES.length} hand-built themes, {EVENTS.length} events, and nothing ever leaves your browser.
           </p>
           <div className={s.cta}>
-            <TicketButton href={dl?.file ?? '/#install'} download={!!dl} title="Download for Chrome" sub={dl ? `Free · .zip · ${dl.kb} KB · v${VERSION}` : 'Free'} stub="Free" tone="tungsten" icon={<Down />} />
+            {site.chromeStoreUrl ? (
+              <TicketButton href={site.chromeStoreUrl} title="Add to Chrome" sub={`Free · Chrome Web Store · v${VERSION}`} stub="Free" tone="tungsten" />
+            ) : (
+              <TicketButton href={dl?.file ?? '/#install'} download={!!dl} title="Download for Chrome" sub={dl ? `Free · .zip · ${dl.kb} KB · v${VERSION}` : 'Free'} stub="Free" tone="tungsten" icon={<Down />} />
+            )}
             <button className={`btn ${s.try}`} onClick={() => void play('pr.merged')} disabled={!ready}>
               Make this page celebrate
             </button>
           </div>
-          <p className={s.skipnote}>Esc skips a show. Edge installs it the same way as Chrome.</p>
+          <p className={s.skipnote}>Esc skips a show.</p>
           <dl className={s.stats}>
             <div><dt>Themes</dt><dd>{THEMES.length}</dd></div>
             <div><dt>Events</dt><dd>{EVENTS.length}</dd></div>

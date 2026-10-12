@@ -45,7 +45,7 @@ Most installs come from the Chrome Web Store, so its search matters more than Go
 - Keep the extension name **Footlit** (using "GitHub" in the name risks a trademark complaint). Put "GitHub" and the key phrases in the **summary** and the **first paragraph** of the description (already done in `docs/STORE_LISTING.md`).
 - Fill every field: website (your domain), support/contact, privacy-policy URL (`/privacy/`), category *Developer Tools*, all seven screenshots, both promo tiles, and a short demo video if you can.
 - **Reviews drive ranking.** Ask your first real users for an honest rating; a handful in the first weeks matters a lot.
-- Link the same site from the Edge Add-ons and Firefox listings; consistent links help the site's authority too.
+- Link the same site from the Firefox listing; consistent links help the site's authority too.
 
 ## 5. Off-site: how people actually find it
 

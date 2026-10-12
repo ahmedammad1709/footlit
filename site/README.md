@@ -20,7 +20,7 @@ Everything is in **`src/site.config.ts`**:
 | Setting | What it does |
 |---|---|
 | `social.instagram`, `social.facebook`, `social.whatsapp` | The footer's "Built by Ammad Ahmed" links. Empty ones are hidden on the live site (shown dashed in `npm run dev`). WhatsApp format: `https://wa.me/<country code and number, digits only>` |
-| `chromeStoreUrl`, `firefoxStoreUrl` | Once the store listings exist, the "coming soon" ticket becomes a real button |
+| `chromeStoreUrl`, `firefoxStoreUrl` | The store listings. `chromeStoreUrl` is set (live); set `firefoxStoreUrl` when the Firefox listing is approved. Empty means "coming soon" and the zip leads |
 | `NEXT_PUBLIC_SITE_URL` (environment variable) | The deployed address, used for canonical links, the sitemap and social cards. Set it in your host's settings, e.g. `https://footlit.example.com` |
 
 ## When the extension changes

@@ -4,8 +4,9 @@
  * - `social`: fill in your real links. Empty ones are simply not shown on the live site
  *   (while running `npm run dev` they appear as dashed placeholders so you can see where they go).
  *   Filled-in links are also published to search engines as the author's profiles.
- * - `chromeStoreUrl` / `firefoxStoreUrl`: set these once the listings are live. Until then the page offers the
- *   direct download and shows "Chrome Web Store: coming soon".
+ * - `chromeStoreUrl` / `firefoxStoreUrl`: the store listings. With `chromeStoreUrl` set, the hero and the install
+ *   section lead with "Add to Chrome" and the zip becomes the manual route. Empty means "coming soon" and the zip leads.
+ *   Set `firefoxStoreUrl` once the Firefox listing is approved.
  * - `NEXT_PUBLIC_SITE_URL`: set to the deployed address (canonical links, sitemap, social cards, structured data).
  * - `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION` / `NEXT_PUBLIC_BING_SITE_VERIFICATION`: the verification tokens from
  *   Google Search Console and Bing Webmaster Tools (the "HTML tag" method; paste only the content value).
@@ -14,7 +15,7 @@ export const site = {
   name: 'Footlit',
   tagline: 'GitHub, with stage lighting.',
   /** What search results show under the title: lead with what it is and what it does (<= 160 characters). */
-  description: 'Free GitHub extension for Chrome, Edge and Firefox. Plays a themed full-screen animation when you merge a pull request, pass checks or publish a release.',
+  description: 'Free GitHub extension for Chrome and Firefox. Plays a themed full-screen animation when you merge a pull request, pass checks or publish a release.',
   longDescription: 'Footlit gives GitHub moments a proper entrance: themed full-screen animations for merged pull requests, green checks, releases, deploys and more. Free, private, six hand-built themes.',
   url: (process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000').replace(/\/$/, ''),
   author: 'Ammad Ahmed',
@@ -28,7 +29,7 @@ export const site = {
     facebook: 'https://www.facebook.com/profile.php?id=100069493475592', // e.g. https://facebook.com/your.page
     whatsapp: 'https://wa.me/923141038814', // e.g. https://wa.me/923001234567  (country code, no + or spaces)
   },
-  chromeStoreUrl: '',
+  chromeStoreUrl: 'https://chromewebstore.google.com/detail/fkjnlcolffmaaneilmchdejmlkgnimlf',
   firefoxStoreUrl: '',
   googleVerification: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION ?? '',
   bingVerification: process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION ?? '',
