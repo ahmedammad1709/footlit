@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { useFootlit } from '@/lib/footlit';
+import { THEMES, useFootlit } from '@/lib/footlit';
 import s from './PrDemo.module.css';
 
 type Pr = 'open' | 'merged' | 'closed';
@@ -19,10 +19,19 @@ export function PrDemo() {
   const [nextFails, setNextFails] = useState(true);
   const [touched, setTouched] = useState(false);
   const timer = useRef<number>(0);
+  const last = useRef<string>('');
+  const [played, setPlayed] = useState('');
 
   useEffect(() => () => clearTimeout(timer.current), []);
 
-  const show = useCallback((event: string) => void play(event, { container: stage.current }), [play]);
+  // every click is a surprise: a random theme out of all six, never the same one twice in a row
+  const show = useCallback((event: string) => {
+    const choices = THEMES.filter((t) => t.id !== last.current);
+    const theme = choices[Math.floor(Math.random() * choices.length)]!;
+    last.current = theme.id;
+    setPlayed(theme.name);
+    void play(event, { container: stage.current, theme: theme.id });
+  }, [play]);
 
   const merge = () => {
     if (pr !== 'open' || !ready || ci === 'pending') return;
@@ -114,7 +123,7 @@ export function PrDemo() {
       </div>
 
       <figcaption className={s.cap}>
-        <span className={s.hint}>{ready ? (touched ? 'The real engine, playing inside this frame.' : 'Press “Merge pull request”.') : 'Warming up the lights…'}</span>
+        <span className={s.hint}>{ready ? (touched ? <>Now playing: <b>{played}</b>. Press any button for another theme.</> : 'Press any button. Each one plays a different theme.') : 'Warming up the lights…'}</span>
         <a href="#themes" className={s.themeLink}>Find your theme</a>
       </figcaption>
     </figure>
