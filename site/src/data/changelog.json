@@ -1,5 +1,15 @@
 [
   {
+    "version": "1.0.2",
+    "date": "2026-10-15",
+    "bullets": [
+      "Fixed repo created, release published, pull request opened and fork shows not playing. Version 1.0.1 only accepted classic form posts, but several GitHub pages submit through script, so those shows were silently skipped.",
+      "The activity log can no longer hold up a show if the background worker is slow to answer.",
+      "Added tests that mimic script-driven GitHub forms."
+    ],
+    "notes": []
+  },
+  {
     "version": "1.0.1",
     "date": "2026-10-14",
     "bullets": [

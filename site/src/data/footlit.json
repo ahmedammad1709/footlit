@@ -1,13 +1,13 @@
 {
-  "version": "1.0.1",
+  "version": "1.0.2",
   "downloads": {
     "chrome": {
-      "file": "/downloads/footlit-chrome-1.0.1.zip",
+      "file": "/downloads/footlit-chrome-1.0.2.zip",
       "kb": 310
     },
     "firefox": {
-      "file": "/downloads/footlit-firefox-1.0.1.zip",
-      "kb": 310
+      "file": "/downloads/footlit-firefox-1.0.2.zip",
+      "kb": 311
     }
   },
   "events": [

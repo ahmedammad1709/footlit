@@ -4,6 +4,9 @@ import { JsonLd, abs, authorSameAs } from '@/lib/seo';
 import { Hero } from '@/components/Hero';
 import { Showcase } from '@/components/Showcase';
 import { VideoDemo } from '@/components/VideoDemo';
+import { Story } from '@/components/Story';
+import { Moments } from '@/components/Moments';
+import { Trust } from '@/components/Trust';
 import { Install } from '@/components/Install';
 import { Faq, FAQ_ITEMS } from '@/components/Faq';
 
@@ -63,7 +66,10 @@ export default function Home() {
       <JsonLd data={{ '@context': 'https://schema.org', '@graph': graph }} />
       <Hero />
       <VideoDemo />
+      <Story />
+      <Moments />
       <Showcase />
+      <Trust />
       <Install />
       <Faq />
     </>
