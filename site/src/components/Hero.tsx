@@ -1,11 +1,43 @@
+'use client';
+
+import { useEffect, useRef } from 'react';
 import { site } from '@/site.config';
 import { TicketButton } from './TicketButton';
 import { PrDemo } from './PrDemo';
 import s from './Hero.module.css';
 
 export function Hero() {
+  const root = useRef<HTMLElement>(null);
+
+  // the stage light leans toward the pointer
+  useEffect(() => {
+    const el = root.current;
+    if (!el || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    let target = 0.5;
+    let x = 0.5;
+    let raf = 0;
+    const move = (e: PointerEvent) => {
+      const r = el.getBoundingClientRect();
+      target = Math.min(1, Math.max(0, (e.clientX - r.left) / r.width));
+    };
+    const tick = () => {
+      x += (target - x) * 0.07;
+      el.style.setProperty('--bx', x.toFixed(4));
+      raf = requestAnimationFrame(tick);
+    };
+    window.addEventListener('pointermove', move, { passive: true });
+    raf = requestAnimationFrame(tick);
+    return () => {
+      window.removeEventListener('pointermove', move);
+      cancelAnimationFrame(raf);
+    };
+  }, []);
+
   return (
-    <section id="top" className={`ink ${s.hero}`}>
+    <section id="top" ref={root} className={`ink ${s.hero}`}>
+      <div className={s.beams} aria-hidden="true">
+        <i className={s.b1} /><i className={s.b2} /><i className={s.b3} />
+      </div>
       <div className={`wrap ${s.grid}`}>
         <div className={s.copy}>
           <p className={s.intro}>A little theatre for your GitHub tab.</p>
@@ -22,7 +54,7 @@ export function Hero() {
           <PrDemo />
         </div>
       </div>
-      <div className={s.lamps} aria-hidden="true">{Array.from({ length: 13 }, (_, i) => <span key={i} />)}</div>
+      <div className={s.lamps} aria-hidden="true">{Array.from({ length: 13 }, (_, i) => <span key={i} style={{ ['--i' as string]: i }} />)}</div>
     </section>
   );
 }
