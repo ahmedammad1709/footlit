@@ -6,11 +6,21 @@
 .num { font-size: clamp(84px, 8vw, 120px); color: var(--lit); line-height: .8; -webkit-text-stroke: 2px var(--ink); margin-bottom: 14px; }
 .steps h3 { font: 500 clamp(24px, 2vw, 30px)/1.15 var(--text); margin: 0 0 10px; }
 .steps p { color: var(--quiet-on-paper); margin: 0 0 22px; max-width: 34ch; font-size: clamp(16px, 1.15vw, 18.5px); }
-.pic { margin-top: auto; height: 150px; border: 2px solid var(--ink); background: var(--ink); color: var(--paper); display: grid; place-items: center; overflow: hidden; }
+.pic { position: relative; margin-top: auto; height: 170px; border: 2px solid var(--ink); background: var(--ink); color: var(--paper); display: grid; place-items: center; overflow: hidden; }
 .pic img { width: 100%; height: 100%; object-fit: cover; }
-.merge { background: #2f8a3a; color: #fff; font: 600 15px/1 system-ui, 'Segoe UI', sans-serif; padding: 11px 18px; border-radius: 6px; }
+.merge { background: #2f8a3a; color: #fff; font: 600 15px/1 system-ui, 'Segoe UI', sans-serif; padding: 11px 18px; border-radius: 6px; transition: background .25s, transform .15s; }
+.merged { background: #8957e5; }
+.cursor { position: absolute; left: 78%; top: 112%; transition: left .8s var(--ease), top .8s var(--ease), transform .15s; pointer-events: none; }
+.cursorIn { left: 58%; top: 58%; }
+.cursorClick { transform: scale(.82); }
 .log { place-items: start; align-content: center; padding: 0 22px; gap: 8px; font: 500 14px/1.3 var(--mono); letter-spacing: .04em; color: var(--quiet-on-ink); }
 .log span { display: block; }
+.dim { color: var(--quiet-on-ink) !important; text-decoration: line-through; }
+.line { opacity: 0; transform: translateX(-6px); transition: opacity .3s, transform .3s; color: var(--lit); }
+.lineOn { opacity: 1; transform: none; }
 .log b { font-weight: 500; color: var(--paper); }
 .log .hit { color: var(--lit); }
 @media (max-width: 860px) { .steps { grid-template-columns: 1fr; gap: 36px; } .pic { height: 170px; } .steps p { max-width: 48ch; } }
+.stage { position: absolute; inset: 0; }
+.hidden { opacity: 0; }
+.pic img { transition: opacity .2s; }

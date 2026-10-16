@@ -67,8 +67,8 @@ export default function Home() {
       <Hero />
       <VideoDemo />
       <Story />
-      <Moments />
       <Showcase />
+      <Moments />
       <Trust />
       <Install />
       <Faq />

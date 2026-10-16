@@ -7,8 +7,8 @@ import s from './Nav.module.css';
 const LINKS = [
   ['Watch', '/#watch'],
   ['How it works', '/#how'],
-  ['Events', '/#events'],
   ['Themes', '/#themes'],
+  ['Events', '/#events'],
   ['Privacy', '/privacy/'],
 ] as const;
 

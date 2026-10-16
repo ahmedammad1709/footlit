@@ -339,6 +339,21 @@ function endCard() {
 }
 
 // ---------- boot ----------
+/** A still for the website's video poster: stage light, wordmark, footlights; the middle is left clear for the play button. */
+function posterCover() {
+  const s = layer(film, `background:#0c0906;overflow:hidden`);
+  [{ w: 1500, o: 0.10 }, { w: 1180, o: 0.12 }, { w: 860, o: 0.16 }, { w: 540, o: 0.22 }].forEach((b) => {
+    mk('div', `position:absolute;left:${960 - b.w / 2}px;top:0;width:${b.w}px;height:1080px;background:${LIT};opacity:${b.o};clip-path:polygon(40% 0,60% 0,100% 100%,0 100%)`, '', s);
+  });
+  const row = mk('div', 'position:absolute;left:0;right:0;bottom:0;height:70px;display:flex;justify-content:space-between;padding:0 62px;align-items:flex-end', '', s);
+  for (let i = 0; i < 15; i++) mk('div', `width:88px;height:44px;border-radius:44px 44px 0 0;background:${LIT}`, '', row);
+  mk('div', `position:absolute;left:0;right:0;bottom:0;height:8px;background:${PAPER}`, '', s);
+  mk('div', `position:absolute;left:0;right:0;top:92px;text-align:center;font:500 24px ${MONO};letter-spacing:.24em;color:#B5A78F;text-transform:uppercase`, 'A free GitHub extension', s);
+  mk('div', `position:absolute;left:0;right:0;top:150px;text-align:center;font:400 330px/1 ${DISPLAY};letter-spacing:.02em;color:${PAPER};text-transform:uppercase`, 'Footlit', s);
+  mk('div', `position:absolute;left:0;right:0;top:470px;text-align:center;font:italic 400 62px ${TEXT};color:${LIT}`, 'Every GitHub event gets a show.', s);
+  mk('div', `position:absolute;left:0;right:0;top:850px;text-align:center;font:500 22px ${MONO};letter-spacing:.2em;color:#B5A78F;text-transform:uppercase`, 'The 56-second film', s);
+}
+
 async function boot() {
   const st = (s: string) => ((window as unknown as { __stage: string }).__stage = s);
   st('fonts');
@@ -353,6 +368,7 @@ async function boot() {
   for (const t of Footlit.themes) { void Footlit.play({ theme: t.id, event: 'pr.merged', container: warm }); await new Promise((r) => setTimeout(r, 450)); Footlit.stop(); }
   warm.remove();
 
+  if (q.get('cover') === 'poster') { posterCover(); w.__ready = true; return; }
   if (q.get('lab')) { w.__ready = true; return; }
   const only = q.get('only');
   st('scenes'); hook(); montage(); logo(); st('demo'); await demo(); st('rest'); trust(); endCard();

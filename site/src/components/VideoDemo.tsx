@@ -31,7 +31,7 @@ export function VideoDemo() {
             </video>
           ) : (
             <button className={s.poster} onClick={() => setStarted(true)} aria-label="Play the 56-second Footlit film">
-              <img src="/demo/poster-launch.jpg" width={1280} height={720} alt="Footlit's gold BRAVO marquee celebrating a merged pull request over a GitHub page" loading="lazy" />
+              <img src="/demo/poster-launch.jpg" width={1280} height={720} alt="Footlit: every GitHub event gets a show. Play the 56-second film." loading="lazy" />
               <span className={s.play}><span aria-hidden="true">▶</span> Watch the film <small>56 s · sound on</small></span>
             </button>
           )}
