@@ -5,7 +5,7 @@
 ## Key facts
 
 - Price: free. No account, no ads.
-- Works with: Chrome 111+, other Chromium browsers; Firefox 140+ (preview build).
+- Works with: Chrome 111+ and Firefox 140+. Both are available from their official extension stores.
 - Events (11): repository created / deleted / forked; pull request opened / merged / closed; checks passed / failed; site or deploy live; release published; issue closed.
 - Themes (6): Marquee, Terminal, Mission Control, Pixel Arcade, Web Crawler, Quiet.
 - Privacy: no network requests from the extension; settings stay in the browser; permissions are access to github.com and storage only.

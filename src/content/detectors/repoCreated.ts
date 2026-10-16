@@ -1,4 +1,5 @@
 import { RESERVED_OWNERS, type Detector } from './types';
+import { submissionIntent } from './intent';
 
 /** pages where you fill in the "new repository" form */
 const FORM_PATHS = [
@@ -15,8 +16,10 @@ const REPO_ROOT = /^\/([^/]+)\/([^/]+)\/?$/;
  * We confirm it really is a repo page (meta tag or <title>) so a stray click to /settings/profile can't trigger it.
  */
 export const repoCreated: Detector = (api) => {
+  const submitted = submissionIntent('repo', (p) => FORM_PATHS.some((r) => r.test(p)));
   api.onNav(({ url, prev }) => {
     if (!prev || !FORM_PATHS.some((r) => r.test(prev.pathname))) return;
+    if (!submitted(prev.pathname)) return;
     const m = url.pathname.match(REPO_ROOT);
     if (!m) return;
     const owner = m[1]!;
@@ -26,6 +29,7 @@ export const repoCreated: Detector = (api) => {
 
     let tries = 0;
     const confirm = () => {
+      if (location.pathname !== url.pathname) return;
       const meta = document.querySelector<HTMLMetaElement>('meta[name="octolytics-dimension-repository_nwo"]')?.content?.toLowerCase();
       const title = document.title.toLowerCase();
       if (meta === nwo || title.includes(nwo)) {

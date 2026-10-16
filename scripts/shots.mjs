@@ -5,6 +5,7 @@ import puppeteer from 'puppeteer-core';
 import http from 'node:http';
 import fs from 'node:fs/promises';
 import path from 'node:path';
+import { safePath } from './safe-path.mjs';
 import { fileURLToPath } from 'node:url';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -40,11 +41,12 @@ h1{font-size:32px;font-weight:400;margin:0 0 8px}h1 span{color:#8b949e}
 <script src=playground.js></script>`);
 
 const server = http.createServer(async (req, res) => {
-  let rel = decodeURIComponent(new URL(req.url, 'http://x').pathname); if (rel === '/') rel = '/index.html'; const p = path.join(dev, rel);
+  let rel = new URL(req.url, 'http://x').pathname; if (rel === '/') rel = '/index.html'; const p = safePath(dev, rel);
+  if (!p) { res.writeHead(403); return res.end(); }
   try { const b = await fs.readFile(p); res.writeHead(200, { 'content-type': p.endsWith('.js') ? 'text/javascript' : p.endsWith('.woff2') ? 'font/woff2' : 'text/html' }); res.end(b); }
   catch { res.writeHead(404); res.end(); }
 });
-await new Promise((r) => server.listen(0, r));
+await new Promise((r) => server.listen(0, '127.0.0.1', r));
 const port = server.address().port;
 
 await fs.mkdir(outDir, { recursive: true });
@@ -53,7 +55,7 @@ const page = await browser.newPage();
 page.on('console', (m) => { if (m.type() !== 'log') console.log('[page]', m.type(), m.text()); });
 page.on('pageerror', (e) => console.log('[pageerror]', e.message));
 const qs = new URLSearchParams({ theme, event, mood: mood === '-' ? '' : mood });
-await page.goto(`http://localhost:${port}/?${qs}`);
+await page.goto(`http://127.0.0.1:${port}/?${qs}`);
 await page.evaluate(() => { window.__p = window.run(); });
 const t0 = Date.now();
 for (const t of times.split(',').map(Number)) {

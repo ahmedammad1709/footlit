@@ -109,7 +109,7 @@ function logo() {
   const tag = mk('div', `position:absolute;left:0;right:0;top:668px;text-align:center;font:italic 400 58px ${TEXT};color:${LIT}`, 'GitHub, with stage lighting.', s);
   A(tag, [{ opacity: 0, transform: 'translateY(14px)' }, { opacity: 1, transform: 'translateY(0)' }], start + 1.75, 0.5);
   tag.style.opacity = '0';
-  const sub = mk('div', `position:absolute;left:0;right:0;top:770px;text-align:center;font:500 22px ${MONO};letter-spacing:.2em;color:#B5A78F;text-transform:uppercase`, 'A browser extension for Chrome, Edge and Firefox', s);
+  const sub = mk('div', `position:absolute;left:0;right:0;top:770px;text-align:center;font:500 22px ${MONO};letter-spacing:.2em;color:#B5A78F;text-transform:uppercase`, 'A browser extension for Chrome and Firefox', s);
   sub.style.opacity = '0';
   A(sub, [{ opacity: 0 }, { opacity: 1 }], start + 2.4, 0.5);
   A(s, [{ transform: 'scale(1)' }, { transform: 'scale(1.035)' }], start, end - start, { easing: 'linear', fill: 'none' });
@@ -295,7 +295,7 @@ function trust() {
     const n = mk('div', `position:absolute;left:-6px;top:0;font:400 640px/0.92 ${DISPLAY};color:${i === 2 ? '#B8301F' : INK};letter-spacing:-.01em`, c.n, box);
     const l = mk('div', `position:absolute;left:0;top:590px;font:italic 500 64px/1.05 ${TEXT};color:${INK};width:540px`, c.l, box);
     const sub = mk('div', `position:absolute;left:0;top:760px;font:500 20px/1.45 ${MONO};letter-spacing:.06em;color:#5C5043;text-transform:uppercase;width:520px`, c.sub, box);
-    if (i < 2) mk('div', `position:absolute;right:-20px;top:20px;width:1.5px;height:700px;background:${INK};opacity:.5`, box);
+    if (i < 2) mk('div', `position:absolute;right:-20px;top:20px;width:1.5px;height:700px;background:${INK};opacity:.5`, '', box);
     for (const [el, dy] of [[n, 120], [l, 40], [sub, 20]] as const) { el.style.opacity = '0'; A(el, [{ opacity: 0, transform: `translateY(${dy}px)` }, { opacity: 1, transform: 'translateY(0)' }], nums[i]! + (el === n ? 0 : 0.12), el === n ? 0.35 : 0.4); }
   });
 }
@@ -314,24 +314,24 @@ function endCard() {
   });
   const icon = mk('img', `position:absolute;left:${960 - 96}px;top:170px;width:192px;height:192px;image-rendering:auto`, '', s) as HTMLImageElement;
   icon.src = '/ext/icons/icon-128.png';
-  A(icon, [{ opacity: 0, transform: 'translateY(30px) scale(.9)' }, { opacity: 1, transform: 'none' }], start + 0.2, 0.5);
+  A(icon, [{ opacity: 0, transform: 'translateY(30px) scale(.9)' }, { opacity: 1, transform: 'none' }], start + 0.1, 0.45);
   const word = mk('div', `position:absolute;left:0;right:0;top:380px;text-align:center;font:400 250px/1 ${DISPLAY};letter-spacing:.03em;color:${PAPER};text-transform:uppercase`, 'Footlit', s);
-  A(word, [{ opacity: 0, transform: 'translateY(40px)' }, { opacity: 1, transform: 'none' }], start + 0.3, 0.5);
-  const free = mk('div', `position:absolute;left:0;right:0;top:660px;text-align:center;font:italic 400 66px ${TEXT};color:${LIT}`, 'Free for Chrome, Edge and Firefox.', s);
+  A(word, [{ opacity: 0, transform: 'translateY(40px)' }, { opacity: 1, transform: 'none' }], start + 0.2, 0.45);
+  const free = mk('div', `position:absolute;left:0;right:0;top:660px;text-align:center;font:italic 400 66px ${TEXT};color:${LIT}`, 'Free for Chrome and Firefox.', s);
   free.style.opacity = '0';
-  A(free, [{ opacity: 0, transform: 'translateY(16px)' }, { opacity: 1, transform: 'none' }], start + 0.9, 0.5);
+  A(free, [{ opacity: 0, transform: 'translateY(16px)' }, { opacity: 1, transform: 'none' }], start + 0.95, 0.45);
   const urlEl = mk('div', `position:absolute;left:0;right:0;top:790px;text-align:center;font:500 34px ${MONO};letter-spacing:.16em;color:${PAPER}`, 'footlit-app.vercel.app', s);
   urlEl.style.opacity = '0';
-  A(urlEl, [{ opacity: 0 }, { opacity: 1 }], start + 1.9, 0.5);
+  A(urlEl, [{ opacity: 0 }, { opacity: 1 }], start + 1.6, 0.45);
   mk('div', `position:absolute;left:0;right:0;top:860px;height:2px;width:520px;margin:0 auto;background:${PAPER};opacity:.35`, '', s);
   const by = mk('div', `position:absolute;left:0;right:0;top:884px;text-align:center;font:500 20px ${MONO};letter-spacing:.2em;color:#B5A78F;text-transform:uppercase`, 'Built by Ammad Ahmed  /  Codeveil Studio', s);
   by.style.opacity = '0';
-  A(by, [{ opacity: 0 }, { opacity: 1 }], start + 2.6, 0.5);
+  A(by, [{ opacity: 0 }, { opacity: 1 }], start + 2.3, 0.45);
   // footlights along the bottom
   const row = mk('div', 'position:absolute;left:0;right:0;bottom:0;height:60px;display:flex;justify-content:space-between;padding:0 62px;align-items:flex-end', '', s);
   for (let i = 0; i < 15; i++) {
     const l = mk('div', `width:88px;height:38px;border-radius:38px 38px 0 0;background:${LIT}`, '', row);
-    A(l, [{ opacity: 1 }, { opacity: 0.25 }, { opacity: 1 }], start + 3 + i * 0.12, 1.2, { easing: 'linear', fill: 'none' });
+    A(l, [{ opacity: 1 }, { opacity: 0.25 }, { opacity: 1 }], start + 2.6 + i * 0.1, 1.0, { easing: 'linear', fill: 'none' });
   }
   mk('div', `position:absolute;left:0;right:0;bottom:0;height:8px;background:${PAPER}`, '', s);
   const fade = layer(s, 'background:#000;opacity:0');

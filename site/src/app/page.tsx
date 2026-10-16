@@ -2,12 +2,8 @@ import { site } from '@/site.config';
 import { DOWNLOADS, EVENTS, THEMES, VERSION } from '@/lib/data';
 import { JsonLd, abs, authorSameAs } from '@/lib/seo';
 import { Hero } from '@/components/Hero';
-import { Ticker } from '@/components/Ticker';
-import { ThemeLab } from '@/components/ThemeLab';
-import { Programme } from '@/components/Programme';
-import { HowItWorks } from '@/components/HowItWorks';
-import { Inside } from '@/components/Inside';
-import { Trust } from '@/components/Trust';
+import { Showcase } from '@/components/Showcase';
+import { VideoDemo } from '@/components/VideoDemo';
 import { Install } from '@/components/Install';
 import { Faq, FAQ_ITEMS } from '@/components/Faq';
 
@@ -50,7 +46,7 @@ export default function Home() {
         `${EVENTS.length} GitHub events: repositories, pull requests, checks, deploys, releases and issues`,
         `${THEMES.length} hand-built animation themes: ${THEMES.map((t) => t.name).join(', ')}`,
         'Per-event theme choice, quiet mode and reduced-motion support',
-        'No network requests, no accounts, no analytics',
+        'No accounts or telemetry; activity stored locally',
       ],
       offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD', availability: 'https://schema.org/InStock' },
       author: { '@id': abs('/#author') },
@@ -66,12 +62,8 @@ export default function Home() {
     <>
       <JsonLd data={{ '@context': 'https://schema.org', '@graph': graph }} />
       <Hero />
-      <Ticker />
-      <ThemeLab />
-      <Programme />
-      <HowItWorks />
-      <Inside />
-      <Trust />
+      <VideoDemo />
+      <Showcase />
       <Install />
       <Faq />
     </>

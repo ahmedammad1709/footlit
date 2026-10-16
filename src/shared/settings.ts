@@ -73,11 +73,7 @@ export async function getSettings(): Promise<Settings> {
 }
 
 export async function saveSettings(next: Settings): Promise<void> {
-  try {
-    await chrome.storage.sync.set({ [KEY]: next });
-  } catch {
-    /* storage unavailable: the in-memory copy still works for this session */
-  }
+  await chrome.storage.sync.set({ [KEY]: next });
 }
 
 export function watchSettings(cb: (s: Settings) => void): () => void {
@@ -99,6 +95,19 @@ export async function getStats(): Promise<Stats> {
 }
 
 export async function recordEvent(entry: LogEntry): Promise<Stats> {
+  try {
+    // never let the activity log hold up an animation: give the background worker a moment, then carry on
+    const result = await Promise.race([
+      chrome.runtime.sendMessage({ type: 'record-event', entry }),
+      new Promise<null>((resolve) => setTimeout(() => resolve(null), 1500)),
+    ]);
+    if (result && typeof result.shows === 'number') return result;
+  } catch { /* An unavailable activity log must not stop a show. */ }
+  return getStats();
+}
+
+/** Called only by the background worker, which serializes all stats writes. */
+export async function writeEvent(entry: LogEntry): Promise<Stats> {
   const s = await getStats();
   const next: Stats = { shows: s.shows + (entry.shown ? 1 : 0), log: [entry, ...s.log].slice(0, 40) };
   try {
@@ -110,6 +119,10 @@ export async function recordEvent(entry: LogEntry): Promise<Stats> {
 }
 
 export async function clearStats(): Promise<void> {
+  await chrome.runtime.sendMessage({ type: 'clear-stats' });
+}
+
+export async function removeStats(): Promise<void> {
   try {
     await chrome.storage.local.remove(STATS_KEY);
   } catch {

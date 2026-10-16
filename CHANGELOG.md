@@ -1,5 +1,20 @@
 # Changelog
 
+## 1.0.2 - 2026-10-15
+
+- Fixed repo created, release published, pull request opened and fork shows not playing. Version 1.0.1 only accepted classic form posts, but several GitHub pages submit through script, so those shows were silently skipped.
+- The activity log can no longer hold up a show if the background worker is slow to answer.
+- Added tests that mimic script-driven GitHub forms.
+
+## 1.0.1 - 2026-10-14
+
+- Fixed animation cleanup and recovery after waiting in a hidden tab.
+- Improved event detection to avoid celebrations for cancelled creation flows and repeated deletion banners.
+- Serialized activity-log writes so events from multiple tabs are retained.
+- Improved reduced-motion handling, keyboard focus, and feedback when settings cannot be saved.
+- Simplified the website and added a click-to-play demonstration video.
+- Connected the approved Firefox Add-ons listing on the website.
+
 ## 1.0.0 - 2026-10-12
 
 First complete release.
@@ -13,4 +28,4 @@ First complete release.
 - Firefox build (its manifest declares that no data is collected), store zips, generated store screenshots and promo tiles, privacy policy and listing copy.
 - Test suites: detectors and handshake (38 cases), theme matrix (6 themes x 11 events, reduced motion, narrow window).
 
-Known gaps: detectors for repo create/delete/fork, release, Pages and the PR merge-box wording are written from documented behaviour and fixtures and have not yet been confirmed on live GitHub; the Firefox build is verified by an automated test on Firefox 157 but, until the Firefox Add-ons listing is approved, installs only as a temporary add-on; no sound; stars and terminal pushes are not detected.
+Known gaps: detectors for repo create/delete/fork, release, Pages and the PR merge-box wording are written from documented behaviour and fixtures and have not yet been confirmed on live GitHub; no sound; stars and terminal pushes are not detected.

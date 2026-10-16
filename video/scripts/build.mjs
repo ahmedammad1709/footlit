@@ -15,7 +15,7 @@ await esbuild.build({
 });
 
 // the films' own timeline code
-for (const name of ['film', 'teaser']) {
+for (const name of ['film', 'teaser', 'linkedin-product']) {
   await esbuild.build({
     entryPoints: [path.join(root, `src/${name}.ts`)],
     bundle: true, format: 'iife', target: 'chrome120', loader: { '.json': 'json' },

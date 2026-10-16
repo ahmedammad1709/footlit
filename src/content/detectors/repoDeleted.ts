@@ -42,6 +42,7 @@ function clearPending() {
  * Merely leaving a repo's settings page is never enough.
  */
 export const repoDeleted: Detector = (api) => {
+  const seen = new WeakMap<Element, string>();
   // B, step 1: remember that the delete form was submitted
   document.addEventListener(
     'submit',
@@ -74,6 +75,8 @@ export const repoDeleted: Detector = (api) => {
     for (const el of document.querySelectorAll(FLASH_SELECTOR)) {
       const text = (el.textContent ?? '').replace(/\s+/g, ' ').trim();
       if (!DELETED_FLASH.test(text)) continue;
+      if (seen.get(el) === text) continue;
+      seen.set(el, text);
       const nwo = (text.match(/([\w.-]+\/[\w.-]+)/)?.[1] ?? getPending()?.nwo ?? 'repository').toLowerCase();
       clearPending();
       api.log('repo.deleted via flash', nwo, text);

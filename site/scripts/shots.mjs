@@ -3,6 +3,7 @@ import puppeteer from 'puppeteer-core';
 import http from 'node:http';
 import fs from 'node:fs/promises';
 import path from 'node:path';
+import { safePath } from '../../scripts/safe-path.mjs';
 
 const site = path.resolve(import.meta.dirname, '..');
 const out = path.resolve(process.argv[2] ?? path.join(site, '.shots'));
@@ -11,8 +12,8 @@ await fs.mkdir(out, { recursive: true });
 
 const types = { '.js': 'text/javascript', '.css': 'text/css', '.html': 'text/html', '.woff2': 'font/woff2', '.png': 'image/png', '.svg': 'image/svg+xml', '.txt': 'text/plain', '.xml': 'application/xml', '.zip': 'application/zip', '.json': 'application/json' };
 const server = http.createServer(async (req, res) => {
-  let rel = decodeURIComponent(new URL(req.url, 'http://x').pathname);
-  let file = path.join(site, 'out', rel);
+  let file = safePath(path.join(site, 'out'), new URL(req.url, 'http://x').pathname);
+  if (!file) { res.writeHead(403); return res.end(); }
   try {
     const st = await fs.stat(file);
     if (st.isDirectory()) file = path.join(file, 'index.html');
@@ -21,8 +22,8 @@ const server = http.createServer(async (req, res) => {
     res.end(b);
   } catch { res.writeHead(404); res.end('not found'); }
 });
-await new Promise((r) => server.listen(0, r));
-const base = `http://localhost:${server.address().port}`;
+await new Promise((r) => server.listen(0, '127.0.0.1', r));
+const base = `http://127.0.0.1:${server.address().port}`;
 
 const browser = await puppeteer.launch({ executablePath: 'C:/Program Files/Google/Chrome/Application/chrome.exe', headless: 'new', args: ['--no-sandbox'] });
 const page = await browser.newPage();
@@ -57,9 +58,7 @@ await page.evaluate(() => [...document.querySelectorAll('button')].find((b) => b
 await wait(2700);
 await shot('04-themes-pixel');
 
-await scrollTo('#events', 70); await shot('05-programme');
-await scrollTo('#how', 70); await shot('06-how');
-await scrollTo('#inside', 70); await wait(600); await shot('07-inside');
+await scrollTo('#watch', 70); await shot('05-video');
 await scrollTo('#trust', 70); await shot('08-trust');
 await scrollTo('#install', 70); await shot('09-install');
 await scrollTo('#faq', 70); await shot('10-faq');

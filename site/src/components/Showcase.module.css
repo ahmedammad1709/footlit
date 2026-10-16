@@ -1,0 +1,21 @@
+.section { padding: 72px 0; background: var(--paper-3); }
+.grid { display: grid; grid-template-columns: .8fr 1.2fr; align-items: center; gap: 64px; }
+.copy h2 { font-size: clamp(48px, 5.2vw, 72px); }
+.copy p { max-width: 35ch; color: var(--quiet-on-paper); font-size: 21px; margin: 20px 0 24px; }
+.choices { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
+.choices button { display: flex; gap: 8px; align-items: center; padding: 11px 13px; background: transparent; border: 1px solid #b8ae9a; border-radius: 5px; font: 12px/1.4 var(--mono); }
+.choices button[aria-pressed=true] { background: var(--ink); color: var(--paper-3); border-color: var(--ink); }
+.choices i { width: 12px; height: 12px; border-radius: 50%; border: 1px solid #a99a80; }
+.link,.reassurance a { font-size: 16px; text-underline-offset: 4px; }
+.screen { position: relative; aspect-ratio: 16 / 10; background: #191d24; border-radius: 8px; overflow: hidden; }
+.stage { position: absolute; inset: 0; }
+.still { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.rest { height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; color: #e2e5e8; font-family: system-ui, sans-serif; text-align: center; padding: 16px; }
+.rest > span { background: #6042a6; border-radius: 50%; width: 46px; height: 46px; display: grid; place-items: center; }
+.rest p { font-size: 23px; margin: 16px 0 6px; }.rest small { font-size: 13px; color: #a5abb5; }
+.caption { display: flex; align-items: center; justify-content: space-between; padding-top: 14px; font: 13px var(--mono); }
+.caption button { border: 0; background: transparent; padding: 8px 0 8px 12px; font: inherit; text-decoration: underline; text-underline-offset: 4px; }.caption button span { padding-left: 8px; }
+.reassurance { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; margin-top: 64px; padding-top: 32px; border-top: 1px solid #cec3ae; }
+.reassurance h3 { font: 500 25px/1.2 var(--text); margin: 0 0 10px; }.reassurance p { color: var(--quiet-on-paper); max-width: 48ch; margin: 0 0 12px; }
+@media(max-width: 800px) { .grid { grid-template-columns: 1fr; gap: 30px; }.copy p { max-width: 48ch; }.reassurance { gap: 28px; margin-top: 40px; }.section { padding: 48px 0; } }
+@media(max-width: 500px) { .reassurance { grid-template-columns: 1fr; }.caption { font-size: 11px; } }

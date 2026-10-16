@@ -1,4 +1,18 @@
 import type { FontReply, Message } from '../shared/messages';
+import { writeEvent, removeStats } from '../shared/settings';
+
+let statsQueue: Promise<unknown> = Promise.resolve();
+chrome.runtime.onMessage.addListener((msg: Message, _sender, respond) => {
+  if (msg.type !== 'record-event' && msg.type !== 'clear-stats') return false;
+  const operation = statsQueue.then(async () => {
+    if (msg.type === 'record-event') return await writeEvent(msg.entry);
+    await removeStats();
+    return null;
+  });
+  statsQueue = operation.catch(() => {});
+  void operation.then(respond, () => respond(null));
+  return true;
+});
 
 // Content scripts can't fetch our font files under github.com's CSP, so they ask us for the bytes.
 const ALLOWED = /^fonts\/[a-z0-9-]+\.woff2$/;

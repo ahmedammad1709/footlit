@@ -9,6 +9,8 @@
     "prebuild": "node scripts/check-config.mjs",
     "build": "next build",
     "seo": "node scripts/seo-check.mjs",
+    "test:ui": "node scripts/test-ui.mjs",
+    "demo": "node scripts/prepare-demo.mjs",
     "start": "npx --yes serve out -l 3000"
   },
   "dependencies": {

@@ -27,7 +27,7 @@ export function Footer() {
             <ul>
               <li><Link prefetch={false} href="/themes/">Themes</Link></li>
               <li><Link prefetch={false} href="/events/">Events</Link></li>
-              <li><Link prefetch={false} href="/#inside">Inside</Link></li>
+              <li><Link prefetch={false} href="/#watch">Watch the demo</Link></li>
               <li><Link prefetch={false} href="/#install">Install</Link></li>
               <li><Link prefetch={false} href="/#faq">FAQ</Link></li>
             </ul>

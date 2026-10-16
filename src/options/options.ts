@@ -4,6 +4,7 @@ import { INTENSITY_SCALE, clearStats, defaultSettings, getSettings, getStats, sa
 import { playShow, stopShow } from '../engine/play';
 import { THEMES, getTheme } from '../themes';
 import { h } from '../engine/util';
+import { preserveFocus } from '../shared/focus';
 
 const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
 let s: Settings;
@@ -29,8 +30,11 @@ function flashSaved() {
 /** Apply a change everywhere: remember it, persist it, show the user it happened. */
 function save(next: Settings) {
   s = next;
-  void saveSettings(next);
-  flashSaved();
+  void saveSettings(next).then(flashSaved, () => {
+    clearTimeout(savedTimer);
+    $('saved').textContent = 'Could not save. Please try the change again.';
+    $('saved').classList.add('flash');
+  });
   render();
 }
 
@@ -148,6 +152,10 @@ function renderLog(log: LogEntry[]) {
 }
 
 function render() {
+  preserveFocus(renderControls);
+}
+
+function renderControls() {
   if (s.appearance === 'auto') document.documentElement.removeAttribute('data-theme');
   else document.documentElement.setAttribute('data-theme', s.appearance);
   $('welcome').hidden = s.onboarded;

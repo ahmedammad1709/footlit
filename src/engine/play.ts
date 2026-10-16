@@ -2,7 +2,7 @@ import { EVENT_BY_ID, type EventId, type Mood } from '../shared/events';
 import { ensureFonts, type FontLoader } from '../shared/fonts';
 import { getTheme } from '../themes';
 import { makeClock } from './util';
-import { mountFullscreen, mountInto } from './stage';
+import { mountFullscreen, mountInto, type Stage } from './stage';
 
 export interface ShowRequest {
   eventId: EventId;
@@ -36,49 +36,65 @@ export async function playShow(req: ShowRequest): Promise<void> {
   const ctl = new AbortController();
   current = ctl;
   const { signal } = ctl;
-
-  const theme = getTheme(req.themeId);
-  const def = EVENT_BY_ID[req.eventId];
-  const mood = req.mood ?? def.mood;
-  const embedded = !!req.container;
-
-  await ensureFonts(theme.fonts, req.fontLoader);
-  if (signal.aborted) return;
-
-  // A page can be detected at document_start, before there is anywhere to put the stage.
-  if (!embedded && !document.body) {
-    await new Promise<void>((resolve) => document.addEventListener('DOMContentLoaded', () => resolve(), { once: true }));
-    if (signal.aborted) return;
-  }
-
-  // Don't perform to an empty room: wait (briefly) for the tab to be visible.
-  if (!embedded && document.visibilityState === 'hidden') {
-    await new Promise<void>((resolve) => {
-      const t = setTimeout(done, 8000);
-      function done() {
-        clearTimeout(t);
-        document.removeEventListener('visibilitychange', onVis);
-        resolve();
-      }
-      function onVis() {
-        if (document.visibilityState === 'visible') done();
-      }
-      document.addEventListener('visibilitychange', onVis);
-    });
-    if (signal.aborted || document.visibilityState === 'hidden') return;
-  }
-
-  const stage = embedded ? mountInto(req.container!, theme.css) : mountFullscreen(theme.css);
-  const reduced = (req.honorReducedMotion ?? true) && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const subject = req.subject ?? '';
-  stage.say(`${def.label}${subject ? `: ${subject}` : ''}`);
-
+  let stage: Stage | undefined;
   const onKey = (e: KeyboardEvent) => {
     if (e.key === 'Escape') ctl.abort();
   };
-  if (!embedded) window.addEventListener('keydown', onKey, true);
 
   try {
+    const theme = getTheme(req.themeId);
+    const def = EVENT_BY_ID[req.eventId];
+    const mood = req.mood ?? def.mood;
+    const embedded = !!req.container;
+
+    await ensureFonts(theme.fonts, req.fontLoader);
+    if (signal.aborted) return;
+
+    // A page can be detected at document_start, before there is anywhere to put the stage.
+    if (!embedded && !document.body) {
+      await new Promise<void>((resolve) => {
+        const done = () => {
+          document.removeEventListener('DOMContentLoaded', done);
+          signal.removeEventListener('abort', done);
+          resolve();
+        };
+        document.addEventListener('DOMContentLoaded', done, { once: true });
+        signal.addEventListener('abort', done, { once: true });
+      });
+      if (signal.aborted) return;
+    }
+
+    // Don't perform to an empty room: wait (briefly) for the tab to be visible.
+    if (!embedded && document.visibilityState === 'hidden') {
+      await new Promise<void>((resolve) => {
+        const t = setTimeout(done, 8000);
+        function done() {
+          clearTimeout(t);
+          document.removeEventListener('visibilitychange', onVis);
+          signal.removeEventListener('abort', done);
+          resolve();
+        }
+        function onVis() {
+          if (document.visibilityState === 'visible') done();
+        }
+        document.addEventListener('visibilitychange', onVis);
+        signal.addEventListener('abort', done, { once: true });
+      });
+      if (signal.aborted || document.visibilityState === 'hidden') return;
+    }
+
+    stage = embedded ? mountInto(req.container!, theme.css) : mountFullscreen(theme.css);
+    const reduced = (req.honorReducedMotion ?? true) && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduced) {
+      const style = document.createElement('style');
+      style.textContent = '* , *::before, *::after { animation: none !important; transition: none !important; }';
+      stage.root.append(style);
+    }
+    const subject = req.subject ?? '';
+    stage.say(`${def.label}${subject ? `: ${subject}` : ''}`);
+
+    if (!embedded) window.addEventListener('keydown', onKey, true);
+
     await theme.play({
       root: stage.root,
       box: stage.box,
@@ -96,8 +112,9 @@ export async function playShow(req: ShowRequest): Promise<void> {
   } catch (err) {
     console.warn('[footlit] theme failed', err);
   } finally {
+    ctl.abort();
     window.removeEventListener('keydown', onKey, true);
-    stage.dispose();
+    stage?.dispose();
     if (current === ctl) current = null;
   }
 }

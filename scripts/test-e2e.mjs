@@ -82,6 +82,7 @@ const base = `http://localhost:${server.address().port}`;
 const stub = () => {
   window.__events = [];
   const mem = { sync: {}, local: {} };
+  let queue = Promise.resolve();
   const area = (n) => ({
     get: async (k) => (k in mem[n] ? { [k]: mem[n][k] } : {}),
     set: async (o) => { Object.assign(mem[n], o); const s = o['footlit:stats']; if (s && s.log[0]) window.__events.push({ event: s.log[0].event, shown: s.log[0].shown, reason: s.log[0].reason }); },
@@ -89,7 +90,17 @@ const stub = () => {
   });
   window.chrome = {
     storage: { sync: area('sync'), local: area('local'), onChanged: { addListener() {}, removeListener() {} } },
-    runtime: { id: 'footlit-test', getURL: (f) => '/' + f, sendMessage: async () => ({ ok: false }), onMessage: { addListener: (l) => (window.__listeners ??= []).push(l) } },
+    runtime: { id: 'footlit-test', getURL: (f) => '/' + f, sendMessage: async (msg) => {
+      if (msg.type !== 'record-event') return { ok: false };
+      const operation = queue.then(async () => {
+        const old = mem.local['footlit:stats'] ?? { shows: 0, log: [] };
+        const next = { shows: old.shows + Number(msg.entry.shown), log: [msg.entry, ...old.log].slice(0, 40) };
+        await area('local').set({ 'footlit:stats': next });
+        return next;
+      });
+      queue = operation;
+      return operation;
+    }, onMessage: { addListener: (l) => (window.__listeners ??= []).push(l) } },
   };
 };
 const browser = await puppeteer.launch({ executablePath: 'C:/Program Files/Google/Chrome/Application/chrome.exe', headless: 'new', args: ['--no-sandbox'] });
@@ -98,7 +109,7 @@ async function open(url) {
   const p = await browser.newPage();
   await p.evaluateOnNewDocument(stub);
   await p.evaluateOnNewDocument(contentJs);
-  p.on('pageerror', (e) => console.log('   [pageerror]', e.message));
+  p.on('pageerror', (e) => { failed++; console.log('   [pageerror]', e.message); });
   await p.goto(base + url);
   return p;
 }
@@ -135,7 +146,7 @@ await check('In progress -> Cancelled stays silent', '/acme/widget/actions/runs/
 console.log('Repo created');
 await check('/new -> the new repo page fires repo.created', '/new', {
   expect: ['repo.created'],
-  then: async (p) => { await wait(400); await p.evaluate(() => location.assign('/acme/widget')); await p.waitForNavigation().catch(() => {}); },
+  then: async (p) => { await wait(400); await submit(p); await Promise.all([p.waitForNavigation(), p.evaluate(() => location.assign('/acme/widget'))]); },
 });
 await check('/new -> /settings/profile stays silent', '/new', {
   expect: [], settle: 2500,
@@ -153,8 +164,16 @@ await check('leaving settings with no banner stays silent', '/acme/widget/settin
 });
 
 console.log('Pull request opened / closed');
-const go = (to) => async (p) => { await wait(400); await p.evaluate((u) => location.assign(u), to); await p.waitForNavigation().catch(() => {}); };
-await check('compare page -> new PR fires pr.opened', '/acme/widget/compare/main...feature', { expect: ['pr.opened'], then: go('/acme/widget/pull/42?c=already-merged') });
+async function submit(p) {
+  await p.evaluate(() => {
+    const form = document.createElement('form'); form.method = 'post'; document.body.append(form);
+    form.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true })); form.remove();
+  });
+}
+const go = (to, submitted = true) => async (p) => { await wait(400); if (submitted) await submit(p); await Promise.all([p.waitForNavigation(), p.evaluate((u) => location.assign(u), to)]); };
+await check('submitted compare -> open PR fires pr.opened', '/acme/widget/compare/main...feature', { expect: ['pr.opened'], then: go('/acme/widget/pull/42?c=ci-already-green') });
+await check('compare navigation without submission stays silent', '/acme/widget/compare/main...feature', { expect: [], then: go('/acme/widget/pull/42?c=ci-already-green', false) });
+await check('submitted compare -> already merged PR stays silent', '/acme/widget/compare/main...feature', { expect: [], then: go('/acme/widget/pull/42?c=already-merged') });
 await check('compare page -> repo root stays silent', '/acme/widget/compare/main...feature', { expect: [], settle: 2500, then: go('/acme/widget') });
 await check('open -> closed while watching fires pr.closed', '/acme/widget/pull/42?c=close-flip', { expect: ['pr.closed'] });
 await check('Primer markup: open -> merged fires pr.merged', '/acme/widget/pull/42?c=primer-merge', { expect: ['pr.merged'] });
@@ -168,6 +187,32 @@ await check('release form -> tag page fires release.published', '/acme/widget/re
 await check('saving a draft (untagged) stays silent', '/acme/widget/releases/new', { expect: [], settle: 2500, then: go('/acme/widget/releases/tag/untagged-abc123') });
 await check('fork form -> your copy fires repo.forked', '/acme/widget/fork', { expect: ['repo.forked'], then: go('/me/widget') });
 await check('fork form -> a different repo stays silent', '/acme/widget/fork', { expect: [], settle: 2500, then: go('/me/other') });
+await check('fork form -> original repo stays silent', '/acme/widget/fork', { expect: [], settle: 2500, then: go('/acme/widget') });
+await check('new repo form cancelled to existing repo stays silent', '/new', { expect: [], settle: 2500, then: go('/acme/widget', false) });
+
+// GitHub's newer pages are script-driven: the form has no method attribute (it reads as "get") or there is no form at all,
+// and the button just runs code. These must still count as a deliberate submission.
+console.log('Script-driven GitHub forms');
+const clickSubmit = (kind, label, to) => async (p) => {
+  await wait(400);
+  await p.evaluate((kind, label) => {
+    const b = document.createElement('button');
+    b.textContent = label;
+    if (kind === 'react-form') { // <form> without method, submit handled by script, real submit button
+      const f = document.createElement('form'); f.addEventListener('submit', (e) => e.preventDefault()); b.type = 'submit'; f.append(b); document.body.append(f);
+    } else if (kind === 'loose-button') { // no form at all, plain button
+      b.type = 'button'; document.body.append(b);
+    }
+    b.click();
+  }, kind, label);
+  await Promise.all([p.waitForNavigation(), p.evaluate((u) => location.assign(u), to)]);
+};
+await check('script-driven repo form (no method) -> fires repo.created', '/new', { expect: ['repo.created'], then: clickSubmit('react-form', 'Create repository', '/acme/widget') });
+await check('plain "Create repository" button, no form -> fires repo.created', '/new', { expect: ['repo.created'], then: clickSubmit('loose-button', 'Create repository', '/acme/widget') });
+await check('plain "Publish release" button -> fires release.published', '/acme/widget/releases/new', { expect: ['release.published'], then: clickSubmit('loose-button', 'Publish release', '/acme/widget/releases/tag/v1.2.0') });
+await check('script-driven "Create pull request" -> fires pr.opened', '/acme/widget/compare/main...feature', { expect: ['pr.opened'], then: clickSubmit('loose-button', 'Create pull request', '/acme/widget/pull/42?c=ci-already-green') });
+await check('clicking "Cancel" then wandering to a repo stays silent', '/new', { expect: [], settle: 2500, then: clickSubmit('loose-button', 'Cancel', '/acme/widget') });
+await check('persistent deletion banner fires only once', '/acme-home', { expect: ['repo.deleted'], settle: 22500 });
 
 console.log('Deploys');
 await check('Pages: being deployed -> live fires deploy.live', '/acme/widget/settings/pages?c=live-flip', { expect: ['deploy.live'] });

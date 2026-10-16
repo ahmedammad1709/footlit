@@ -1,4 +1,5 @@
 import type { Detector } from './types';
+import { submissionIntent } from './intent';
 import { itemTitle, readItemState, watchState, whenTitleHas, type ItemState } from './track';
 
 const PR_PATH = /^\/([^/]+)\/([^/]+)\/pull\/(\d+)(?:\/.*)?$/;
@@ -13,6 +14,7 @@ const PR_FORM = /^\/[^/]+\/[^/]+\/(?:compare(?:\/|$)|pull\/new\/)/;
  * Visiting an already merged or closed PR is never a celebration.
  */
 export const prMerged: Detector = (api) => {
+  const submitted = submissionIntent('pr', (p) => PR_FORM.test(p));
   watchState<ItemState>(api, {
     match: (p) => p.match(PR_PATH),
     key: (m) => `${m[1]}/${m[2]}#${m[3]}`.toLowerCase(),
@@ -29,9 +31,12 @@ export const prMerged: Detector = (api) => {
 
   api.onNav(({ url, prev }) => {
     if (!prev || !PR_FORM.test(prev.pathname)) return;
+    if (!submitted(prev.pathname)) return;
     const m = url.pathname.match(PR_PATH);
     if (!m) return;
     whenTitleHas(`#${m[3]}`, () => {
+      if (location.pathname !== url.pathname) return;
+      if (!['open', 'draft'].includes(readItemState() ?? '')) return;
       const key = `${m[1]}/${m[2]}#${m[3]}`.toLowerCase();
       api.log('pr.opened confirmed', key);
       api.emit('pr.opened', { subject: `${m[1]}/${m[2]} #${m[3]}`, detail: itemTitle(), key: `${key}:opened` });

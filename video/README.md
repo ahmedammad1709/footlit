@@ -15,5 +15,6 @@ npm run loudness                 # momentary loudness per 2 s window
 - `npm run teaser` renders the 12 s vertical teaser (1080x1920, no voice, "coming soon") to `out/footlit-teaser-1080x1920.mp4`. Its timings are in `src/teaser-cues.json`; the shared synth is `scripts/synth.mjs`.
 - `src/cues.json` holds every timing (cuts, clicks, shows). Picture and sound both read it.
 - `src/vo.json` holds the script. To use a purchased voice, drop `assets/vo/<id>.wav` (mono, 48 kHz, silence trimmed) over the scratch files and run `npm run audio` then `npm run render`.
+- `node scripts/make-vo.mjs --line=10` regenerates just the closing narration when Python and `edge-tts` are installed. Set `PYTHON` to an executable path if needed. The closing take was edited offline to remove the Edge mention while preserving the original voice; `scripts/update-browser-voice.mjs` retains the original WAV and reproduces that edit.
 - `node scripts/render.mjs --preview=1.5,10,30` saves stills to `out/preview/` for quick checks.
 - Stand-in pages (`src/gh.ts`) are generic code-host lookalikes with no logos or marks.

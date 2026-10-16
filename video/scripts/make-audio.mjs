@@ -110,7 +110,7 @@ const { hook, montage, logo, demo, trust, end } = cues;
   }
   // pads that carry the harmony
   const pads = [[0, 4, 7], [5, 9, 12], [7, 11, 14], [0, 4, 7]];
-  for (let k = 0; k < 24; k += 2) {
+  for (let k = 0; t0 + k < demo.end - 1; k += 2) {
     const t = t0 + k * 1.0, root = [0, 5, 7, 4][(k / 2) % 4];
     if (t > failA - 0.1 && t < failB - 0.1) continue;
     put(music, t, pad(pads[(k / 2) % 4].map((x) => mtof(E1 + 24 + root * 0 + x + (root === 4 ? 0 : 0))), 2.05, 0.4, 0.9, 1400, 0.55), 1);
@@ -188,7 +188,12 @@ const { hook, montage, logo, demo, trust, end } = cues;
     put(sfx, t, bell(mtof(E1 + 40 + notes[i]), 2.4, 0.4), 1, -0.3 + i * 0.3);
     put(sfx, t, pluck(mtof(E1 + 28 + notes[i]), 0.8, 0.4), 1);
   });
-  for (let k = 0; k < 10; k++) put(music, t0 + 0.3 + k * 0.5, hat(0.12), 0.7, k % 2 ? 0.3 : -0.3);
+  // a pulse under the numbers, so the act keeps moving: kick on the beat, a plucked bass, eighth-note hats
+  for (let t = t0 + 0.2, k = 0; t < trust.end - 0.3; t += 0.5, k++) {
+    put(music, t, kick(0.5), 0.9);
+    put(music, t, pluckBass(mtof(E1 + 12 + [0, 0, 5, 7][k % 4]), 0.34, 0.45), 0.8);
+    put(music, t + 0.25, hat(0.16), 0.7, k % 2 ? 0.3 : -0.3);
+  }
   // the zero: a held breath
   put(sfx, trust.nums[2] + 0.02, osc('sine', 41, len(1.6)).map((v, i, a) => v * Math.exp(-i / SR / 0.9) * 0.9), 1);
 }
@@ -203,7 +208,7 @@ const { hook, montage, logo, demo, trust, end } = cues;
   put(music, t0, pad([mtof(E1), mtof(E1 + 7)], end.end - t0, 0.3, 2.0, 520, 0.8), 1);
   const mel = [16, 19, 23, 19, 16, 12, 16, 19];
   mel.forEach((m, i) => put(music, t0 + 0.4 + i * 0.5, bell(mtof(E1 + 48 + m), 2.4, 0.26), 1, -0.4 + i * 0.1));
-  for (let i = 0; i < 15; i++) put(sfx, t0 + 3 + i * 0.12, click(0.14, 1.2 + (i % 5) * 0.08), 1, -0.8 + i * 0.11);
+  for (let i = 0; i < 15; i++) put(sfx, t0 + 2.6 + i * 0.1, click(0.14, 1.2 + (i % 5) * 0.08), 1, -0.8 + i * 0.11);
   put(sfx, end.end - 0.9, bell(mtof(E1 + 64), 1.2, 0.12), 1);
 }
 

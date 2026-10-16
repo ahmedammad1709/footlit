@@ -1,13 +1,14 @@
+'use client';
+
 import Link from 'next/link';
 import { TicketButton } from './TicketButton';
 import s from './Nav.module.css';
 
 const LINKS = [
   ['Themes', '/#themes'],
-  ['Events', '/#events'],
-  ['Inside', '/#inside'],
+  ['Demo', '/#watch'],
+  ['Events', '/events/'],
   ['Privacy', '/privacy/'],
-  ['Install', '/#install'],
 ] as const;
 
 export function Nav() {
@@ -25,7 +26,8 @@ export function Nav() {
             </Link>
           ))}
         </nav>
-        <TicketButton href="/#install" title="Download" stub="Free" tone="ink" size="sm" />
+        <details className={s.mobile} onKeyDown={(e) => { if (e.key === 'Escape') { e.currentTarget.open = false; e.currentTarget.querySelector('summary')?.focus(); } }}><summary>Menu</summary><nav aria-label="Mobile navigation">{LINKS.map(([label, href]) => <Link key={href} href={href} prefetch={false} onClick={(e) => e.currentTarget.closest('details')?.removeAttribute('open')}>{label}</Link>)}</nav></details>
+        <TicketButton href="/#install" title="Get Footlit" stub="Free" tone="ink" size="sm" />
       </div>
     </header>
   );

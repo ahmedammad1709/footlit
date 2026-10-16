@@ -5,6 +5,7 @@ import puppeteer from 'puppeteer-core';
 import http from 'node:http';
 import fs from 'node:fs/promises';
 import path from 'node:path';
+import { safePath } from './safe-path.mjs';
 
 const root = path.resolve(import.meta.dirname, '..');
 const out = path.join(root, 'site/public/mock');
@@ -37,16 +38,18 @@ h1{font-size:32px;font-weight:400;margin:0 0 8px}h1 span{color:#8b949e}
 const types = { '.js': 'text/javascript', '.woff2': 'font/woff2', '.html': 'text/html', '.css': 'text/css', '.png': 'image/png' };
 const serve = (dir) => new Promise((resolve) => {
   const s = http.createServer(async (req, res) => {
-    let rel = decodeURIComponent(new URL(req.url, 'http://x').pathname);
+    let rel = new URL(req.url, 'http://x').pathname;
     if (rel === '/') rel = '/index.html';
-    try { const b = await fs.readFile(path.join(dir, rel)); res.writeHead(200, { 'content-type': types[path.extname(rel)] ?? 'text/plain' }); res.end(b); } catch { res.writeHead(404); res.end(); }
+    const file = safePath(dir, rel);
+    if (!file) { res.writeHead(403); return res.end(); }
+    try { const b = await fs.readFile(file); res.writeHead(200, { 'content-type': types[path.extname(file)] ?? 'text/plain' }); res.end(b); } catch { res.writeHead(404); res.end(); }
   });
-  s.listen(0, () => resolve(s));
+  s.listen(0, '127.0.0.1', () => resolve(s));
 });
 const devServer = await serve(dev);
 const distServer = await serve(path.join(root, 'dist'));
-const devBase = `http://localhost:${devServer.address().port}`;
-const distBase = `http://localhost:${distServer.address().port}`;
+const devBase = `http://127.0.0.1:${devServer.address().port}`;
+const distBase = `http://127.0.0.1:${distServer.address().port}`;
 
 const browser = await puppeteer.launch({ executablePath: 'C:/Program Files/Google/Chrome/Application/chrome.exe', headless: 'new', args: ['--no-sandbox'] });
 

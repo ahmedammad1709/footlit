@@ -19,8 +19,8 @@ export default function Privacy() {
       <header className={`ink ${s.hero}`}>
         <div className="wrap">
           <p className="eyebrow">Privacy policy</p>
-          <h1 className={`display ${s.h1}`}>Safe by design.<br /><em>Nothing leaves your browser.</em></h1>
-          <p className="lede">Footlit plays an animation when something happens on github.com. It was built so that it could not collect your data even by accident. Last updated {site.updated}.</p>
+          <h1 className={`display ${s.h1}`}>Your work.<br /><em>Your business.</em></h1>
+          <p className="lede">Footlit has no analytics, telemetry, or accounts. Activity stays on your device; your browser may sync your preferences. Last updated {site.updated}.</p>
         </div>
       </header>
 
@@ -28,10 +28,10 @@ export default function Privacy() {
         <aside className={s.short} aria-label="The short version">
           <h2 className="display">The short version</h2>
           <ul>
-            <li><Tick /> The extension makes <b>no network requests</b>: no analytics, no telemetry, no crash reports, no ads, no remote code.</li>
+            <li><Tick /> Footlit sends <b>no telemetry</b>: no analytics, no crash reports, no ads, no remote code.</li>
             <li><Tick /> It runs <b>only on github.com</b>.</li>
             <li><Tick /> It does not read your code, diffs, comments, passwords, tokens or anything you type.</li>
-            <li><Tick /> Your settings stay in your browser. There are no accounts.</li>
+            <li><Tick /> Settings use browser storage and may sync between your devices. No Footlit account is needed.</li>
           </ul>
         </aside>
 
@@ -59,7 +59,7 @@ export default function Privacy() {
               </tbody>
             </table>
           </div>
-          <p>Neither is ever transmitted. You can clear the activity log (Settings → Activity &amp; help → Clear activity) or reset every setting at any time, and removing the extension deletes all of it.</p>
+          <p>Footlit does not send the activity log to a server. Your browser may transmit preferences through its own sync service. You can clear the activity log (Settings → Activity &amp; help → Clear activity) or reset your settings at any time.</p>
         </section>
 
         <section>

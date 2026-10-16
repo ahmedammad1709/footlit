@@ -3,6 +3,7 @@ import type { HelloReply, RehearseReply } from '../shared/messages';
 import { getSettings, getStats, saveSettings, watchSettings, type Settings } from '../shared/settings';
 import { THEMES } from '../themes';
 import { h } from '../engine/util';
+import { preserveFocus } from '../shared/focus';
 
 const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
 let s: Settings;
@@ -12,7 +13,9 @@ let stale = false;
 
 const save = (next: Settings) => {
   s = next;
-  void saveSettings(next);
+  void saveSettings(next).catch(() => {
+    $('hint').textContent = 'Could not save. Please try the change again.';
+  });
   render();
 };
 
@@ -47,6 +50,10 @@ async function rehearse(id: EventId) {
 }
 
 function render() {
+  preserveFocus(renderControls);
+}
+
+function renderControls() {
   applyAppearance();
   ($('master') as HTMLInputElement).checked = s.enabled;
   $('masterLabel').textContent = s.enabled ? 'On' : 'Off';

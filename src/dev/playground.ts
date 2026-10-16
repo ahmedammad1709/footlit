@@ -1,10 +1,11 @@
 // Dev-only: runs the overlay engine on a plain page (no extension APIs) so themes can be screenshotted.
-import { playShow } from '../engine/play';
+import { playShow, isPlaying, stopShow } from '../engine/play';
 import type { EventId, Mood } from '../shared/events';
 import type { FontLoader } from '../shared/fonts';
 
 const q = new URLSearchParams(location.search);
 const fontLoader: FontLoader = async (file) => (await fetch('/' + file)).arrayBuffer();
+Object.assign(window, { isPlaying, stopShow });
 
 (window as unknown as { run: () => Promise<void> }).run = () =>
   playShow({

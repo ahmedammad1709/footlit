@@ -1,0 +1,13 @@
+.section { padding: 64px 0; background: var(--paper); }
+.grid { display: grid; grid-template-columns: .8fr 1.2fr; gap: 64px; align-items: center; }
+.copy h2 { font-size: clamp(48px, 5vw, 70px); }
+.copy p { max-width: 36ch; color: var(--quiet-on-paper); margin: 20px 0; }
+.copy .duration { font: 12px/1.5 var(--mono); }
+.film { margin: 0; min-width: 0; }
+.film video,.poster { display: block; width: 100%; aspect-ratio: 16 / 9; border: 0; border-radius: 8px; background: #211b17; overflow: hidden; }
+.poster { padding: 0; position: relative; }
+.poster img { width: 100%; height: 100%; object-fit: cover; }
+.poster::after { content: ''; position: absolute; inset: 0; background: #0003; }
+.play { display: inline-flex; align-items: center; gap: 14px; position: absolute; z-index: 1; left: 50%; top: 50%; transform: translate(-50%, -50%); white-space: nowrap; padding: 16px 24px; background: #fff3d6; color: #211b17; border-radius: 40px; font: 500 14px var(--mono); box-shadow: 0 4px 24px #0005; }
+.poster:hover .play { background: var(--lit); }.film figcaption { margin-top: 12px; max-width: 62ch; font-size: 14px; color: var(--quiet-on-paper); }
+@media(max-width: 800px) { .grid { grid-template-columns: 1fr; gap: 24px; }.copy p { max-width: 48ch; }.section { padding: 44px 0; } }

@@ -1,7 +1,7 @@
 import { EVENT_BY_ID, type EventId } from '../shared/events';
 import { loadFontViaBackground } from '../shared/fonts';
 import type { HelloReply, Message, RehearseReply } from '../shared/messages';
-import { INTENSITY_SCALE, defaultSettings, getSettings, recordEvent, themeFor, watchSettings, type Settings } from '../shared/settings';
+import { INTENSITY_SCALE, getSettings, recordEvent, themeFor, watchSettings, type Settings } from '../shared/settings';
 import { isPlaying, playShow } from '../engine/play';
 import { watchNavigation, type NavInfo } from './nav';
 import { RESERVED_OWNERS, type DetectorApi, type EmitInfo } from './detectors/types';
@@ -22,8 +22,7 @@ if (!w[FLAG]) {
 }
 
 async function main() {
-  let settings: Settings = defaultSettings();
-  void getSettings().then((s) => (settings = s));
+  let settings: Settings = await getSettings();
   watchSettings((s) => (settings = s));
 
   const debug = (() => {
@@ -38,6 +37,7 @@ async function main() {
   };
 
   const recent = new Map<string, number>();
+  let activeShows = 0;
 
   /** After the extension is updated or reloaded, old copies of this script are orphaned and chrome.* stops working. */
   const orphaned = () => !chrome.runtime?.id;
@@ -53,25 +53,30 @@ async function main() {
       if (Date.now() - last < 20_000) return;
       recent.set(k, Date.now());
 
-      const reason = !settings.enabled ? 'Footlit is off' : !settings.events[id]?.enabled ? 'This event is switched off' : Date.now() < settings.quietUntil ? 'Quiet mode' : isPlaying() ? 'Another show was running' : '';
+      const reason = !settings.enabled ? 'Footlit is off' : !settings.events[id]?.enabled ? 'This event is switched off' : Date.now() < settings.quietUntil ? 'Quiet mode' : activeShows || isPlaying() ? 'Another show was running' : '';
       if (reason) {
         void recordEvent({ ...entry, shown: false, reason });
         return;
       }
     }
 
-    const stats = await recordEvent({ ...entry, shown: true });
-    await playShow({
-      eventId: id,
-      mood: opts.mood ?? def.mood,
-      themeId: opts.themeId ?? themeFor(settings, id),
-      subject: info.subject,
-      detail: info.detail,
-      tally: stats.shows,
-      scale: INTENSITY_SCALE[settings.intensity],
-      honorReducedMotion: settings.honorReducedMotion,
-      fontLoader: loadFontViaBackground,
-    });
+    activeShows++;
+    try {
+      const stats = await recordEvent({ ...entry, shown: true });
+      await playShow({
+        eventId: id,
+        mood: opts.mood ?? def.mood,
+        themeId: opts.themeId ?? themeFor(settings, id),
+        subject: info.subject,
+        detail: info.detail,
+        tally: stats.shows,
+        scale: INTENSITY_SCALE[settings.intensity],
+        honorReducedMotion: settings.honorReducedMotion,
+        fontLoader: loadFontViaBackground,
+      });
+    } finally {
+      activeShows--;
+    }
   }
 
   // ---- detector plumbing ----

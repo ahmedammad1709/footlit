@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { THEMES, useFootlit } from '@/lib/footlit';
+import { useFootlit } from '@/lib/footlit';
 import s from './PrDemo.module.css';
 
 type Pr = 'open' | 'merged' | 'closed';
@@ -12,7 +12,7 @@ type Ci = 'passed' | 'failed' | 'pending';
  * the selected theme right inside the frame, exactly as the extension does on github.com.
  */
 export function PrDemo() {
-  const { play, ready, themeId, setThemeId } = useFootlit();
+  const { play, ready, stop } = useFootlit();
   const stage = useRef<HTMLDivElement>(null);
   const [pr, setPr] = useState<Pr>('open');
   const [ci, setCi] = useState<Ci>('passed');
@@ -25,19 +25,20 @@ export function PrDemo() {
   const show = useCallback((event: string) => void play(event, { container: stage.current }), [play]);
 
   const merge = () => {
-    if (pr !== 'open') return;
+    if (pr !== 'open' || !ready || ci === 'pending') return;
     setTouched(true);
     setPr('merged');
     show('pr.merged');
   };
   const close = () => {
-    if (pr !== 'open') return;
+    if (pr !== 'open' || !ready) return;
+    clearTimeout(timer.current);
     setTouched(true);
     setPr('closed');
     show('pr.closed');
   };
   const rerun = () => {
-    if (pr !== 'open' || ci === 'pending') return;
+    if (pr !== 'open' || ci === 'pending' || !ready) return;
     setTouched(true);
     setCi('pending');
     timer.current = window.setTimeout(() => {
@@ -48,6 +49,8 @@ export function PrDemo() {
     }, 1100);
   };
   const reset = () => {
+    clearTimeout(timer.current);
+    stop();
     setPr('open');
     setCi('passed');
     setNextFails(true);
@@ -87,11 +90,11 @@ export function PrDemo() {
                       {ci === 'passed' ? 'All checks have passed' : ci === 'failed' ? 'Some checks were not successful' : 'Some checks haven’t completed yet'}
                     </p>
                     <div className={s.actions}>
-                      <button className={`${s.go} ${!touched ? s.pulse : ''}`} onClick={merge} disabled={ci === 'pending'}>
+                      <button className={s.go} onClick={merge} disabled={!ready || ci === 'pending'}>
                         Merge pull request
                       </button>
-                      <button className={s.ghost} onClick={close}>Close pull request</button>
-                      <button className={s.ghost} onClick={rerun} disabled={ci === 'pending'}>Re-run checks</button>
+                      <button className={s.ghost} onClick={close} disabled={!ready}>Close pull request</button>
+                      <button className={s.ghost} onClick={rerun} disabled={!ready || ci === 'pending'}>Re-run checks</button>
                     </div>
                   </>
                 ) : (
@@ -112,13 +115,7 @@ export function PrDemo() {
 
       <figcaption className={s.cap}>
         <span className={s.hint}>{ready ? (touched ? 'The real engine, playing inside this frame.' : 'Press “Merge pull request”.') : 'Warming up the lights…'}</span>
-        <span className={s.themes} role="group" aria-label="Demo theme">
-          {THEMES.map((t) => (
-            <button key={t.id} className={s.chip} aria-pressed={t.id === themeId} onClick={() => setThemeId(t.id)} title={t.tagline}>
-              {t.name}
-            </button>
-          ))}
-        </span>
+        <a href="#themes" className={s.themeLink}>Find your theme</a>
       </figcaption>
     </figure>
   );

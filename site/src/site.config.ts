@@ -30,7 +30,7 @@ export const site = {
     whatsapp: 'https://wa.me/923141038814', // e.g. https://wa.me/923001234567  (country code, no + or spaces)
   },
   chromeStoreUrl: 'https://chromewebstore.google.com/detail/fkjnlcolffmaaneilmchdejmlkgnimlf',
-  firefoxStoreUrl: '',
+  firefoxStoreUrl: 'https://addons.mozilla.org/en-US/firefox/addon/footlit/',
   googleVerification: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION ?? '',
   bingVerification: process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION ?? '',
 } as const;

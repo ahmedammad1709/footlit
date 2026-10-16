@@ -31,28 +31,66 @@ const browser = await puppeteer.launch({ executablePath: 'C:/Program Files/Googl
 let failed = 0;
 async function run(label, theme, event, { reduced = false, size } = {}) {
   const page = await browser.newPage();
+  await page.evaluateOnNewDocument(() => {
+    window.__intervals = new Set();
+    window.__observers = new Set();
+    window.__roots = [];
+    const set = window.setInterval.bind(window), clear = window.clearInterval.bind(window);
+    window.setInterval = (...args) => { const id = set(...args); window.__intervals.add(id); return id; };
+    window.clearInterval = (id) => { window.__intervals.delete(id); clear(id); };
+    const Observer = window.ResizeObserver;
+    window.ResizeObserver = class extends Observer {
+      observe(...args) { window.__observers.add(this); super.observe(...args); }
+      disconnect() { window.__observers.delete(this); super.disconnect(); }
+    };
+    const attach = Element.prototype.attachShadow;
+    Element.prototype.attachShadow = function (options) { const root = attach.call(this, options); window.__roots.push(root); return root; };
+  });
   if (size) await page.setViewport(size);
   if (reduced) await page.emulateMediaFeatures([{ name: 'prefers-reduced-motion', value: 'reduce' }]);
   const errors = [];
   page.on('pageerror', (e) => errors.push(e.message));
-  page.on('console', (m) => m.type() === 'error' && !m.text().includes('404') && errors.push(m.text()));
+  page.on('console', (m) => (m.type() === 'error' || m.text().includes('[footlit] theme failed')) && !m.text().includes('404') && errors.push(m.text()));
   await page.goto(`${base}/?theme=${theme}&event=${event}&scale=0.45&reduced=${reduced ? 1 : 0}`);
+  const result = page.evaluate(async () => {
+    const show = window.run();
+    await new Promise((r) => setTimeout(r, 150));
+    window.__animated = window.__roots.some((r) => [...r.querySelectorAll('*')].some((el) => getComputedStyle(el).animationName !== 'none'));
+    await show;
+    return 'done';
+  });
   const finished = await Promise.race([
-    page.evaluate(() => window.run().then(() => 'done')),
+    result,
     new Promise((r) => setTimeout(() => r('timeout'), 15000)),
   ]);
   const left = await page.evaluate(() => document.querySelectorAll('footlit-stage').length);
-  const ok = finished === 'done' && left === 0 && errors.length === 0;
+  const resources = await page.evaluate(() => ({ intervals: window.__intervals.size, observers: window.__observers.size, animated: window.__animated, playing: window.isPlaying() }));
+  const ok = finished === 'done' && left === 0 && errors.length === 0 && !resources.intervals && !resources.observers && !resources.playing && (!reduced || !resources.animated);
   if (!ok) failed++;
-  console.log(`${ok ? 'PASS' : 'FAIL'}  ${label}${ok ? '' : `  (${finished}, ${left} stage left, errors: ${JSON.stringify(errors)})`}`);
+  console.log(`${ok ? 'PASS' : 'FAIL'}  ${label}${ok ? '' : `  (${finished}, ${left} stage left, errors: ${JSON.stringify(errors)}, resources: ${JSON.stringify(resources)})`}`);
   await page.close();
 }
 
 for (const t of themes) for (const e of events) await run(`${t} / ${e}`, t, e);
 console.log('Reduced motion');
 for (const t of themes) await run(`${t} / reduced motion`, t, 'ci.passed', { reduced: true });
+for (const t of themes) await run(`${t} / reduced motion alarm`, t, 'ci.failed', { reduced: true });
 console.log('Small window');
 for (const t of themes) await run(`${t} / 420x700`, t, 'pr.merged', { size: { width: 420, height: 700 } });
+
+const hidden = await browser.newPage();
+await hidden.goto(`${base}/?theme=quiet&event=pr.merged&scale=0.1`);
+const hiddenOK = await hidden.evaluate(async () => {
+  Object.defineProperty(document, 'visibilityState', { configurable: true, get: () => 'hidden' });
+  await window.run();
+  const released = !window.isPlaying();
+  Object.defineProperty(document, 'visibilityState', { configurable: true, get: () => 'visible' });
+  await window.run();
+  return released && !window.isPlaying() && !document.querySelector('footlit-stage');
+});
+if (!hiddenOK) failed++;
+console.log(`${hiddenOK ? 'PASS' : 'FAIL'}  hidden-tab timeout releases player and next show completes`);
+await hidden.close();
 
 await browser.close();
 server.close();

@@ -1,0 +1,26 @@
+import {spawnSync} from 'node:child_process';
+import fs from 'node:fs/promises';
+import path from 'node:path';
+import {createRequire} from 'node:module';
+const repo=path.resolve(import.meta.dirname,'../..');
+const out=path.join(repo,'brag-output-2026-10-14-linkedin');
+const ff=createRequire(import.meta.url)('ffmpeg-static');
+const probe=createRequire(path.join(repo,'video/linkedin-tools/package.json'))('ffprobe-static').path;
+function run(bin,args){const r=spawnSync(bin,args,{encoding:'utf8',windowsHide:true,maxBuffer:8e6});if(r.status!==0)throw Error(r.stderr||r.error?.message);return r}
+const raw=path.join(out,'footlit-linkedin.mp4'),final=path.join(out,'brag.mp4'),poster=path.join(out,'brag.jpg');
+run(ff,['-y','-ss','6','-i',raw,'-frames:v','1','-q:v','2',poster]);
+console.log('Poster extracted from the settled Marquee reveal.');
+run(ff,['-y','-i',raw,'-i',poster,'-filter_complex',"[0:v][1:v]overlay=0:0:enable='eq(n,0)'[v]",'-map','[v]','-map','0:a','-c:v','libx264','-preset','slow','-crf','16','-pix_fmt','yuv420p','-c:a','copy','-movflags','+faststart',final]);
+const info=JSON.parse(run(probe,['-v','error','-show_format','-show_streams','-of','json',final]).stdout);
+const v=info.streams.find(s=>s.codec_type==='video'),a=info.streams.find(s=>s.codec_type==='audio');
+if(v.width!==1080||v.height!==1350||v.r_frame_rate!=='30/1'||Number(v.nb_frames)!==720||v.codec_name!=='h264'||!a||Math.abs(Number(info.format.duration)-24)>.1)throw Error('Unexpected media format');
+run(ff,['-v','error','-i',final,'-f','null','-']);
+const loud=run(ff,['-hide_banner','-i',final,'-af','loudnorm=I=-16:TP=-1.5:LRA=8:print_format=json','-f','null','-']).stderr;
+const metrics=JSON.parse(loud.slice(loud.lastIndexOf('{'),loud.lastIndexOf('}')+1));
+if(Number(metrics.input_tp)>0)throw Error('Clipping detected');
+await fs.mkdir(path.join(out,'review/export'),{recursive:true});
+for(const t of [0,1.7,6,11.5,14.5,18,22,23.9])run(ff,['-y','-ss',String(t),'-i',final,'-frames:v','1',path.join(out,'review/export',`frame-${t}.jpg`)]);
+const qa={duration:Number(info.format.duration),width:v.width,height:v.height,fps:v.r_frame_rate,frames:Number(v.nb_frames),video:v.codec_name,pixelFormat:v.pix_fmt,audio:a.codec_name,bytes:Number(info.format.size),loudness:metrics,decode:'passed',poster:'brag.jpg'};
+await fs.writeFile(path.join(out,'verification.json'),JSON.stringify(qa,null,2)+'\n');
+await fs.copyFile(final,path.join(repo,'video/out/footlit-linkedin-1080x1350.mp4'));
+console.log(JSON.stringify(qa,null,2));

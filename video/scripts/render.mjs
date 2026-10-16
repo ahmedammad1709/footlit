@@ -9,6 +9,7 @@ import fs from 'node:fs/promises';
 import { createWriteStream } from 'node:fs';
 import path from 'node:path';
 import { createRequire } from 'node:module';
+import { safePath } from '../../scripts/safe-path.mjs';
 
 const root = path.resolve(import.meta.dirname, '..');
 const repo = path.resolve(root, '..');
@@ -40,10 +41,11 @@ const dirs = [
   ['/', path.join(root, 'src')],
 ];
 const server = http.createServer(async (req, res) => {
-  const p = decodeURIComponent(new URL(req.url, 'http://x').pathname);
+  const p = new URL(req.url, 'http://x').pathname;
   for (const [prefix, dir] of dirs) {
     if (!p.startsWith(prefix)) continue;
-    const file = path.join(dir, p.slice(prefix.length) || 'index.html');
+    const file = safePath(dir, p.slice(prefix.length) || 'index.html');
+    if (!file) { res.writeHead(403); return res.end(); }
     try {
       let body = await fs.readFile(file);
       if (p === '/ext/popup/popup.html') body = Buffer.from(body.toString('utf8').replace('<script src="popup.js"></script>', popupStub + '<script src="popup.js"></script>'));
@@ -54,8 +56,8 @@ const server = http.createServer(async (req, res) => {
   res.writeHead(404);
   res.end('not found');
 });
-await new Promise((r) => server.listen(0, r));
-const base = `http://localhost:${server.address().port}`;
+await new Promise((r) => server.listen(0, '127.0.0.1', r));
+const base = `http://127.0.0.1:${server.address().port}`;
 
 // ---------- browser ----------
 const cacheDir = path.join(root, '.cache/chrome-headless-shell');

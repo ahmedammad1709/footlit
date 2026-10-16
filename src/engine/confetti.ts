@@ -65,8 +65,13 @@ export class Confetti {
       canvas.height = Math.max(1, Math.round(this.h * this.dpr));
     };
     resize();
-    new ResizeObserver(resize).observe(box);
-    signal.addEventListener('abort', () => cancelAnimationFrame(this.raf), { once: true });
+    const observer = new ResizeObserver(resize);
+    observer.observe(box);
+    signal.addEventListener('abort', () => {
+      cancelAnimationFrame(this.raf);
+      observer.disconnect();
+      this.ps = [];
+    }, { once: true });
   }
 
   burst(o: BurstOpts): void {
