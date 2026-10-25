@@ -19,7 +19,7 @@ export function Install() {
         <dl className={s.glance}>
           <div><dt>Price</dt><dd>Free</dd></div>
           <div><dt>Works with</dt><dd>Chrome 111+ and Chromium browsers; Firefox 140+</dd></div>
-          {site.chromeUsers ? <div><dt>Users</dt><dd>{site.chromeUsers} on Chrome</dd></div> : <div><dt>Version</dt><dd>{VERSION}</dd></div>}
+          {site.chromeUsers ? <div><dt>Installs</dt><dd>{site.chromeUsers} on Chrome</dd></div> : <div><dt>Version</dt><dd>{VERSION}</dd></div>}
           <div><dt>Download</dt><dd>{chrome ? `${chrome.kb} KB` : 'n/a'}</dd></div>
           <div><dt>Data collected</dt><dd>None</dd></div>
           <div><dt>Permissions</dt><dd>github.com access and storage</dd></div>

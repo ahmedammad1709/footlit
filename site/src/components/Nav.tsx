@@ -30,9 +30,9 @@ export function Nav() {
         </nav>
         <details className={s.mobile} onKeyDown={(e) => { if (e.key === 'Escape') { e.currentTarget.open = false; e.currentTarget.querySelector('summary')?.focus(); } }}><summary>Menu</summary><nav aria-label="Mobile navigation">{LINKS.map(([label, href]) => <Link key={href} href={href} prefetch={false} onClick={(e) => e.currentTarget.closest('details')?.removeAttribute('open')}>{label}</Link>)}</nav></details>
         {site.chromeUsers && (
-          <a className={s.proof} href={site.chromeStoreUrl || '/#install'} aria-label={`${site.chromeUsers} users on Chrome`}>
+          <a className={s.proof} href={site.chromeStoreUrl || '/#install'} aria-label={`${site.chromeUsers} installs on Chrome`}>
             <i className={s.lamp} aria-hidden="true" />
-            <b>{site.chromeUsers}</b> users
+            <b>{site.chromeUsers}</b> installs
           </a>
         )}
         <TicketButton href="/#install" title="Get Footlit" stub="Free" tone="ink" size="sm" />
