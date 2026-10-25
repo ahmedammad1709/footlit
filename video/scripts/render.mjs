@@ -16,11 +16,11 @@ const repo = path.resolve(root, '..');
 const ffmpeg = createRequire(import.meta.url)('ffmpeg-static');
 const arg = (name, def) => { const a = process.argv.find((x) => x.startsWith(`--${name}=`)); return a ? a.slice(a.indexOf('=') + 1) : (process.argv.includes(`--${name}`) ? true : def); };
 
-const FPS = Number(arg('fps', 30));
 // which film: 'film' (the 60 s hero) or e.g. 'teaser' (src/teaser.html + src/teaser-cues.json)
 const FILM = String(arg('film', 'film'));
 const cues = JSON.parse(await fs.readFile(path.join(root, FILM === 'film' ? 'src/cues.json' : `src/${FILM}-cues.json`), 'utf8'));
 const [VW, VH] = cues.size ?? [1920, 1080];
+const FPS = Number(arg('fps', cues.fps ?? 30));
 const DURATION = cues.duration;
 const preview = arg('preview', '') ? String(arg('preview')).split(',').map(Number) : null;
 const full = arg('full', false) === true;
@@ -30,7 +30,7 @@ const crf = String(arg('crf', 14));
 
 // ---------- static server ----------
 const popupJs = await fs.readFile(path.join(repo, 'dist/popup/popup.js'), 'utf8');
-const BUILD = /build !== "([a-z0-9]+)"/.exec(popupJs)?.[1] ?? '';
+const BUILD = /build\s*!==\s*"([a-z0-9]+)"/.exec(popupJs)?.[1] ?? '';
 const popupStub = `<script>(()=>{const mem={sync:{'footlit:settings':{onboarded:true,theme:(new URLSearchParams(location.search).get('theme')||'terminal')}},local:{'footlit:stats':{shows:214,log:[]}}};const ls=[];const area=(n)=>({get:async(k)=>(k in mem[n]?{[k]:mem[n][k]}:{}),set:async(o)=>{Object.assign(mem[n],o);const ch={};for(const k in o)ch[k]={newValue:o[k]};ls.forEach(f=>f(ch,n))},remove:async()=>{}});window.chrome={storage:{sync:area('sync'),local:area('local'),onChanged:{addListener(f){ls.push(f)},removeListener(){}}},runtime:{getURL:(f)=>'/ext/'+f,openOptionsPage(){},sendMessage:async()=>({})},tabs:{query:async()=>[{id:1,url:'https://github.com/acme/widget-shop'}],sendMessage:async(_i,m)=>m.type==='hello'?{build:'${BUILD}'}:{ok:true},reload(){}}};})();</script>`;
 const types = { '.js': 'text/javascript', '.css': 'text/css', '.html': 'text/html', '.woff2': 'font/woff2', '.png': 'image/png', '.svg': 'image/svg+xml', '.json': 'application/json' };
 const dirs = [
@@ -103,7 +103,10 @@ if (full) {
   const outFile = path.join(root, 'out', from || to < DURATION ? `footlit-${FILM}-part-${from}-${to}.mp4` : (cues.output ?? 'footlit-launch-1920x1080.mp4'));
   const args = ['-y', '-f', 'image2pipe', '-framerate', String(FPS), '-c:v', 'png', '-i', 'pipe:0'];
   if (haveAudio) args.push('-ss', String(from), '-t', String(endFrame / FPS - startFrame / FPS), '-i', audio);
+  if (cues.bt709) args.push('-vf', 'scale=in_range=full:out_range=tv:out_color_matrix=bt709:flags=accurate_rnd+full_chroma_int+bicubic,format=yuv420p');
   args.push('-c:v', 'libx264', '-preset', 'slow', '-crf', crf, '-pix_fmt', 'yuv420p', '-r', String(FPS), '-movflags', '+faststart');
+  if (cues.tune) args.push('-tune', cues.tune);
+  if (cues.bt709) args.push('-colorspace', 'bt709', '-color_primaries', 'bt709', '-color_trc', 'bt709', '-color_range', 'tv');
   if (haveAudio) args.push('-c:a', 'aac', '-b:a', '320k', '-shortest');
   args.push(outFile);
   enc = spawn(ffmpeg, args, { stdio: ['pipe', 'ignore', 'pipe'] });

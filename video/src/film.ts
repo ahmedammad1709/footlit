@@ -351,7 +351,7 @@ function posterCover() {
   mk('div', `position:absolute;left:0;right:0;top:92px;text-align:center;font:500 24px ${MONO};letter-spacing:.24em;color:#B5A78F;text-transform:uppercase`, 'A free GitHub extension', s);
   mk('div', `position:absolute;left:0;right:0;top:150px;text-align:center;font:400 330px/1 ${DISPLAY};letter-spacing:.02em;color:${PAPER};text-transform:uppercase`, 'Footlit', s);
   mk('div', `position:absolute;left:0;right:0;top:470px;text-align:center;font:italic 400 62px ${TEXT};color:${LIT}`, 'Every GitHub event gets a show.', s);
-  mk('div', `position:absolute;left:0;right:0;top:850px;text-align:center;font:500 22px ${MONO};letter-spacing:.2em;color:#B5A78F;text-transform:uppercase`, 'The 56-second film', s);
+  mk('div', `position:absolute;left:0;right:0;top:850px;text-align:center;font:500 22px ${MONO};letter-spacing:.2em;color:#B5A78F;text-transform:uppercase`, 'The 44-second film', s);
 }
 
 async function boot() {

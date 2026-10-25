@@ -14,7 +14,7 @@
     "start": "npx --yes serve out -l 3000"
   },
   "dependencies": {
-    "next": "^16.4.0",
+    "next": "^16.4.3",
     "react": "^19.3.0",
     "react-dom": "^19.3.0"
   },

@@ -1,0 +1,286 @@
+{
+  "size": [
+    1920,
+    1080
+  ],
+  "fps": 60,
+  "bt709": true,
+  "tune": "animation",
+  "duration": 43.8,
+  "output": "footlit-marketing-linkedin-1920x1080.mp4",
+  "vo": {
+    "10": 34.05,
+    "11": 38.8,
+    "01": 0.35,
+    "02": 2.2,
+    "03": 3.75,
+    "04": 6.4,
+    "05": 7.45,
+    "06": 11.85,
+    "07": 17.15,
+    "08": 22.15,
+    "09": 28.1
+  },
+  "hook": {
+    "start": 0,
+    "end": 3.5625,
+    "click": 1.3125
+  },
+  "payoff": {
+    "start": 3.5625,
+    "end": 6,
+    "scale": 0.55
+  },
+  "logo": {
+    "start": 6,
+    "end": 11.625,
+    "popupAt": 7.875
+  },
+  "demo": {
+    "start": 11.625,
+    "end": 27.9375,
+    "steps": [
+      {
+        "n": 1,
+        "t": 11.625,
+        "title": "Create a repo.",
+        "label": "Create a repo"
+      },
+      {
+        "n": 2,
+        "t": 17.0625,
+        "title": "Break the build.",
+        "label": "Break the build"
+      },
+      {
+        "n": 3,
+        "t": 21.9375,
+        "title": "Merge it.",
+        "label": "Merge it"
+      }
+    ],
+    "typeStart": 12.1,
+    "typeEnd": 13.3,
+    "createClick": 13.6875,
+    "checksFail": 18.375,
+    "checksPass": 22.6875,
+    "mergeClick": 23.4375,
+    "shows": [
+      {
+        "t": 13.875,
+        "event": "repo.created",
+        "scale": 0.75,
+        "subject": "acme/widget-shop",
+        "detail": ""
+      },
+      {
+        "t": 18.5625,
+        "event": "ci.failed",
+        "scale": 0.7,
+        "subject": "acme/widget-shop #42",
+        "detail": "build / test"
+      },
+      {
+        "t": 23.625,
+        "event": "pr.merged",
+        "scale": 0.85,
+        "subject": "acme/widget-shop #42",
+        "detail": "Fix flaky login redirect on Safari"
+      }
+    ]
+  },
+  "montage": {
+    "start": 27.9375,
+    "end": 33.9375,
+    "unit": 0.1875,
+    "payoff": {
+      "marquee": 1.5,
+      "terminal": 2.8,
+      "mission": 2.3,
+      "pixel": 1.9,
+      "crawler": 1.5,
+      "quiet": 0.7
+    },
+    "shots": [
+      {
+        "theme": "marquee",
+        "name": "Marquee",
+        "event": "repo.created",
+        "dur": 1.125
+      },
+      {
+        "theme": "terminal",
+        "name": "Terminal",
+        "event": "pr.merged",
+        "dur": 1.125
+      },
+      {
+        "theme": "mission",
+        "name": "Mission Control",
+        "event": "ci.passed",
+        "dur": 0.9375
+      },
+      {
+        "theme": "pixel",
+        "name": "Pixel Arcade",
+        "event": "pr.merged",
+        "dur": 0.9375
+      },
+      {
+        "theme": "crawler",
+        "name": "Web Crawler",
+        "event": "repo.forked",
+        "dur": 0.9375
+      },
+      {
+        "theme": "quiet",
+        "name": "Quiet",
+        "event": "pr.merged",
+        "dur": 0.9375
+      }
+    ]
+  },
+  "trust": {
+    "start": 33.9375,
+    "end": 38.625,
+    "words": [
+      0,
+      0.65,
+      1.4
+    ]
+  },
+  "end": {
+    "start": 38.625,
+    "end": 43.8
+  },
+  "subs": [
+    {
+      "id": "01",
+      "chunks": [
+        {
+          "text": "You just merged your pull request.",
+          "em": [
+            "merged"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "02",
+      "chunks": [
+        {
+          "text": "And nothing happened.",
+          "em": [
+            "nothing"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "03",
+      "chunks": [
+        {
+          "text": "What if it felt like this?",
+          "em": [
+            "felt like this?"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "04",
+      "chunks": [
+        {
+          "text": "Meet Footlit.",
+          "em": [
+            "Footlit."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "05",
+      "chunks": [
+        {
+          "text": "A free GitHub extension",
+          "em": [
+            "free"
+          ]
+        },
+        {
+          "text": "that gives every moment a standing ovation.",
+          "em": [
+            "standing ovation."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "06",
+      "chunks": [
+        {
+          "text": "Create a repo. Opening night.",
+          "em": [
+            "Opening night."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "07",
+      "chunks": [
+        {
+          "text": "Break the build. The show stops.",
+          "em": [
+            "The show stops."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "08",
+      "chunks": [
+        {
+          "text": "Merge it. Take a bow.",
+          "em": [
+            "Take a bow."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "09",
+      "chunks": [
+        {
+          "text": "Six hand-built themes.",
+          "em": [
+            "Six"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "10",
+      "chunks": [
+        {
+          "text": "Free. Private. Nothing leaves your browser.",
+          "em": [
+            "Free.",
+            "Private."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "11",
+      "chunks": [
+        {
+          "text": "Footlit. Free for Chrome and Firefox.",
+          "em": [
+            "Footlit."
+          ]
+        }
+      ]
+    }
+  ]
+}

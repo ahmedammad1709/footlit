@@ -4,35 +4,36 @@ import { useState } from 'react';
 import s from './VideoDemo.module.css';
 
 const TRANSCRIPT = [
-  "Every merge you've ever done… deserved better.",
-  'Meet Footlit. GitHub, with stage lighting.',
-  'Pick a theme. Create a repo, and the show begins. Break the build, and the show stops.',
-  'Fix it. Merge it. Take a bow.',
-  'Eleven events. Six themes. Zero data leaves your browser.',
+  'You just merged your pull request. And nothing happened.',
+  'What if it felt like this?',
+  'Meet Footlit. A free GitHub extension that gives every moment a standing ovation.',
+  'Create a repo. Opening night. Break the build. The show stops. Merge it. Take a bow.',
+  'Six hand-built themes.',
+  'Free. Private. Nothing leaves your browser.',
   'Footlit. Free for Chrome and Firefox.',
 ];
 
-/** The full launch film, click to play (nothing downloads until you press play). */
+/** The final marketing film (voice, music and captions), click to play (nothing downloads until you press play). */
 export function VideoDemo() {
   const [started, setStarted] = useState(false);
   return (
     <section id="watch" className={s.section} aria-labelledby="watch-heading">
       <div className="wrap">
         <header className={s.head}>
-          <p className="eyebrow">The whole show in under a minute</p>
+          <p className="eyebrow">The whole show in 44 seconds</p>
           <h2 id="watch-heading" className="display">See what a merge<br />could feel like.</h2>
         </header>
         <figure className={s.film}>
           {started ? (
-            <video controls autoPlay playsInline preload="auto" poster="/demo/poster-launch.jpg" aria-label="Footlit launch film, 56 seconds" aria-describedby="demo-description">
-              <source src="/demo/footlit-launch.mp4" type="video/mp4" />
-              <track kind="captions" src="/demo/footlit-launch.en.vtt" srcLang="en" label="English" default />
-              <a href="/demo/footlit-launch.mp4">Download the film</a>
+            <video controls autoPlay playsInline preload="auto" poster="/demo/poster-launch.jpg" aria-label="Footlit marketing film, 44 seconds" aria-describedby="demo-description">
+              <source src="/demo/footlit-marketing.mp4" type="video/mp4" />
+              <track kind="captions" src="/demo/footlit-marketing.en.vtt" srcLang="en" label="English" default />
+              <a href="/demo/footlit-marketing.mp4">Download the film</a>
             </video>
           ) : (
-            <button className={s.poster} onClick={() => setStarted(true)} aria-label="Play the 56-second Footlit film">
-              <img src="/demo/poster-launch.jpg" width={1280} height={720} alt="Footlit: every GitHub event gets a show. Play the 56-second film." loading="lazy" />
-              <span className={s.play}><span aria-hidden="true">▶</span> Watch the film <small>56 s · sound on</small></span>
+            <button className={s.poster} onClick={() => setStarted(true)} aria-label="Play the 44-second Footlit film">
+              <img src="/demo/poster-launch.jpg" width={1280} height={720} alt="Footlit: every GitHub event gets a show. Play the 44-second film." loading="lazy" />
+              <span className={s.play}><span aria-hidden="true">▶</span> Watch the film <small>44 s · sound on</small></span>
             </button>
           )}
           <figcaption id="demo-description">

@@ -30,6 +30,8 @@ export const site = {
     whatsapp: 'https://wa.me/923141038814', // e.g. https://wa.me/923001234567  (country code, no + or spaces)
   },
   chromeStoreUrl: 'https://chromewebstore.google.com/detail/fkjnlcolffmaaneilmchdejmlkgnimlf',
+  /** Chrome Web Store user count, shown as social proof. Use the dashboard's number, rounded down ("50+"). Leave empty to hide it. */
+  chromeUsers: '50+',
   firefoxStoreUrl: 'https://addons.mozilla.org/en-US/firefox/addon/footlit/',
   googleVerification: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION ?? '',
   bingVerification: process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION ?? '',

@@ -12,7 +12,10 @@
     "preview": "node scripts/render.mjs --preview=",
     "loudness": "node scripts/loudness.mjs",
     "all": "node scripts/build.mjs && node scripts/make-audio.mjs && node scripts/render.mjs --full",
-    "teaser": "node scripts/build.mjs && node scripts/make-teaser-audio.mjs && node scripts/render.mjs --film=teaser --full --crf=12"
+    "teaser": "node scripts/build.mjs && node scripts/make-teaser-audio.mjs && node scripts/render.mjs --film=teaser --full --crf=12",
+    "marketing:vo": "node scripts/make-marketing-vo.mjs",
+    "marketing:audio": "node scripts/make-marketing-audio.mjs && node scripts/make-marketing-subs.mjs",
+    "marketing": "node scripts/build.mjs && node scripts/render.mjs --film=marketing --full --crf=13"
   },
   "dependencies": {
     "@puppeteer/browsers": "^3.2.4",

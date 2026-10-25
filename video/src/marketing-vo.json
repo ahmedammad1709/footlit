@@ -1,0 +1,18 @@
+{
+  "voice": "af_heart",
+  "speed": 1.0,
+  "note": "Kokoro open voice (Apache-2.0), synthesised locally with scripts/tts_kokoro.py. To use a different voice: change `voice` (or drop your own mono 48 kHz wavs into assets/vo-marketing/<id>.wav) and run `npm run marketing:audio` then `npm run marketing`.",
+  "lines": [
+    { "id": "01", "text": "You just merged your pull request." },
+    { "id": "02", "text": "And nothing happened." },
+    { "id": "03", "text": "What if it felt like this?" },
+    { "id": "04", "text": "Meet Footlit." },
+    { "id": "05", "text": "A free GitHub extension that gives every moment a standing ovation." },
+    { "id": "06", "text": "Create a repo. Opening night." },
+    { "id": "07", "text": "Break the build. The show stops." },
+    { "id": "08", "text": "Merge it. Take a bow." },
+    { "id": "09", "text": "Six hand-built themes." },
+    { "id": "10", "text": "Free. Private. Nothing leaves your browser." },
+    { "id": "11", "text": "Footlit. Free for Chrome and Firefox." }
+  ]
+}

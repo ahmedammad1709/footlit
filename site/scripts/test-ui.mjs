@@ -59,7 +59,7 @@ try {
     await page.waitForSelector('#themes footlit-stage');
   }
   await page.evaluate(() => window.Footlit.stop());
-  await page.click('button[aria-label="Play the 56-second Footlit film"]');
+  await page.click('button[aria-label="Play the 44-second Footlit film"]');
   await page.waitForFunction(() => document.querySelector('video')?.currentTime > 0, { timeout: 15000 });
   assert(videos.length > 0, 'video loads on request');
   await page.$eval('video', (el) => el.pause());

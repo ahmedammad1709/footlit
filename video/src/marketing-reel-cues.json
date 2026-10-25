@@ -1,0 +1,9 @@
+{
+  "_note": "Render settings for the portrait cut. All timing, voice and subtitle text come from marketing-cues.json (one script, two layouts).",
+  "size": [1080, 1920],
+  "fps": 60,
+  "bt709": true,
+  "tune": "animation",
+  "duration": 43.8,
+  "output": "footlit-marketing-reel-1080x1920.mp4"
+}
