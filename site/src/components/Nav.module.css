@@ -9,3 +9,12 @@
 @media (max-width: 400px) { .brand { gap: 6px; }.brand img { width: 28px; height: 28px; }.row { gap: 10px; } }
 .links a:hover { border-bottom-color: var(--lit); }
 @media (max-width: 860px) { .links { display: none; } .row { height: 60px; } .brand :global(.display) { font-size: 30px; } }
+
+/* social proof: a footlight that glows beside the install button */
+.proof { display: inline-flex; align-items: center; gap: 9px; flex: none; padding: 8px 13px 7px; background: var(--ink); color: var(--lit-hi); text-decoration: none; border-radius: 2px; font: 500 12.5px/1 var(--mono); letter-spacing: .09em; text-transform: uppercase; white-space: nowrap; animation: proofGlow 2.8s ease-in-out infinite; }
+.proof b { color: var(--lit); font-weight: 500; font-size: 14px; }
+.proof:hover { color: var(--paper); }
+.lamp { width: 9px; height: 9px; border-radius: 50%; background: var(--lit); box-shadow: 0 0 9px 2px #f2a81daa; animation: lampPulse 1.6s ease-in-out infinite; }
+@keyframes proofGlow { 0%, 100% { box-shadow: 0 0 0 0 #f2a81d00; } 50% { box-shadow: 0 0 16px 3px #f2a81d55; } }
+@keyframes lampPulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: .55; transform: scale(.8); } }
+@media (max-width: 560px) { .proof { display: none; } }
