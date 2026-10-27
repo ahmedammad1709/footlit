@@ -68,3 +68,13 @@ Search engines rank sites other sites link to. In rough order of effort and payo
 
 - After any content change: `npm run build` then `npm run seo` in `site/` (it fails on regressions such as a missing title or a broken link).
 - When the extension changes: follow `site/README.md` ("When the extension changes"). The changelog page is generated from `CHANGELOG.md`, so a release note is also fresh content for search engines.
+
+## 6. The GitHub repository is an SEO asset too
+
+The repo ranks for "github extension" style searches and sends stars-to-installs traffic both ways.
+
+- **Settings -> General:** write the description ("Free, open-source browser extension that plays a themed full-screen animation when you merge a PR, pass checks or publish a release"), set the website to the site, and upload `docs/media/social-preview.png` as the social preview (re-render it with `node site/scripts/make-social-card.mjs` in `site/`).
+- **Topics:** `chrome-extension`, `firefox-addon`, `github`, `github-extension`, `typescript`, `developer-tools`, `animation`, `confetti`.
+- **Releases:** publish each version as a GitHub Release with the zips attached; releases are indexed and show a "latest" badge on the repo page.
+- **README:** keep the demo GIF (`docs/media/footlit-demo.gif`) at the top; most visitors decide in a few seconds.
+- The site links back: navbar, hero, footer, the Trust section and the "Is Footlit open source?" FAQ, plus a `SoftwareSourceCode` node in the structured data (`codeRepository`) and the repo under the app's `sameAs`.

@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   authors: [{ name: site.author, url: site.url }],
   creator: site.author,
   category: 'developer tools',
-  keywords: ['GitHub extension', 'GitHub confetti', 'celebrate merged pull request', 'GitHub themes', 'GitHub animation', 'Chrome extension for GitHub', 'Firefox add-on for GitHub', 'pull request celebration', 'developer tools'],
+  keywords: ['GitHub extension', 'GitHub confetti', 'celebrate merged pull request', 'GitHub themes', 'GitHub animation', 'Chrome extension for GitHub', 'Firefox add-on for GitHub', 'pull request celebration', 'developer tools', 'open source GitHub extension'],
   alternates: { canonical: '/' },
   robots: { index: true, follow: true, googleBot: { index: true, follow: true, 'max-image-preview': 'large', 'max-snippet': -1, 'max-video-preview': -1 } },
   openGraph: {

@@ -15,8 +15,8 @@ export const site = {
   name: 'Footlit',
   tagline: 'GitHub, with stage lighting.',
   /** What search results show under the title: lead with what it is and what it does (<= 160 characters). */
-  description: 'Free GitHub extension for Chrome and Firefox. Plays a themed full-screen animation when you merge a pull request, pass checks or publish a release.',
-  longDescription: 'Footlit gives GitHub moments a proper entrance: themed full-screen animations for merged pull requests, green checks, releases, deploys and more. Free, private, six hand-built themes.',
+  description: 'Free, open-source GitHub extension for Chrome and Firefox. Plays a themed full-screen animation when you merge a pull request, pass checks or ship a release.',
+  longDescription: 'Footlit gives GitHub moments a proper entrance: themed full-screen animations for merged pull requests, green checks, releases, deploys and more. Free, private, open source (MIT), six hand-built themes.',
   url: (process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000').replace(/\/$/, ''),
   author: 'Ammad Ahmed',
   /** the studio the product is built at; linked from the footer and published as the author's employer */

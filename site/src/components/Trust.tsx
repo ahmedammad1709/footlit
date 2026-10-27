@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { site } from '@/site.config';
 import s from './Trust.module.css';
 
 /** The one place the privacy promise is made in full (everywhere else just links here). */
@@ -29,7 +30,7 @@ export function Trust() {
         </div>
         <aside className={s.note} aria-labelledby="perm-heading">
           <h3 id="perm-heading">Why does Chrome say it can “read and change your data on github.com”?</h3>
-          <p>That is Chrome’s standard wording for any extension that runs on a website, and it describes what is possible, not what happens. Footlit reads page labels locally to know when something happened, draws the animation, and sends nothing anywhere. <Link href="/privacy/" prefetch={false}>Read the privacy details</Link>.</p>
+          <p>That is Chrome’s standard wording for any extension that runs on a website, and it describes what is possible, not what happens. Footlit reads page labels locally to know when something happened, draws the animation, and sends nothing anywhere. <Link href="/privacy/" prefetch={false}>Read the privacy details</Link>.{site.repoUrl && <> Don’t take our word for it: the code is public, so you can <a href={site.repoUrl} target="_blank" rel="noopener noreferrer">read it on GitHub</a>.</>}</p>
         </aside>
       </div>
     </section>

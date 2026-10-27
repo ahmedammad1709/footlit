@@ -1,12 +1,28 @@
-# Footlit
+<h1 align="center">Footlit</h1>
 
-**GitHub, with stage lighting.** A browser extension that gives GitHub moments a proper entrance: merge a pull request, watch checks go green, publish a release, put a site live, and the page answers with a full-screen animation in the theme you chose.
+<p align="center"><b>GitHub, with stage lighting.</b><br>
+A free browser extension that plays a themed full-screen animation when you merge a pull request, pass checks or publish a release.</p>
 
-**[Add to Chrome](https://chromewebstore.google.com/detail/fkjnlcolffmaaneilmchdejmlkgnimlf)** · **[Add to Firefox](https://addons.mozilla.org/en-US/firefox/addon/footlit/)** · **[Try it in your browser](https://footlit-app.vercel.app)**
+<p align="center">
+  <a href="https://chromewebstore.google.com/detail/fkjnlcolffmaaneilmchdejmlkgnimlf"><b>Add to Chrome</b></a> &nbsp;·&nbsp;
+  <a href="https://addons.mozilla.org/en-US/firefox/addon/footlit/"><b>Add to Firefox</b></a> &nbsp;·&nbsp;
+  <a href="https://footlit-app.vercel.app"><b>Try it in your browser</b></a>
+</p>
 
-Free, no account, nothing leaves your machine. If you like it, a star on the repo helps other people find it.
+<p align="center">
+  <a href="https://github.com/ahmedammad1709/footlit/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/ahmedammad1709/footlit?style=flat&color=F2A81D&labelColor=1B1612"></a>
+  <a href="LICENSE"><img alt="License: MIT" src="https://img.shields.io/badge/license-MIT-F2A81D?labelColor=1B1612"></a>
+  <img alt="Chrome and Firefox" src="https://img.shields.io/badge/Chrome%20%2B%20Firefox-extension-F2A81D?labelColor=1B1612">
+  <img alt="No tracking" src="https://img.shields.io/badge/data%20collected-none-F2A81D?labelColor=1B1612">
+</p>
 
-Works in Chrome and other Chromium browsers; a Firefox build is included (see below).
+<p align="center"><img src="docs/media/footlit-demo.gif" width="760" alt="A pull request is merged and nothing happens. With Footlit, a marquee sign reads BRAVO with confetti and a ticket for the merged pull request."></p>
+
+Footlit gives GitHub moments a proper entrance: merge a pull request, watch checks go green, publish a release, put a site live, and the page answers with a full-screen animation in the theme you chose. Free, no account, nothing leaves your machine.
+
+If you like it, a star on this repo helps other developers find it.
+
+Works in Chrome and other Chromium browsers (111+) and in Firefox (140+).
 
 ## What it reacts to
 
@@ -21,7 +37,22 @@ Footlit only reacts to things it sees happen in a tab you are looking at. Openin
 
 ## Themes
 
-Marquee (theatre), Terminal (a shell and a merge graph), Mission Control (countdown, GO/NO-GO, anomaly), Pixel Arcade (stage clear, game over), Web Crawler (webs, spiders, tears when the build breaks) and Quiet (one small toast, for the office). Every theme has an applause, a farewell and an alarm version, honours reduced motion, and any event can use its own theme.
+<p align="center"><img src="docs/media/footlit-themes.gif" width="760" alt="The six Footlit themes in turn: Marquee, Terminal, Mission Control, Pixel Arcade, Web Crawler and Quiet."></p>
+
+<table>
+  <tr>
+    <td width="33%"><img src="site/public/mock/theme-marquee.png" alt="Marquee theme: a theatre marquee sign reading BRAVO"><br><b>Marquee</b>: theatre lights and confetti</td>
+    <td width="33%"><img src="site/public/mock/theme-terminal.png" alt="Terminal theme: a shell showing a git merge graph"><br><b>Terminal</b>: a shell and a merge graph</td>
+    <td width="33%"><img src="site/public/mock/theme-mission.png" alt="Mission Control theme: countdown and GO/NO-GO poll"><br><b>Mission Control</b>: countdown and GO/NO-GO</td>
+  </tr>
+  <tr>
+    <td><img src="site/public/mock/theme-pixel.png" alt="Pixel Arcade theme: stage clear screen"><br><b>Pixel Arcade</b>: stage clear, game over</td>
+    <td><img src="site/public/mock/theme-crawler.png" alt="Web Crawler theme: spiders and webs"><br><b>Web Crawler</b>: webs, spiders, tears when the build breaks</td>
+    <td><img src="site/public/mock/theme-quiet.png" alt="Quiet theme: one small toast"><br><b>Quiet</b>: one small toast, for the office</td>
+  </tr>
+</table>
+
+Every theme has an applause, a farewell and an alarm version, honours reduced motion, and any event can use its own theme. Press Esc to dismiss a show, or switch on quiet mode.
 
 ## Install (development)
 
@@ -85,7 +116,10 @@ Footlit reads github.com pages in your browser to notice events and plays an ani
 
 The marketing site lives in `site/` (Next.js, static export) and reuses the extension's engine and themes for its live demos. See `site/README.md`. Related commands: `npm run site-assets` (renders the mockup images) and, inside `site/`, `npm run prep`, `npm run dev`, `npm run build`.
 
-by Codeveilstudio
 ## License
 
-[MIT](LICENSE) © Ammad Ahmed, Codeveil Studio.
+[MIT](LICENSE) © Ammad Ahmed, [Codeveil Studio](https://codeveilstudio.tech).
+
+## Contributing
+
+Bug reports, new theme ideas and detector fixes are welcome: open an issue or a pull request. A new theme is a single file, see "Adding a theme" above.

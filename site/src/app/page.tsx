@@ -9,6 +9,9 @@ import { Moments } from '@/components/Moments';
 import { Trust } from '@/components/Trust';
 import { Install } from '@/components/Install';
 import { Faq, FAQ_ITEMS } from '@/components/Faq';
+import releases from '@/data/changelog.json';
+
+const LATEST = releases[0].date;
 
 export default function Home() {
   const studio = { '@type': 'Organization', '@id': abs('/#studio'), name: site.agency.name, url: site.agency.url };
@@ -40,8 +43,10 @@ export default function Home() {
       browserRequirements: 'Requires Chrome 111 or later (or another Chromium browser) or Firefox 140 or later',
       softwareVersion: VERSION,
       datePublished: site.published,
-      dateModified: site.published,
+      dateModified: LATEST,
       inLanguage: 'en',
+      license: 'https://opensource.org/licenses/MIT',
+      ...(site.repoUrl ? { sameAs: [site.repoUrl, site.chromeStoreUrl, site.firefoxStoreUrl].filter(Boolean) } : {}),
       isAccessibleForFree: true,
       ...(DOWNLOADS.chrome ? { downloadUrl: abs(DOWNLOADS.chrome.file), fileSize: `${DOWNLOADS.chrome.kb} KB` } : {}),
       ...(site.chromeStoreUrl ? { installUrl: site.chromeStoreUrl } : {}),
@@ -53,6 +58,30 @@ export default function Home() {
       ],
       offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD', availability: 'https://schema.org/InStock' },
       author: { '@id': abs('/#author') },
+      publisher: { '@id': abs('/#author') },
+    },
+    ...(site.repoUrl
+      ? [{
+          '@type': 'SoftwareSourceCode',
+          '@id': abs('/#source'),
+          name: `${site.name} source code`,
+          codeRepository: site.repoUrl,
+          programmingLanguage: 'TypeScript',
+          license: 'https://opensource.org/licenses/MIT',
+          targetProduct: { '@id': abs('/#app') },
+          author: { '@id': abs('/#author') },
+        }]
+      : []),
+    {
+      '@type': 'VideoObject',
+      '@id': abs('/#film'),
+      name: 'Footlit in 44 seconds',
+      description: 'A 44-second film: what happens when you merge a pull request, then Footlit playing a themed full-screen show for repository, check, merge and release events across six themes.',
+      thumbnailUrl: abs('/demo/poster-launch.jpg'),
+      contentUrl: abs('/demo/footlit-marketing.mp4'),
+      uploadDate: '2026-10-16',
+      duration: 'PT44S',
+      inLanguage: 'en',
       publisher: { '@id': abs('/#author') },
     },
     {
