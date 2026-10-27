@@ -38,6 +38,7 @@ export function Footer() {
               <li><Link prefetch={false} href="/privacy/">Privacy policy</Link></li>
               <li><Link prefetch={false} href="/#trust">How it stays private</Link></li>
               <li><Link prefetch={false} href="/changelog/">Changelog</Link></li>
+              {site.repoUrl && <li><a href={site.repoUrl} target="_blank" rel="noopener noreferrer">Source code on GitHub</a></li>}
             </ul>
           </div>
         </nav>

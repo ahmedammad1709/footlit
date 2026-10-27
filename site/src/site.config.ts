@@ -29,6 +29,8 @@ export const site = {
     facebook: 'https://www.facebook.com/profile.php?id=100069493475592', // e.g. https://facebook.com/your.page
     whatsapp: 'https://wa.me/923141038814', // e.g. https://wa.me/923001234567  (country code, no + or spaces)
   },
+  /** the public source repository; linked from the navbar, hero and footer. Empty hides every link to it. */
+  repoUrl: 'https://github.com/ahmedammad1709/footlit',
   chromeStoreUrl: 'https://chromewebstore.google.com/detail/fkjnlcolffmaaneilmchdejmlkgnimlf',
   /** Chrome Web Store installs, shown as social proof (navbar, hero, install section). Use the dashboard's number, rounded down ("50+"). Leave empty to hide it. */
   chromeUsers: '50+',

@@ -2,7 +2,11 @@
 
 **GitHub, with stage lighting.** A browser extension that gives GitHub moments a proper entrance: merge a pull request, watch checks go green, publish a release, put a site live, and the page answers with a full-screen animation in the theme you chose.
 
-Works in Chrome, Edge and other Chromium browsers; a Firefox build is included (see below).
+**[Add to Chrome](https://chromewebstore.google.com/detail/fkjnlcolffmaaneilmchdejmlkgnimlf)** · **[Add to Firefox](https://addons.mozilla.org/en-US/firefox/addon/footlit/)** · **[Try it in your browser](https://footlit-app.vercel.app)**
+
+Free, no account, nothing leaves your machine. If you like it, a star on the repo helps other people find it.
+
+Works in Chrome and other Chromium browsers; a Firefox build is included (see below).
 
 ## What it reacts to
 

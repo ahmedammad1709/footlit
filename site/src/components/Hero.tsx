@@ -47,7 +47,7 @@ export function Hero() {
             <TicketButton href={site.chromeStoreUrl || '/#install'} title={site.chromeStoreUrl ? 'Add to Chrome' : 'Get Footlit'} sub="Free. No account needed." stub="Free" tone="tungsten" />
             <a href="#watch" className={s.watch}><span aria-hidden="true">▷</span> Watch the demo</a>
           </div>
-          <p className={s.note}>Six themes. No sound. Always your call.{site.firefoxStoreUrl && <> <a href={site.firefoxStoreUrl}>Also on Firefox.</a></>}{site.chromeUsers && <> <b>{site.chromeUsers} installs on Chrome.</b></>}</p>
+          <p className={s.note}>Six themes. No sound. Always your call.{site.firefoxStoreUrl && <> <a href={site.firefoxStoreUrl}>Also on Firefox.</a></>}{site.chromeUsers && <> <b>{site.chromeUsers} installs on Chrome.</b></>}{site.repoUrl && <> <a href={site.repoUrl} target="_blank" rel="noopener noreferrer">Star it on GitHub.</a></>}</p>
         </div>
         <div className={s.demo}>
           <div className={s.demoLabel}><span className={s.liveDot} /> Try it here <span>No installation needed</span></div>

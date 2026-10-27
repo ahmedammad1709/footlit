@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { site } from '@/site.config';
 import { TicketButton } from './TicketButton';
+import { GitHub } from './Icons';
 import s from './Nav.module.css';
 
 const LINKS = [
@@ -28,7 +29,12 @@ export function Nav() {
             </Link>
           ))}
         </nav>
-        <details className={s.mobile} onKeyDown={(e) => { if (e.key === 'Escape') { e.currentTarget.open = false; e.currentTarget.querySelector('summary')?.focus(); } }}><summary>Menu</summary><nav aria-label="Mobile navigation">{LINKS.map(([label, href]) => <Link key={href} href={href} prefetch={false} onClick={(e) => e.currentTarget.closest('details')?.removeAttribute('open')}>{label}</Link>)}</nav></details>
+        {site.repoUrl && (
+          <a className={s.repo} href={site.repoUrl} target="_blank" rel="noopener noreferrer" aria-label="Footlit source code on GitHub (opens in a new tab)">
+            <GitHub width={18} height={18} /> <span>GitHub</span>
+          </a>
+        )}
+        <details className={s.mobile} onKeyDown={(e) => { if (e.key === 'Escape') { e.currentTarget.open = false; e.currentTarget.querySelector('summary')?.focus(); } }}><summary>Menu</summary><nav aria-label="Mobile navigation">{LINKS.map(([label, href]) => <Link key={href} href={href} prefetch={false} onClick={(e) => e.currentTarget.closest('details')?.removeAttribute('open')}>{label}</Link>)}{site.repoUrl && <a href={site.repoUrl} target="_blank" rel="noopener noreferrer">GitHub</a>}</nav></details>
         {site.chromeUsers && (
           <a className={s.proof} href={site.chromeStoreUrl || '/#install'} aria-label={`${site.chromeUsers} installs on Chrome`}>
             <i className={s.lamp} aria-hidden="true" />
