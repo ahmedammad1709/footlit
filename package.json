@@ -1,6 +1,7 @@
 {
   "name": "footlit",
   "version": "1.0.2",
+  "license": "MIT",
   "private": true,
   "description": "GitHub, with stage lighting. A browser extension that gives GitHub events a proper entrance.",
   "type": "module",

@@ -1,4 +1,0 @@
-# Composition brief
-Create a 24-second 1080x1350 LinkedIn film following brag-plan.md. Use local GSAP and Hyperframes, one paused seekable timeline. Use separately captured real product animation footage so engine timers cannot break timeline seeking. Use the real extension popup capture. Keep all body copy at 28px or larger, hero copy 130–165px. Match DESIGN.md palette/fonts. Cuts and kinetic typography should connect actions and results. Keep the five-second install ending readable. No Edge mention, no invented usage statistics or endorsements. No narration. Original music with gentle film-only sound effects.
-
-Deliver MP4, custom poster, share-copy.txt and editable composition. Verify runtime, layout and contrast with Hyperframes check, inspect all scene midpoints, decode final MP4 and measure audio.

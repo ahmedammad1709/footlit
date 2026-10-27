@@ -1,3 +1,0 @@
-A merged PR deserves a little more than a purple badge. I built Footlit to give GitHub wins a moment of their own—with six themes, silent celebrations, and no account needed.
-
-Free for Chrome and Firefox: https://footlit-app.vercel.app
