@@ -12,6 +12,7 @@ A free browser extension that plays a themed full-screen animation when you merg
 <p align="center">
   <a href="https://github.com/ahmedammad1709/footlit/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/ahmedammad1709/footlit?style=flat&color=F2A81D&labelColor=1B1612"></a>
   <a href="LICENSE"><img alt="License: MIT" src="https://img.shields.io/badge/license-MIT-F2A81D?labelColor=1B1612"></a>
+  <a href="https://chromewebstore.google.com/detail/fkjnlcolffmaaneilmchdejmlkgnimlf"><img alt="100+ installs on the Chrome Web Store" src="https://img.shields.io/badge/Chrome%20installs-100%2B-F2A81D?labelColor=1B1612"></a>
   <img alt="Chrome and Firefox" src="https://img.shields.io/badge/Chrome%20%2B%20Firefox-extension-F2A81D?labelColor=1B1612">
   <img alt="No tracking" src="https://img.shields.io/badge/data%20collected-none-F2A81D?labelColor=1B1612">
 </p>

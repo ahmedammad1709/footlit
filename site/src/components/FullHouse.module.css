@@ -1,0 +1,30 @@
+.section { padding: clamp(64px, 8vw, 120px) 0; border-top: 2px solid var(--lit); }
+.grid { display: grid; grid-template-columns: minmax(0, .95fr) minmax(0, 1.05fr); gap: clamp(36px, 5vw, 84px); align-items: center; }
+.copy { min-width: 0; }
+.num { display: block; font-size: clamp(130px, 17vw, 250px); line-height: .8; color: var(--lit); letter-spacing: .01em; }
+.unit { font: 500 13px/1.3 var(--mono); letter-spacing: .16em; text-transform: uppercase; color: var(--quiet-on-ink); margin: 16px 0 clamp(28px, 3.4vw, 44px); }
+.h2 { font-size: clamp(42px, 4.8vw, 70px); }
+.body { margin: 18px 0 0; max-width: 40ch; color: var(--quiet-on-ink); font-size: clamp(18px, 1.35vw, 21px); }
+.cta { display: flex; flex-wrap: wrap; align-items: center; gap: 20px 28px; margin-top: 30px; }
+.cta > * { min-width: 0; }
+.star { display: inline-flex; align-items: center; gap: 9px; font: 500 14px/1 var(--mono); letter-spacing: .04em; text-decoration: none; color: var(--paper); padding: 10px 0; border-bottom: 2px solid var(--lit); }
+.star:hover { color: var(--lit-hi); }
+
+.map { min-width: 0; }
+.stage { margin: 0 0 22px; text-align: center; font: 500 12px/1 var(--mono); letter-spacing: .5em; text-transform: uppercase; color: var(--lit); border-top: 4px solid var(--lit); padding-top: 12px; }
+.seats { display: grid; grid-template-columns: repeat(var(--cols), minmax(0, 1fr)); gap: clamp(5px, .7vw, 9px); }
+.seat { display: block; aspect-ratio: 1 / 1; border-radius: 7px 7px 2px 2px; background: var(--lit); box-shadow: 0 0 8px 1px #f2a81d55; }
+.cap { margin: 22px 0 0; font: 400 13px/1.5 var(--mono); color: var(--quiet-on-ink); }
+
+/* seats start dark on the client, then light in a scattered order once the section is on screen */
+.armed .seat { background: var(--ink-3); box-shadow: none; }
+.armed.on .seat { animation: seatOn .6s var(--ease) both; animation-delay: calc(var(--d) * 1ms); }
+@keyframes seatOn {
+  0% { background: var(--ink-3); box-shadow: 0 0 0 0 #f2a81d00; transform: scale(.7); }
+  55% { background: var(--lit-hi); box-shadow: 0 0 20px 5px #ffe29aaa; transform: scale(1.18); }
+  100% { background: var(--lit); box-shadow: 0 0 8px 1px #f2a81d55; transform: none; }
+}
+
+@media (max-width: 900px) { .grid { grid-template-columns: minmax(0, 1fr); } .map { max-width: 640px; } }
+@media (max-width: 640px) { .seats { grid-template-columns: repeat(var(--cols-sm), minmax(0, 1fr)); } }
+@media (prefers-reduced-motion: reduce) { .armed .seat { background: var(--lit); box-shadow: 0 0 8px 1px #f2a81d55; } .armed.on .seat { animation: none; } }

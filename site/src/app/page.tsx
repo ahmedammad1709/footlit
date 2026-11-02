@@ -7,6 +7,7 @@ import { VideoDemo } from '@/components/VideoDemo';
 import { Story } from '@/components/Story';
 import { Moments } from '@/components/Moments';
 import { Trust } from '@/components/Trust';
+import { FullHouse } from '@/components/FullHouse';
 import { Install } from '@/components/Install';
 import { Faq, FAQ_ITEMS } from '@/components/Faq';
 import releases from '@/data/changelog.json';
@@ -99,6 +100,7 @@ export default function Home() {
       <Showcase />
       <Moments />
       <Trust />
+      <FullHouse />
       <Install />
       <Faq />
     </>

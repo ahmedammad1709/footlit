@@ -32,8 +32,8 @@ export const site = {
   /** the public source repository; linked from the navbar, hero and footer. Empty hides every link to it. */
   repoUrl: 'https://github.com/ahmedammad1709/footlit',
   chromeStoreUrl: 'https://chromewebstore.google.com/detail/fkjnlcolffmaaneilmchdejmlkgnimlf',
-  /** Chrome Web Store installs, shown as social proof (navbar, hero, install section). Use the dashboard's number, rounded down ("50+"). Leave empty to hide it. */
-  chromeUsers: '50+',
+  /** Chrome Web Store installs, shown as social proof (navbar, hero, the "house count" seat map, install section). Use the dashboard's number, rounded down ("50+"). Leave empty to hide it. */
+  chromeUsers: '100+',
   firefoxStoreUrl: 'https://addons.mozilla.org/en-US/firefox/addon/footlit/',
   googleVerification: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION ?? '',
   bingVerification: process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION ?? '',
