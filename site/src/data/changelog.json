@@ -1,5 +1,15 @@
 [
   {
+    "version": "1.0.3",
+    "date": "2026-11-03",
+    "bullets": [
+      "Fixed pull request and issue shows not playing on github.com. GitHub changed the markup of the Open / Merged / Closed badge, so Footlit could not tell when a pull request was opened, merged or closed, or when an issue was closed.",
+      "Opening a pull request now waits for the new page to finish loading before celebrating, and the debug log says why a show was skipped.",
+      "Added tests that use GitHub's current markup."
+    ],
+    "notes": []
+  },
+  {
     "version": "1.0.2",
     "date": "2026-10-15",
     "bullets": [
