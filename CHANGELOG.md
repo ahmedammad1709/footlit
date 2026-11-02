@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.3 - 2026-11-03
+
+- Fixed pull request and issue shows not playing on github.com. GitHub changed the markup of the Open / Merged / Closed badge, so Footlit could not tell when a pull request was opened, merged or closed, or when an issue was closed.
+- Opening a pull request now waits for the new page to finish loading before celebrating, and the debug log says why a show was skipped.
+- Added tests that use GitHub's current markup.
+
 ## 1.0.2 - 2026-10-15
 
 - Fixed repo created, release published, pull request opened and fork shows not playing. Version 1.0.1 only accepted classic form posts, but several GitHub pages submit through script, so those shows were silently skipped.
