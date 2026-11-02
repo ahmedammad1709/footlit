@@ -49,6 +49,15 @@ const routes = {
   '/acme/widget/pull/42?c=primer-merge': page('Fix flaky login · Pull Request #42 · acme/widget · GitHub',
     '<bdi class="js-issue-title">Fix flaky login</bdi><span id="hs" data-testid="header-state" data-status="pullOpened" class="prc-StateLabel">Open</span>',
     flipAfter(1900, `const b=document.getElementById('hs');b.setAttribute('data-status','pullMerged');b.textContent='Merged';`)),
+  // the markup github.com serves today: a Primer StateLabel inside the page header, no data-testid
+  '/acme/widget/pull/42?c=live-merge': page('Fix flaky login · Pull Request #42 · acme/widget · GitHub',
+    '<bdi class="markdown-title">Fix flaky login</bdi><div data-component="PageHeader.Description"><span id="hs" class="prc-StateLabel-StateLabel-Iawzp label__4pC8-d" data-component="StateLabel" data-size="medium" data-status="pullOpened"><svg aria-label="Pull request" role="img"></svg>Open</span></div>',
+    flipAfter(1900, `const b=document.getElementById('hs');b.setAttribute('data-status','pullMerged');b.lastChild.textContent='Merged';`)),
+  '/acme/widget/pull/42?c=live-open': page('Fix flaky login · Pull Request #42 · acme/widget · GitHub',
+    '<bdi class="markdown-title">Fix flaky login</bdi><div data-component="PageHeader.Description"><span data-component="StateLabel" data-status="pullOpened"><svg aria-label="Pull request" role="img"></svg>Open</span></div>'),
+  '/acme/widget/issues/7?c=live-close': page('Bug report · Issue #7 · acme/widget · GitHub',
+    '<div data-component="PageHeader.Description"><span id="hs" data-component="StateLabel" data-status="issueOpened">Open</span></div>',
+    flipAfter(1900, `const b=document.getElementById('hs');b.setAttribute('data-status','issueClosed');b.textContent='Closed';`)),
   // issues
   '/acme/widget/issues/7?c=close-flip': page('Bug report · Issue #7 · acme/widget · GitHub',
     '<span id="hs" data-testid="header-state" data-status="issueOpened">Open</span>',
@@ -177,9 +186,11 @@ await check('submitted compare -> already merged PR stays silent', '/acme/widget
 await check('compare page -> repo root stays silent', '/acme/widget/compare/main...feature', { expect: [], settle: 2500, then: go('/acme/widget') });
 await check('open -> closed while watching fires pr.closed', '/acme/widget/pull/42?c=close-flip', { expect: ['pr.closed'] });
 await check('Primer markup: open -> merged fires pr.merged', '/acme/widget/pull/42?c=primer-merge', { expect: ['pr.merged'] });
+await check('current github.com markup (StateLabel, no testid): open -> merged fires pr.merged', '/acme/widget/pull/42?c=live-merge', { expect: ['pr.merged'] });
 
 console.log('Issues');
 await check('open -> closed fires issue.closed', '/acme/widget/issues/7?c=close-flip', { expect: ['issue.closed'] });
+await check('current github.com markup: issue open -> closed fires issue.closed', '/acme/widget/issues/7?c=live-close', { expect: ['issue.closed'] });
 await check('visiting a closed issue stays silent', '/acme/widget/issues/7?c=already-closed', { expect: [], settle: 3000 });
 
 console.log('Releases and forks');
@@ -211,6 +222,7 @@ await check('script-driven repo form (no method) -> fires repo.created', '/new',
 await check('plain "Create repository" button, no form -> fires repo.created', '/new', { expect: ['repo.created'], then: clickSubmit('loose-button', 'Create repository', '/acme/widget') });
 await check('plain "Publish release" button -> fires release.published', '/acme/widget/releases/new', { expect: ['release.published'], then: clickSubmit('loose-button', 'Publish release', '/acme/widget/releases/tag/v1.2.0') });
 await check('script-driven "Create pull request" -> fires pr.opened', '/acme/widget/compare/main...feature', { expect: ['pr.opened'], then: clickSubmit('loose-button', 'Create pull request', '/acme/widget/pull/42?c=ci-already-green') });
+await check('current github.com markup: submitted compare -> open PR fires pr.opened', '/acme/widget/compare/main...feature', { expect: ['pr.opened'], then: clickSubmit('loose-button', 'Create pull request', '/acme/widget/pull/42?c=live-open') });
 await check('clicking "Cancel" then wandering to a repo stays silent', '/new', { expect: [], settle: 2500, then: clickSubmit('loose-button', 'Cancel', '/acme/widget') });
 await check('persistent deletion banner fires only once', '/acme-home', { expect: ['repo.deleted'], settle: 22500 });
 

@@ -2,8 +2,12 @@ import type { DetectorApi } from './types';
 
 export type ItemState = 'open' | 'draft' | 'merged' | 'closed';
 
-/** Header badge of an issue or pull request: current Primer markup first, then the older .State badge. */
-const BADGES = '[data-testid="header-state"], #partial-discussion-header .State, .gh-header-meta .State';
+/**
+ * Header badge of an issue or pull request. GitHub's current pages render a Primer StateLabel
+ * (<span data-component="StateLabel" data-status="pullOpened">) with no data-testid, so that comes first;
+ * the older data-testid and .State badges stay as fallbacks. The header comes before any other label in the document.
+ */
+const BADGES = '[data-component="PageHeader.Description"] [data-component="StateLabel"], [data-testid="header-state"], [data-component="StateLabel"][data-status^="pull"], [data-component="StateLabel"][data-status^="issue"], #partial-discussion-header .State, .gh-header-meta .State';
 
 export function readItemState(): ItemState | null {
   const badge = document.querySelector<HTMLElement>(BADGES);
