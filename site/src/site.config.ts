@@ -11,6 +11,11 @@
  * - `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION` / `NEXT_PUBLIC_BING_SITE_VERIFICATION`: the verification tokens from
  *   Google Search Console and Bing Webmaster Tools (the "HTML tag" method; paste only the content value).
  */
+import installs from './data/installs.json';
+
+/** The dashboard's install count, shown rounded down to the last 50 (269 -> "250+"). Edit data/installs.json only. */
+const milestone = (n: number) => (n >= 50 ? `${Math.floor(n / 50) * 50}+` : '');
+
 export const site = {
   name: 'Footlit',
   tagline: 'GitHub, with stage lighting.',
@@ -33,7 +38,9 @@ export const site = {
   repoUrl: 'https://github.com/ahmedammad1709/footlit',
   chromeStoreUrl: 'https://chromewebstore.google.com/detail/fkjnlcolffmaaneilmchdejmlkgnimlf',
   /** Chrome Web Store installs, shown as social proof (navbar, hero, the "house count" seat map, install section). Use the dashboard's number, rounded down ("50+"). Leave empty to hide it. */
-  chromeUsers: '100+',
+  chromeUsers: milestone(installs.installs),
+  /** the exact dashboard number behind the label above */
+  chromeInstalls: installs.installs,
   firefoxStoreUrl: 'https://addons.mozilla.org/en-US/firefox/addon/footlit/',
   googleVerification: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION ?? '',
   bingVerification: process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION ?? '',

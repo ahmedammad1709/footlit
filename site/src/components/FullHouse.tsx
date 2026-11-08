@@ -13,7 +13,9 @@ export function FullHouse() {
   const [on, setOn] = useState(false);
 
   const total = parseInt(String(site.chromeUsers), 10);
-  const seats = Number.isFinite(total) && total > 0 ? Math.min(total, 300) : 0;
+  // one seat per install up to 100, then one seat per 5, 10 or 25 installs so the map stays a size you can take in
+  const per = total <= 100 ? 1 : total <= 300 ? 5 : total <= 600 ? 10 : 25;
+  const seats = Number.isFinite(total) && total > 0 ? Math.round(total / per) : 0;
 
   useEffect(() => {
     const el = root.current;
@@ -29,7 +31,7 @@ export function FullHouse() {
 
   // a scattered, but fixed, order: seats fill like a house arriving, not like a progress bar
   const step = [37, 41, 43, 47].find((p) => seats % p !== 0) ?? 1;
-  const cols = seats % 20 === 0 ? 20 : seats % 10 === 0 ? 10 : 20;
+  const cols = seats % 20 === 0 ? 20 : 10;
   const colsSm = seats % 10 === 0 ? 10 : seats % 5 === 0 ? 5 : 8;
 
   return (
@@ -40,7 +42,7 @@ export function FullHouse() {
           <b className={`display ${s.num}`}>{site.chromeUsers}</b>
           <p className={s.unit}>installs on the Chrome Web Store</p>
           <h2 id="h-house" className={`display ${s.h2}`}>The house is filling up.</h2>
-          <p className={s.body}>Footlit passed {seats} installs. Thank you to everyone who took a seat, and to the ones who told a friend. Every one of them means a lot to a small project.</p>
+          <p className={s.body}>Footlit passed {total} installs. Thank you to everyone who took a seat, and to the ones who told a friend. Every one of them means a lot to a small project.</p>
           <div className={s.cta}>
             <TicketButton href={site.chromeStoreUrl || '/#install'} title={site.chromeStoreUrl ? 'Add to Chrome' : 'Get Footlit'} sub="Free. Take a seat." stub="Free" tone="tungsten" />
             {site.repoUrl && (
@@ -53,7 +55,7 @@ export function FullHouse() {
           <div className={s.seats} aria-hidden="true">
             {Array.from({ length: seats }, (_, i) => <i key={i} className={s.seat} style={{ ['--d' as string]: ((i * step) % seats) * 26 }} />)}
           </div>
-          <p className={s.cap}>One seat per install. Chrome Web Store only; Firefox is not counted here.</p>
+          <p className={s.cap}>{per === 1 ? 'One seat per install.' : `One seat per ${per} installs.`} Chrome Web Store only; Firefox is not counted here.</p>
         </div>
       </div>
     </section>
